@@ -5,6 +5,7 @@ import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.pdfgeneration.PageDirection
 import io.scanbot.sdk.kmp.pdfgeneration.PageSize
 import io.scanbot.sdk.kmp.pdfgeneration.PdfConfiguration
+import io.scanbot.sdk.kmp.utils.Result
 
 fun createPdfFromImages(
     imageRefs: List<ImageRef>,

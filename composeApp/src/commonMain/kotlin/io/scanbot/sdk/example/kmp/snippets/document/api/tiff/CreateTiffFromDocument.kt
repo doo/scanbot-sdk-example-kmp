@@ -3,6 +3,7 @@ package io.scanbot.sdk.example.kmp.snippets.document.api.tiff
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.tiffgeneration.CompressionMode
 import io.scanbot.sdk.kmp.tiffgeneration.TiffGeneratorParameters
+import io.scanbot.sdk.kmp.utils.Result
 
 fun createTiffFromDocument(
     documentId: String,
@@ -15,7 +16,7 @@ fun createTiffFromDocument(
     )
 
     return ScanbotSDK.tiffGenerator.generateFromDocument(
-        documentID = documentId,
+        documentUuid = documentId,
         tiffGeneratorParameters = tiffParams,
         outputURI = outputUri
     )

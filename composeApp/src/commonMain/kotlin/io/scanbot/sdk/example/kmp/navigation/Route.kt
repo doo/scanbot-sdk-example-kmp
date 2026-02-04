@@ -1,45 +1,24 @@
 package io.scanbot.sdk.example.kmp.navigation
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
-@Serializable
-sealed interface Route: NavKey {
-
-    val title: String
+sealed interface Route {
 
     @Serializable
-    data object Menu : Route {
-        override val title = "Menu"
-    }
+    data object Menu: Route
 
     @Serializable
-    data object BarcodeUseCases : Route {
-        override val title = "Barcode Use Cases"
-    }
+    data object BarcodeUseCases: Route
 
     @Serializable
-    data object DocumentUseCases : Route {
-        override val title = "Document Use Cases"
-    }
+    data object DocumentUseCases: Route
 
     @Serializable
-    data class BarcodePreview(
-        val resultJson: String
-    ) : Route {
-        override val title = "Barcode Preview"
-    }
+    data class BarcodePreview(val barcodeJson: String) : Route
 
     @Serializable
-    data class DocumentPreview(
-        val resultJson: String
-    ) : Route {
-        override val title = "Document Preview"
-    }
+    data class DocumentPreview(val documentDataJson: String) : Route
 
     @Serializable
-    data object BarcodeCustomUI : Route {
-        override val title = "Barcode Custom UI"
-    }
+    data object BarcodeCustomUI: Route
 }

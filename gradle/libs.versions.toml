@@ -3,16 +3,17 @@ agp = "8.13.1"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "36"
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.3"
 androidx-lifecycle = "2.9.6"
-composeMultiplatform = "1.9.3"
+composeMultiplatform = "1.10.0"
 kotlin = "2.3.0"
 
-scanbotSDK = "8.0.5-SNAPSHOT"
-spm = "1.0.4"
-imagepickerkmp = "1.0.28"
-cmpNavigation3 = "1.0.0-alpha06"
-kotlinx = "1.9.0"
+scanbotSDK = "8.0.11-SNAPSHOT"
+spm = "1.4.7"
+imagepickerkmp = "1.0.31"
+cmpNavigation3 = "1.1.0-alpha02"
+kotlinx = "1.10.0"
+navigation-compose = "2.9.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -24,7 +25,9 @@ scanbot-sdk = { module = "io.scanbot.sdk.kmp:scanbot-bundle", version.ref = "sca
 scanbot-compose-ui = { module = "io.scanbot.sdk.kmp:scanbot-compose-ui", version.ref = "scanbotSDK" }
 
 image-picker = { module = "io.github.ismoy:imagepickerkmp", version.ref = "imagepickerkmp"}
-jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "cmpNavigation3" }
+
+# Navigation
+jetbrains-compose-navigation = { module ="org.jetbrains.androidx.navigation:navigation-compose", version.ref ="navigation-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

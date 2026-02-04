@@ -1,3 +1,7 @@
+@file:OptIn(ExperimentalSpmForKmpFeature::class)
+
+import io.github.frankois944.spmForKmp.swiftPackageConfig
+import io.github.frankois944.spmForKmp.utils.ExperimentalSpmForKmpFeature
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -12,24 +16,7 @@ plugins {
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
-    val iosSwiftPackageName = "scanbotiOSShared"
-    swiftPackageConfig {
-        create(iosSwiftPackageName) {
-            spmWorkingPath = "${projectDir.resolve("spm")}"
-            minIos = "13.0"
-
-            dependency {
-                remotePackageVersion(
-                    url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
-                    products = { add("ScanbotSDK", exportToKotlin = true) },
-                    packageName = "scanbot-sdk-ios-spm",
-                    version = "8.0.0-RC13"
-                )
-            }
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -37,13 +24,22 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
-        iosTarget.compilations.getByName("main") {
-            cinterops.create(iosSwiftPackageName)
-        }
-
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+        }
+
+        iosTarget.swiftPackageConfig(cinteropName = "spmScanbot") {
+            minIos = "13.0"
+            dependency {
+                remotePackageVersion(
+                    url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
+                    version = "8.0.0",
+                    products = {
+                        add("ScanbotSDK", exportToKotlin = true)
+                    },
+                )
+            }
         }
     }
 
@@ -61,9 +57,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.jetbrains.compose.navigation)
             implementation(libs.scanbot.sdk)
             implementation(libs.scanbot.compose.ui)
             implementation(libs.image.picker)

@@ -4,6 +4,7 @@ import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.tiffgeneration.CompressionMode
 import io.scanbot.sdk.kmp.tiffgeneration.TiffGeneratorParameters
+import io.scanbot.sdk.kmp.utils.Result
 
 fun createTiffFromImages(
     imageRefs: List<ImageRef>,
@@ -16,7 +17,7 @@ fun createTiffFromImages(
     )
 
     return ScanbotSDK.tiffGenerator.generateFromImages(
-        imageRefs = imageRefs,
+        images = imageRefs,
         tiffGeneratorParameters = tiffParams,
         outputURI = outputUri
     )

@@ -25,13 +25,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
-        maven {
-            url = uri("https://nexus2-staging.scanbot.io/nexus/content/repositories/snapshots/")
-            credentials {
-                username = ""
-                password = ""
-            }
-        }
+        mavenLocal()
         maven { url = uri("https://nexus.scanbot.io/nexus/content/repositories/releases/") }
         maven { url = uri("https://nexus.scanbot.io/nexus/content/repositories/snapshots/") }
     }
