@@ -12,7 +12,7 @@ fun createDocumentFromImage(
     val configuration = CreateDocumentOptions()
     // Configure other parameters as needed.
 
-    return ScanbotSDK.document.createDocumentFromImageRefs(
+    return ScanbotSDK.document.createDocumentFromImages(
         images = images,
         options = configuration,
     )

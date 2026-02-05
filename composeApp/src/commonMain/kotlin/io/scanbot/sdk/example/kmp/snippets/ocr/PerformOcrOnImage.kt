@@ -9,5 +9,5 @@ suspend fun performOcrOnImage(
     images: List<ImageRef>,
 ): Result<PerformOcrResult> =
     ScanbotSDK.ocrEngine.recognizeOnImages(
-        imageRefs = images,
+        images = images,
     )
