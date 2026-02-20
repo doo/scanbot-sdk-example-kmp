@@ -47,18 +47,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.addPages
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.pdf.createPdfFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.pdf.createSearchablePdfFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.removeAllPagesFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.tiff.createBinarizedTiffFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.tiff.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
-import io.scanbot.sdk.example.kmp.ui.common.LicenseInvalidDialog
-import io.scanbot.sdk.example.kmp.ui.common.SelectImagesFromGallery
+import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
+import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
-import io.scanbot.sdk.example.kmp.ui.common.isLicenseValid
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
-import io.scanbot.sdk.kmp.imageprocessing.ScanbotBinarizationFilter
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.page.PageData
-import io.scanbot.sdk.kmp.pdfgeneration.PdfConfiguration
-import io.scanbot.sdk.kmp.tiffgeneration.TiffGeneratorParameters
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -69,135 +71,176 @@ fun DocumentPreviewScreen(
     resultJson: String,
     onPopBackStack: () -> Unit
 ) {
-    var documentData by remember(resultJson) { mutableStateOf(DocumentData.fromJson(resultJson)) }
+    var documentData by remember(resultJson) {
+        mutableStateOf<DocumentData?>(
+            DocumentData.fromJson(
+                resultJson
+            )
+        )
+    }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
     var showImagePicker by remember { mutableStateOf(false) }
-    var showLicenseError by remember { mutableStateOf(false) }
 
-    fun checkLicense(action: () -> Unit) {
-        if (isLicenseValid()) {
-            action()
-        } else {
-            showLicenseError = true
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
-        },
-        bottomBar = {
-            BottomAppBar(
-                containerColor = ScanbotRed,
-                contentColor = Color.White
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+    LicenseGuard { checkLicense ->
+        Scaffold(
+            topBar = {
+                TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
+            },
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = ScanbotRed,
+                    contentColor = Color.White
                 ) {
-                    TextButton(onClick = {
-                        checkLicense {
-                            continueScanning(
-                                documentUuid = documentData.uuid,
-                                onDocumentUpdated = { documentData = it }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        TextButton(onClick = {
+                            checkLicense {
+                                documentData?.let {
+                                    ScanbotSDK.document.startScanner(
+                                        configuration = DocumentScanningFlow(documentUuid = it.uuid),
+                                        onResult = { result ->
+                                            documentData = result.getOrNull()
+                                        }
+                                    )
+                                }
+                            }
+                        }) {
+                            Text(
+                                "Continue\nScanning",
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelMedium
                             )
                         }
-                    }) {
-                        Text("Continue\nScanning", color = Color.White, style = MaterialTheme.typography.labelMedium)
-                    }
 
-                    TextButton(onClick = { checkLicense { showImagePicker = true } }) {
-                        Text("Add Page", color = Color.White, style = MaterialTheme.typography.labelMedium)
-                    }
-
-                    TextButton(onClick = { checkLicense { showExportSheet = true } }) {
-                        Text("Export", color = Color.White, style = MaterialTheme.typography.labelMedium)
-                    }
-
-                    TextButton(onClick = {
-                        checkLicense {
-                            deleteAllPages(
-                                documentUuid = documentData.uuid,
-                                onDocumentUpdated = { documentData = it }
+                        TextButton(onClick = { checkLicense { showImagePicker = true } }) {
+                            Text(
+                                "Add Page",
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelMedium
                             )
                         }
-                    }) {
-                        Text("Delete All", color = Color.White, style = MaterialTheme.typography.labelMedium)
+
+                        TextButton(onClick = { checkLicense { showExportSheet = true } }) {
+                            Text(
+                                "Export",
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+
+                        TextButton(onClick = {
+                            checkLicense {
+                                documentData = documentData?.let {
+                                    removeAllPagesFromDocument(
+                                        documentUuid = it.uuid,
+                                    ).getOrNull()
+                                }
+                            }
+                        }) {
+                            Text(
+                                "Delete All",
+                                color = Color.White,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
                     }
                 }
             }
-        }
-    ) { paddingValues ->
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 100.dp),
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color.White)
-        ) {
-            items(documentData.pages) { page ->
-                PagePreviewItem(page = page)
+        ) { paddingValues ->
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 100.dp),
+                contentPadding = PaddingValues(8.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(Color.White)
+            ) {
+                documentData?.let {
+                    items(it.pages) { page ->
+                        PagePreviewItem(page = page)
+                    }
+                }
             }
-        }
 
-        if (showImagePicker) {
-            SelectImagesFromGallery(
-                allowMultiple = true,
-                onImagesSelected = { images ->
-                    showImagePicker = false
-                    addPagesFromGallery(
-                        documentUuid = documentData.uuid,
-                        images = images,
-                        onDocumentUpdated = { documentData = it }
-                    )
-                },
-                onDismiss = { showImagePicker = false }
-            )
-        }
-
-        if (showExportSheet) {
-            ModalBottomSheet(onDismissRequest = { showExportSheet = false }) {
-                ExportBottomSheetContent(
-                    onExportPdf = { withOcr ->
-                        showExportSheet = false
-                        exportPdf(
-                            documentUuid = documentData.uuid,
-                            withOcr = withOcr,
-                            onExported = { path ->
-                                resultDialogMessage = "Result\nPdf File created: $path"
-                            }
-                        )
+            if (showImagePicker) {
+                GalleryPicker(
+                    allowMultiple = true,
+                    onImagesSelected = { images ->
+                        showImagePicker = false
+                        documentData?.uuid?.let { uuid ->
+                            addPages(documentUuid = uuid, images = images)
+                                .onSuccess { updatedDoc -> documentData = updatedDoc }
+                                .onFailure { error ->
+                                    resultDialogMessage = "Add pages failed: ${error.message}"
+                                }
+                        }
                     },
-                    onExportTiff = { binarized ->
-                        showExportSheet = false
-                        exportTiff(
-                            documentUuid = documentData.uuid,
-                            binarized = binarized,
-                            onExported = { path ->
-                                resultDialogMessage = "Result\nTiff File created: $path"
-                            }
-                        )
-                    },
-                    onCancel = { showExportSheet = false }
+                    onDismiss = { showImagePicker = false }
                 )
             }
-        }
 
-        if (resultDialogMessage != null) {
-            AlertDialog(
-                onDismissRequest = { resultDialogMessage = null },
-                title = { Text("Result") },
-                text = { Text(text = resultDialogMessage ?: "", fontFamily = FontFamily.Monospace) },
-                confirmButton = {
-                    TextButton(onClick = { resultDialogMessage = null }) { Text("Close") }
+            if (showExportSheet) {
+                ModalBottomSheet(onDismissRequest = { showExportSheet = false }) {
+                    ExportBottomSheetContent(
+                        onExportPdf = { withOcr ->
+                            showExportSheet = false
+
+                            val onPdfCreated: (String) -> Unit = { path ->
+                                val type = if (withOcr) "Searchable PDF File" else "PDF File"
+                                resultDialogMessage = "Result\n$type created: $path"
+                            }
+
+                            if (withOcr) {
+                                createSearchablePdfFromDocument(
+                                    documentId = documentData!!.uuid
+                                ).onSuccess(onPdfCreated)
+                            } else {
+                                createPdfFromDocument(
+                                    documentId = documentData!!.uuid
+                                ).onSuccess(onPdfCreated)
+                            }
+                        },
+                        onExportTiff = { binarized ->
+                            showExportSheet = false
+
+                            val onTiffCreated: (String) -> Unit = { path ->
+                                val type = if (binarized) "Binarized TIFF File" else "TIFF File"
+                                resultDialogMessage = "Result\n$type created: $path"
+                            }
+
+                            if (binarized) {
+                                createBinarizedTiffFromDocument(
+                                    documentUuid = documentData!!.uuid
+                                ).onSuccess(onTiffCreated)
+                            } else {
+                                createTiffFromDocument(
+                                    documentUuid = documentData!!.uuid
+                                ).onSuccess(onTiffCreated)
+                            }
+                        },
+                        onCancel = { showExportSheet = false }
+                    )
                 }
-            )
-        }
+            }
 
-        if (showLicenseError) {
-            LicenseInvalidDialog { showLicenseError = false }
+            if (resultDialogMessage != null) {
+                AlertDialog(
+                    onDismissRequest = { resultDialogMessage = null },
+                    title = { Text("Result") },
+                    text = {
+                        Text(
+                            text = resultDialogMessage ?: "",
+                            fontFamily = FontFamily.Monospace
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { resultDialogMessage = null }) { Text("Close") }
+                    }
+                )
+            }
         }
     }
 }
@@ -209,9 +252,11 @@ fun PagePreviewItem(page: PageData) {
     LaunchedEffect(page) {
         withContext(Dispatchers.Default) {
             page.documentImagePreviewURI?.let { uri ->
-                ImageRef.fromPath(uri)?.encode()?.getOrNull()?.decodeToImageBitmap()
-            }?.let {
-                imageBitmap = it
+                ImageRef.fromPath(uri)?.use { ref ->
+                    ref.encode().getOrNull()?.decodeToImageBitmap()
+                }
+            }?.let { bitmap ->
+                imageBitmap = bitmap
             }
         }
     }
@@ -259,68 +304,4 @@ fun ExportItem(icon: ImageVector, text: String, onClick: () -> Unit) {
         headlineContent = { Text(text) },
         modifier = Modifier.clickable(onClick = onClick)
     )
-}
-
-private fun continueScanning(
-    documentUuid: String,
-    onDocumentUpdated: (DocumentData) -> Unit
-) {
-    ScanbotSDK.document.startScanner(
-        configuration = DocumentScanningFlow(documentUuid = documentUuid),
-        onResult = { result ->
-            result.getOrNull()?.let(onDocumentUpdated)
-        }
-    )
-}
-
-private fun deleteAllPages(
-    documentUuid: String,
-    onDocumentUpdated: (DocumentData) -> Unit
-) {
-    onDocumentUpdated(
-        ScanbotSDK.document.removeAllPages(documentUuid).getOrThrow()
-    )
-}
-
-private fun addPagesFromGallery(
-    documentUuid: String,
-    images: List<ImageRef>,
-    onDocumentUpdated: (DocumentData) -> Unit
-) {
-    ScanbotSDK.document.addPages(
-        documentUuid = documentUuid,
-        images = images
-    ).getOrNull()?.let(onDocumentUpdated)
-}
-
-private fun exportPdf(
-    documentUuid: String,
-    withOcr: Boolean,
-    onExported: (path: String) -> Unit
-) {
-    ScanbotSDK.pdfGenerator.generateFromDocument(
-        documentUuid = documentUuid,
-        pdfConfiguration = PdfConfiguration(),
-        performOcr = withOcr
-    ).getOrNull()?.let(onExported)
-}
-
-private fun exportTiff(
-    documentUuid: String,
-    binarized: Boolean,
-    onExported: (path: String) -> Unit
-) {
-    val params = if (binarized) {
-        TiffGeneratorParameters(
-            binarizationFilter = ScanbotBinarizationFilter(),
-            dpi = 300
-        )
-    } else {
-        TiffGeneratorParameters()
-    }
-
-    ScanbotSDK.tiffGenerator.generateFromDocument(
-        documentUuid = documentUuid,
-        tiffGeneratorParameters = params
-    ).getOrNull()?.let(onExported)
 }

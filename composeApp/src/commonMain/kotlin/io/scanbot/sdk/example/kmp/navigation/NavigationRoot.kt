@@ -8,7 +8,7 @@ import androidx.navigation.toRoute
 import io.scanbot.sdk.example.kmp.ui.menu.MenuScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeUseCasesScreen
-import io.scanbot.sdk.example.kmp.ui.custom.BarcodeCustomUIScreen
+import io.scanbot.sdk.example.kmp.ui.barcode.custom.BarcodeCustomUIScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCasesScreen
 

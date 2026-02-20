@@ -71,7 +71,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108282DD971C70B84D23D5AF /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				63DBE8FA2ECC93A100D821A6 /* ShellScript */,
+				63DBE8FA2ECC93A100D821A6 /* Run Script */,
 				C3C7E2C90FA3FE56FD6D5105 /* Compile Kotlin Framework */,
 				BF726DFD356FA17B33567EE6 /* Sources */,
 				FDC19B845A66462344987209 /* Frameworks */,
@@ -136,7 +136,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		63DBE8FA2ECC93A100D821A6 /* ShellScript */ = {
+		63DBE8FA2ECC93A100D821A6 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -146,6 +146,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (

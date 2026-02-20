@@ -45,6 +45,7 @@ fun MenuItem(
                     onClick = {
                         enabled = false
                         onClick()
+                        enabled = true
                     }
                 ),
         ) {

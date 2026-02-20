@@ -10,6 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
@@ -22,6 +26,8 @@ fun TopBar(
     onPopBackStack: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
+    var enabled by remember { mutableStateOf(true) }
+
     TopAppBar(
         title = {
             Text(
@@ -32,7 +38,13 @@ fun TopBar(
         },
         navigationIcon = {
             if (showBackButton) {
-                IconButton(onClick = onPopBackStack) {
+                IconButton(
+                    onClick = {
+                        enabled = false
+                        onPopBackStack()
+                    },
+                    enabled = enabled
+                ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",

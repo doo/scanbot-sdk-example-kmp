@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.scanbot.sdk.example.kmp.ui.common.BarcodeItemCard
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerUiResult
 
@@ -46,7 +45,6 @@ fun BarcodePreviewScreen(
                 )
 
                 BarcodeItemCard(item.barcode)
-
                 Spacer(Modifier.height(16.dp))
             }
         }

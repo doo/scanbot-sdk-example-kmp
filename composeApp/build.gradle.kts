@@ -34,7 +34,7 @@ kotlin {
             dependency {
                 remotePackageVersion(
                     url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
-                    version = "8.0.0",
+                    version = "8.0.2",
                     products = {
                         add("ScanbotSDK", exportToKotlin = true)
                     },
@@ -64,6 +64,10 @@ kotlin {
             implementation(libs.scanbot.sdk)
             implementation(libs.scanbot.compose.ui)
             implementation(libs.image.picker)
+            implementation(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
+            implementation(libs.moko.permissions.camera)
+
         }
     }
 }
