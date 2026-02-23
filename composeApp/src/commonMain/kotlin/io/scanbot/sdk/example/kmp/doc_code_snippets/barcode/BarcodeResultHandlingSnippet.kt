@@ -20,7 +20,6 @@ import io.scanbot.sdk.kmp.image.ImageRef
     This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
 */
 
-
 class BarcodeResultHandlingSnippets {
 
     fun handlingBarcodeResult(imageRef: ImageRef) {

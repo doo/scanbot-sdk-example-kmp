@@ -11,7 +11,7 @@ import io.scanbot.sdk.kmp.imageprocessing.ScanbotBinarizationFilter
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.utils.Result
 
-// @Tag("ApplyFilterToDocumentPage")
+// @Tag("Apply filter to document page")
 fun processDocumentPage(
     documentUuid: String,
     pageUuid: Int,
@@ -30,9 +30,9 @@ fun processDocumentPage(
         )
     )
 }
-// @EndTag("ApplyFilterToDocumentPage")
+// @EndTag("Apply filter to document page")
 
-// @Tag("ApplyFilterToImage")
+// @Tag("Apply filter to image with chained processing steps")
 fun processRawImage(image: ImageRef): ImageRef? {
     // Step 1: Detect document polygon
     val detectionResult = ScanbotSDK.document.scanFromImage(
@@ -58,4 +58,4 @@ fun processRawImage(image: ImageRef): ImageRef? {
             ScanbotSDK.imageProcessor.applyFilters(img, filters).getOrNull()
         }
 }
-// @EndTag("ApplyFilterToImage")
+// @EndTag("Apply filter to image with chained processing steps")

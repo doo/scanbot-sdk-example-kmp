@@ -7,20 +7,18 @@ import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun cropFlowConfig(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+    val configuration = DocumentScanningFlow().apply {
 
-    // Retrieve the instance of the crop configuration from the main configuration object.
-    val cropScreenConfiguration = configuration.screens.cropping
+        // Disable the rotation feature.
+        screens.cropping.bottomBar.rotateButton.visible = false
 
-    // Disable the rotation feature.
-    cropScreenConfiguration.bottomBar.rotateButton.visible = false
+        // Configure various colors.
+        appearance.topBarBackgroundColor = ScanbotColor("#C8193C")
+        screens.cropping.topBarConfirmButton.foreground.color = ScanbotColor("#FFFFFF")
 
-    // Configure various colors.
-    configuration.appearance.topBarBackgroundColor = ScanbotColor("#C8193C")
-    cropScreenConfiguration.topBarConfirmButton.foreground.color = ScanbotColor("#FFFFFF")
-
-    // Customize a UI element's text
-    configuration.localization.croppingTopBarCancelButtonTitle = "Cancel"
+        // Customize a UI element's text
+        localization.croppingTopBarCancelButtonTitle = "Cancel"
+    }
 
     return configuration
 }

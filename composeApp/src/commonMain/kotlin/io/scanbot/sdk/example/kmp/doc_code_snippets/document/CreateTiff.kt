@@ -1,7 +1,9 @@
-package io.scanbot.sdk.example.kmp.doc_code_snippets.document.tiff
+package io.scanbot.sdk.example.kmp.doc_code_snippets.document
 
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.imageprocessing.ScanbotBinarizationFilter
+import io.scanbot.sdk.kmp.tiffgeneration.CompressionMode
 import io.scanbot.sdk.kmp.tiffgeneration.TiffGeneratorParameters
 import io.scanbot.sdk.kmp.utils.Result
 
@@ -9,7 +11,7 @@ import io.scanbot.sdk.kmp.utils.Result
 fun createTiffFromDocument(
     documentUuid: String,
     outputUri: String? = null
-): Result<String> {
+): io.scanbot.sdk.kmp.utils.Result<String> {
 
     val tiffParams = TiffGeneratorParameters(
         dpi = 200,
@@ -43,3 +45,22 @@ fun createBinarizedTiffFromDocument(
     )
 }
 // @EndTag("CreateBinarizedTiffFromDocument")
+
+// @Tag("CreateTiffFromImages")
+fun createTiffFromImages(
+    imageRefs: List<ImageRef>,
+    outputUri: String
+): Result<String> {
+
+    val tiffParams = TiffGeneratorParameters(
+        compression = CompressionMode.LZW,
+        jpegQuality = 80
+    )
+
+    return ScanbotSDK.tiffGenerator.generateFromImages(
+        images = imageRefs,
+        tiffGeneratorParameters = tiffParams,
+        outputURI = outputUri
+    )
+}
+// @EndTag("CreateTiffFromImages")

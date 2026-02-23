@@ -4,6 +4,7 @@ import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.documentqualityanalyzer.DocumentQualityAnalyzerConfiguration
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.page.DocumentData
+import io.scanbot.sdk.kmp.utils.Result
 
 // @Tag("Analyze document quality on image")
 fun analyzeDocumentQualityOnImage(image: ImageRef): String {

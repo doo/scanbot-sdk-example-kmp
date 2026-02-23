@@ -6,11 +6,13 @@ import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun localizationConfigurationScanning(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
-    configuration.localization.cameraTopBarTitle = "document.camera.title"
-    configuration.localization.reviewScreenSubmitButtonTitle = "review.submit.title"
-    configuration.localization.cameraUserGuidanceNoDocumentFound = "camera.userGuidance.noDocumentFound"
-    configuration.localization.cameraUserGuidanceTooDark = "camera.userGuidance.tooDark"
+    val configuration = DocumentScanningFlow().apply {
+        localization.cameraTopBarTitle = "document.camera.title"
+        localization.reviewScreenSubmitButtonTitle = "review.submit.title"
+        localization.cameraUserGuidanceNoDocumentFound =
+            "camera.userGuidance.noDocumentFound"
+        localization.cameraUserGuidanceTooDark = "camera.userGuidance.tooDark"
+    }
 
     return configuration
 }

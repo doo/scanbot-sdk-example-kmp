@@ -1,6 +1,7 @@
-package io.scanbot.sdk.example.kmp.doc_code_snippets.document.pdf
+package io.scanbot.sdk.example.kmp.doc_code_snippets.document
 
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.pdfgeneration.PageDirection
 import io.scanbot.sdk.kmp.pdfgeneration.PageFit
 import io.scanbot.sdk.kmp.pdfgeneration.PageSize
@@ -71,3 +72,35 @@ fun createSearchablePdfFromDocument(
     )
 }
 // @EndTag("CreateSearchablePdfFromDocument")
+
+// @Tag("CreatePdfFromImages")
+fun createPdfFromImages(
+    imageRefs: List<ImageRef>,
+    outputUri: String
+): Result<String> {
+
+    val pdfConfig = PdfConfiguration.default()
+
+    return ScanbotSDK.pdfGenerator.generateFromImages(
+        imageRefs,
+        outputURI = outputUri,
+        pdfConfiguration = pdfConfig,
+    )
+}
+// @EndTag("CreatePdfFromImages")
+
+// @Tag("CreateSearchablePdfFromImages")
+fun createSearchablePdfFromImages(
+    imageRefs: List<ImageRef>,
+    outputUri: String
+): Result<String> {
+    val pdfConfig = PdfConfiguration.default()
+
+    return ScanbotSDK.pdfGenerator.generateFromImages(
+        imageRefs,
+        outputURI = outputUri,
+        pdfConfiguration = pdfConfig,
+        performOcr = true,  // Enable OCR for searchable PDF
+    )
+}
+// @EndTag("CreateSearchablePdfFromImages")

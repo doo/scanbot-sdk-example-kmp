@@ -1,40 +1,43 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases
 
-// @Tag("SinglePageScanningFinder")
+// @Tag("Single Page Finder")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun rtuUiSinglePageScanningFinderUseCase(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+    val configuration = DocumentScanningFlow().apply {
 
-    // Disable the multiple page behavior
-    configuration.outputSettings.pagesScanLimit = 1
+        // Disable the multiple page behavior
+        outputSettings.pagesScanLimit = 1
 
-    // Enable view finder
-    configuration.screens.camera.viewFinder.visible = true
-    // configuration.screens.camera.viewFinder.aspectRatio = AspectRatio(width: 3, height: 4);
+        // Enable view finder
+        screens.camera.viewFinder.visible = true
+        // configuration.screens.camera.viewFinder.aspectRatio = AspectRatio(width: 3, height: 4);
 
-    // Enable/Disable the review screen.
-    configuration.screens.review.enabled = false
+        // Enable/Disable the review screen.
+        screens.review.enabled = false
 
-    // Enable/Disable Auto Snapping behavior
-    configuration.screens.camera.cameraConfiguration.autoSnappingEnabled = true
+        // Enable/Disable Auto Snapping behavior
+        screens.camera.cameraConfiguration.autoSnappingEnabled = true
 
-    // Hide the auto snapping enable/disable button
-    configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = false
-    configuration.screens.camera.bottomBar.manualSnappingModeButton.visible = false
+        // Hide the auto snapping enable/disable button
+        screens.camera.bottomBar.autoSnappingModeButton.visible = false
+        screens.camera.bottomBar.manualSnappingModeButton.visible = false
 
-    // Set colors
-    configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF")
-    configuration.palette.sbColorOnPrimary = ScanbotColor("#ffffff")
+        // Set colors
+        palette.sbColorPrimary = ScanbotColor("#C8193CFF")
+        palette.sbColorOnPrimary = ScanbotColor("#ffffff")
 
-    // Configure the hint texts for different scenarios
-    configuration.screens.camera.userGuidance.statesTitles.tooDark = "Need more lighting to detect a document"
-    configuration.screens.camera.userGuidance.statesTitles.tooSmall = "Document too small"
-    configuration.screens.camera.userGuidance.statesTitles.noDocumentFound = "Could not detect a document"
+        // Configure the hint texts for different scenarios
+        screens.camera.userGuidance.statesTitles.tooDark =
+            "Need more lighting to detect a document"
+        screens.camera.userGuidance.statesTitles.tooSmall = "Document too small"
+        screens.camera.userGuidance.statesTitles.noDocumentFound =
+            "Could not detect a document"
 
+    }
     return configuration;
 }
 

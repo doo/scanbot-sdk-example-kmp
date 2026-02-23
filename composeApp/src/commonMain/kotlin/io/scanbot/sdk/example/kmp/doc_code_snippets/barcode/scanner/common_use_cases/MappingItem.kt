@@ -1,5 +1,6 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases
 
+// @Tag("Mapping item scanning")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeItemMapper
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeMappedData
@@ -7,32 +8,31 @@ import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfig
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.MultipleScanningMode
 
 fun rtuUiMappingItemScanningUseCase(): BarcodeScannerScreenConfiguration {
-    // Create the default configuration object.
-    val configuration = BarcodeScannerScreenConfiguration();
+    // Create configuration object.
+    val configuration = BarcodeScannerScreenConfiguration().apply {
 
-    // Initialize the use case for single scanning.
-    val scanningMode = MultipleScanningMode();
+        // Initialize the use case for single scanning.
+        useCase = MultipleScanningMode().apply {
 
-    // Set the item mapper.
-    scanningMode.barcodeInfoMapping.barcodeItemMapper =
-        BarcodeItemMapper { item, onResult, onError ->
-            if (item.text.isNotEmpty()) {
-                onResult.onResult(
-                    BarcodeMappedData(
-                        title = "Mapped: ${item.text}",
-                        subtitle = item.format.name,
-                        barcodeImage = ""
-                    )
-                )
-            } else {
-                onError.onError()
-            }
+            // Set the item mapper.
+            barcodeInfoMapping.barcodeItemMapper =
+                BarcodeItemMapper { item, onResult, onError ->
+                    if (item.text.isNotEmpty()) {
+                        onResult.onResult(
+                            BarcodeMappedData(
+                                title = "Mapped: ${item.text}",
+                                subtitle = item.format.name,
+                                barcodeImage = ""
+                            )
+                        )
+                    } else {
+                        onError.onError()
+                    }
+                }
+
+            // Configure other parameters as needed.
         }
-
-    configuration.useCase = scanningMode;
-
-    // Configure other parameters as needed.
-
+    }
     return configuration;
 }
 
@@ -48,3 +48,4 @@ fun startMappingItemScanning(
         }
     )
 }
+// @EndTag("Mapping item scanning")

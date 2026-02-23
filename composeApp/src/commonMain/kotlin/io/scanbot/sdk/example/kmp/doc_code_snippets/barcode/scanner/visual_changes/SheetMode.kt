@@ -1,5 +1,6 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.visual_changes
 
+// @Tag("Sheet mode")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.CollapsedVisibleHeight
@@ -8,31 +9,29 @@ import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.SheetMode
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
 fun rtuUiMultipleScanningPreviewConfig(): BarcodeScannerScreenConfiguration {
-    // Create the default configuration object.
-    val config = BarcodeScannerScreenConfiguration()
+    // Create configuration object.
+    val config = BarcodeScannerScreenConfiguration().apply {
 
-    // Initialize the use case for multiple scanning.
-    val scanningMode = MultipleScanningMode()
+        // Initialize the use case for multiple scanning.
+        useCase = MultipleScanningMode().apply {
 
-    // Set the sheet mode for the barcodes preview.
-    scanningMode.sheet.mode = SheetMode.COLLAPSED_SHEET
+            // Set the sheet mode for the barcodes preview.
+            sheet.mode = SheetMode.COLLAPSED_SHEET
 
-    // Set the height for the collapsed sheet.
-    scanningMode.sheet.collapsedVisibleHeight = CollapsedVisibleHeight.LARGE
+            // Set the height for the collapsed sheet.
+            sheet.collapsedVisibleHeight = CollapsedVisibleHeight.LARGE
 
-    // Configure the submit button on the sheet.
-    scanningMode.sheetContent.submitButton.text = "Submit"
-    scanningMode.sheetContent.submitButton.foreground.color = ScanbotColor("#000000")
+            // Configure the submit button on the sheet.
+            sheetContent.submitButton.text = "Submit"
+            sheetContent.submitButton.foreground.color = ScanbotColor("#000000")
+        }
+        // Configure localization parameters.
+        localization.barcodeInfoMappingErrorStateCancelButton = "Custom Cancel title"
+        localization.cameraPermissionCloseButton = "Custom Close title"
+        // Configure other strings as needed.
 
-    // Configure localization parameters.
-    config.localization.barcodeInfoMappingErrorStateCancelButton = "Custom Cancel title"
-    config.localization.cameraPermissionCloseButton = "Custom Close title"
-    // Configure other strings as needed.
-
-    // Configure other parameters, pertaining to multiple-scanning mode as needed.
-
-    config.useCase = scanningMode
-
+        // Configure other parameters
+    }
     return config
 }
 
@@ -45,3 +44,4 @@ fun startMultipleScanningPreview() {
         }
     )
 }
+// @EndTag("Sheet mode")

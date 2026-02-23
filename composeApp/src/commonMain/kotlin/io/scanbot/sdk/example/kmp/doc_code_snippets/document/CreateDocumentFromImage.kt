@@ -3,11 +3,10 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.document
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.document.configuration.CreateDocumentOptions
 import io.scanbot.sdk.kmp.image.ImageRef
-import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.utils.Result
 
-// @Tag("Create document from images")
 fun createDocumentFromImages(images: List<ImageRef>): String {
+// @Tag("Create document from images")
     val configuration = CreateDocumentOptions()
     // Configure other parameters (e.g., documentImageSizeLimit) as needed.
 
@@ -25,5 +24,5 @@ fun createDocumentFromImages(images: List<ImageRef>): String {
             "Failed to create document: ${error.message ?: "Unknown error"}"
         }
     )
-}
 // @EndTag("Create document from images")
+}

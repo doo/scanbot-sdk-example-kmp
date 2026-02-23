@@ -7,22 +7,20 @@ import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun reorderFlowConfig(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+    val configuration = DocumentScanningFlow().apply {
 
-    // Retrieve the instance of the reorder pages configuration from the main configuration object.
-    val reorderScreenConfiguration = configuration.screens.reorderPages
+        // Hide the guidance view.
+        screens.reorderPages.guidance.visible = false
 
-    // Hide the guidance view.
-    reorderScreenConfiguration.guidance.visible = false
+        // Set the title for the reorder screen.
+        screens.reorderPages.topBarTitle.text = "Reorder Pages Screen"
 
-    // Set the title for the reorder screen.
-    reorderScreenConfiguration.topBarTitle.text = "Reorder Pages Screen"
+        // Set the title for the guidance.
+        screens.reorderPages.guidance.title.text = "Reorder"
 
-    // Set the title for the guidance.
-    reorderScreenConfiguration.guidance.title.text = "Reorder"
-
-    // Set the color for the page number text.
-    reorderScreenConfiguration.pageTextStyle.color = ScanbotColor("#000000")
+        // Set the color for the page number text.
+        screens.reorderPages.pageTextStyle.color = ScanbotColor("#000000")
+    }
 
     return configuration
 }

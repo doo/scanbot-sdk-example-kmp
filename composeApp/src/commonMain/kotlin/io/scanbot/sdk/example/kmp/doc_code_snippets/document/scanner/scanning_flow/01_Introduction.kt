@@ -11,39 +11,40 @@ import io.scanbot.sdk.kmp.ui_v2.document.configuration.IntroductionScreenConfigu
 
 fun introductionFlowConfig(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+    val configuration = DocumentScanningFlow().apply {
 
-    // Configure the introduction screen
-    configuration.screens.camera.introduction =
-        IntroductionScreenConfiguration().apply {
+        // Configure the introduction screen
+        screens.camera.introduction =
+            IntroductionScreenConfiguration().apply {
 
-            showAutomatically = true
+                showAutomatically = true
 
-            items = listOf(
-                // First introduction item
-                IntroListEntry().apply {
-                    image = IntroImage.receiptsIntroImage()
-                    text = StyledText(
-                        text = "Some text explaining how to scan a receipt",
-                        color = ScanbotColor("#000000")
-                    )
-                },
+                items = listOf(
+                    // First introduction item
+                    IntroListEntry().apply {
+                        image = IntroImage.receiptsIntroImage()
+                        text = StyledText(
+                            text = "Some text explaining how to scan a receipt",
+                            color = ScanbotColor("#000000")
+                        )
+                    },
 
-                // Second introduction item
-                IntroListEntry().apply {
-                    image = IntroImage.checkIntroImage()
-                    text = StyledText(
-                        text = "Some text explaining how to scan a check",
-                        color = ScanbotColor("#000000")
-                    )
-                }
-            )
+                    // Second introduction item
+                    IntroListEntry().apply {
+                        image = IntroImage.checkIntroImage()
+                        text = StyledText(
+                            text = "Some text explaining how to scan a check",
+                            color = ScanbotColor("#000000")
+                        )
+                    }
+                )
 
-            title = StyledText(
-                text = "Introduction",
-                color = ScanbotColor("#000000")
-            )
-        }
+                title = StyledText(
+                    text = "Introduction",
+                    color = ScanbotColor("#000000")
+                )
+            }
+    }
 
     return configuration
 }

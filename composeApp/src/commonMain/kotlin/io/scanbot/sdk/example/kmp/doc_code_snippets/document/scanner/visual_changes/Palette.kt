@@ -7,28 +7,29 @@ import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun paletteConfigurationScanning(): DocumentScanningFlow {
     // Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+    val configuration = DocumentScanningFlow().apply {
 
-    // Simply alter one color and keep the other default.
-    configuration.palette.sbColorPrimary = ScanbotColor("c86e19")
+        // Simply alter one color and keep the other default.
+        palette.sbColorPrimary = ScanbotColor("c86e19")
 
-    // ... or set an entirely new palette.
-    configuration.palette.sbColorPrimary = ScanbotColor("#C8193C")
-    configuration.palette.sbColorPrimaryDisabled = ScanbotColor("#F5F5F5")
-    configuration.palette.sbColorNegative = ScanbotColor("#FF3737")
-    configuration.palette.sbColorPositive = ScanbotColor("#4EFFB4")
-    configuration.palette.sbColorWarning = ScanbotColor("#FFCE5C")
-    configuration.palette.sbColorSecondary = ScanbotColor("#FFEDEE")
-    configuration.palette.sbColorSecondaryDisabled = ScanbotColor("#F5F5F5")
-    configuration.palette.sbColorOnPrimary = ScanbotColor("#FFFFFF")
-    configuration.palette.sbColorOnSecondary = ScanbotColor("#C8193C")
-    configuration.palette.sbColorSurface = ScanbotColor("#FFFFFF")
-    configuration.palette.sbColorOutline = ScanbotColor("#EFEFEF")
-    configuration.palette.sbColorOnSurfaceVariant = ScanbotColor("#707070")
-    configuration.palette.sbColorOnSurface = ScanbotColor("#000000")
-    configuration.palette.sbColorSurfaceLow = ScanbotColor("#00000026")
-    configuration.palette.sbColorSurfaceHigh = ScanbotColor("#0000007A")
-    configuration.palette.sbColorModalOverlay = ScanbotColor("#000000A3")
+        // ... or set an entirely new palette.
+        palette.sbColorPrimary = ScanbotColor("#C8193C")
+        palette.sbColorPrimaryDisabled = ScanbotColor("#F5F5F5")
+        palette.sbColorNegative = ScanbotColor("#FF3737")
+        palette.sbColorPositive = ScanbotColor("#4EFFB4")
+        palette.sbColorWarning = ScanbotColor("#FFCE5C")
+        palette.sbColorSecondary = ScanbotColor("#FFEDEE")
+        palette.sbColorSecondaryDisabled = ScanbotColor("#F5F5F5")
+        palette.sbColorOnPrimary = ScanbotColor("#FFFFFF")
+        palette.sbColorOnSecondary = ScanbotColor("#C8193C")
+        palette.sbColorSurface = ScanbotColor("#FFFFFF")
+        palette.sbColorOutline = ScanbotColor("#EFEFEF")
+        palette.sbColorOnSurfaceVariant = ScanbotColor("#707070")
+        palette.sbColorOnSurface = ScanbotColor("#000000")
+        palette.sbColorSurfaceLow = ScanbotColor("#00000026")
+        palette.sbColorSurfaceHigh = ScanbotColor("#0000007A")
+        palette.sbColorModalOverlay = ScanbotColor("#000000A3")
+    }
 
     return configuration
 }

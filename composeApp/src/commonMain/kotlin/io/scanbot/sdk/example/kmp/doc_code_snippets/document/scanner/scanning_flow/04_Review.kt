@@ -1,36 +1,35 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.scanning_flow
 
+// @Tag("Review Screen")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun reviewFlowConfig(): DocumentScanningFlow {
+    // Create the default configuration object.
+    val configuration = DocumentScanningFlow().apply {
 
-// Create the default configuration object.
-    val configuration = DocumentScanningFlow()
+        // Configure the review screen.
+        screens.review.apply {
+            enabled = true
+            zoomButton.visible = false
+            bottomBar.addButton.visible = false
+            bottomBar.retakeButton.visible = true
+            bottomBar.retakeButton.title.color = ScanbotColor("000000")
+        }
 
-// Configure the review screen.
-    val reviewScreen = configuration.screens.review
-    reviewScreen.apply {
-        enabled = true
-        zoomButton.visible = false
-        bottomBar.addButton.visible = false
-        bottomBar.retakeButton.visible = true
-        bottomBar.retakeButton.title.color = ScanbotColor("000000")
+        // Configure the reorder pages screen.
+        screens.reorderPages.apply {
+            guidance.visible = false
+            topBarTitle.text = "Reorder Pages Screen"
+        }
+
+        // Configure the cropping screen.
+        screens.cropping
+            .bottomBar
+            .resetButton
+            .visible = false
     }
-
-// Configure the reorder pages screen.
-    val reorderPagesScreen = configuration.screens.reorderPages
-    reorderPagesScreen.apply {
-        guidance.visible = false
-        topBarTitle.text = "Reorder Pages Screen"
-    }
-
-// Configure the cropping screen.
-    configuration.screens.cropping
-        .bottomBar
-        .resetButton
-        .visible = false
 
     return configuration
 
@@ -44,3 +43,4 @@ fun startScanningWithReviewFlow() =
             it.onFailure { TODO("Handle error") }
         }
     )
+// @EndTag("Review Screen")

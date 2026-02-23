@@ -1,18 +1,19 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.visual_changes
 
+// @Tag("Localization")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
 
 fun rtuUiLocalizationConfig(): BarcodeScannerScreenConfiguration {
-    // Create the default configuration object.
-    val configuration = BarcodeScannerScreenConfiguration()
+    // Create configuration object.
+    val configuration = BarcodeScannerScreenConfiguration().apply {
 
-    // Configure localization parameters.
-    configuration.localization.barcodeInfoMappingErrorStateCancelButton = "Custom Cancel title"
-    configuration.localization.cameraPermissionCloseButton = "Custom Close title"
+        // Configure localization parameters.
+        localization.barcodeInfoMappingErrorStateCancelButton = "Custom Cancel title"
+        localization.cameraPermissionCloseButton = "Custom Close title"
 
-    // Configure other strings as needed.
-
+        // Configure other strings as needed.
+    }
     return configuration
 }
 
@@ -25,3 +26,4 @@ fun startLocalizationScanning() {
         }
     )
 }
+// @EndTag("Localization")

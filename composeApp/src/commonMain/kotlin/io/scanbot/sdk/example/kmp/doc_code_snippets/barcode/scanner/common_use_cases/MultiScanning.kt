@@ -1,5 +1,6 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases
 
+// @Tag("Multiple scanning")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.CollapsedVisibleHeight
@@ -9,38 +10,35 @@ import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.SheetMode
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
 fun rtuUiMutliScanningUseCase(): BarcodeScannerScreenConfiguration {
-    // Create the default configuration object.
-    val configuration = BarcodeScannerScreenConfiguration()
+    // Create configuration object.
+    val configuration = BarcodeScannerScreenConfiguration().apply {
 
-    // Initialize the use case for multiple scanning.
-    val scanningMode = MultipleScanningMode()
+        // Initialize the use case for multiple scanning.
+        useCase = MultipleScanningMode().apply {
 
-    // Set the counting mode.
-    scanningMode.mode = MultipleBarcodesScanningMode.COUNTING
+            // Set the counting mode.
+            mode = MultipleBarcodesScanningMode.COUNTING
 
-    // Set the sheet mode for the barcodes preview.
-    scanningMode.sheet.mode = SheetMode.COLLAPSED_SHEET
+            // Set the sheet mode for the barcodes preview.
+            sheet.mode = SheetMode.COLLAPSED_SHEET
 
-    // Set the height for the collapsed sheet.
-    scanningMode.sheet.collapsedVisibleHeight = CollapsedVisibleHeight.LARGE
+            // Set the height for the collapsed sheet.
+            sheet.collapsedVisibleHeight = CollapsedVisibleHeight.LARGE
 
-    // Enable manual count change.
-    scanningMode.sheetContent.manualCountChangeEnabled = true
+            // Enable manual count change.
+            sheetContent.manualCountChangeEnabled = true
 
-    // Set the delay before same barcode counting repeat.
-    scanningMode.countingRepeatDelay = 1000
+            // Set the delay before same barcode counting repeat.
+            countingRepeatDelay = 1000
 
-    // Configure the submit button.
-    scanningMode.sheetContent.submitButton.text = "Submit"
-    scanningMode.sheetContent.submitButton.foreground.color =
-        ScanbotColor("#000000")
+            // Configure the submit button.
+            sheetContent.submitButton.text = "Submit"
+            sheetContent.submitButton.foreground.color =
+                ScanbotColor("#000000")
 
-    // Configure other parameters, pertaining to multiple-scanning mode as needed.
-
-    configuration.useCase = scanningMode
-
-    // Configure other parameters as needed.
-
+            // Configure other parameters as needed.
+        }
+    }
     return configuration
 }
 
@@ -56,3 +54,4 @@ fun startMultiScanning(
         }
     )
 }
+// @EndTag("Multiple scanning")

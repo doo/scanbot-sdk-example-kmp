@@ -5,6 +5,7 @@ import io.scanbot.sdk.kmp.image.EncodeImageOptions
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.image.PathImageLoadOptions
 import io.scanbot.sdk.kmp.image.SaveImageOptions
+import io.scanbot.sdk.kmp.utils.Result
 
 /*
     NOTE: this snippet of code is to be used only as a part of the website documentation.

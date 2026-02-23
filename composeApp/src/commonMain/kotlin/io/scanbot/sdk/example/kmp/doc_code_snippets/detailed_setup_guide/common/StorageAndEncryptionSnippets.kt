@@ -3,6 +3,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.detailed_setup_guide.common
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.FileEncryptionMode
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
+import io.scanbot.sdk.kmp.utils.Result
 
 /*
     NOTE: this snippet of code is to be used only as a part of the website documentation.

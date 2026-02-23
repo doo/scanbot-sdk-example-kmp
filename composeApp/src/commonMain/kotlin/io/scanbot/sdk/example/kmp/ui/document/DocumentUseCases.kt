@@ -24,7 +24,7 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createDocumentFromI
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases.startMultiPageScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases.startSinglePageFinderScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases.startSinglePageScanning
-import io.scanbot.sdk.example.kmp.doc_code_snippets.ocr.performOcrOnImages
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrOnImages
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker

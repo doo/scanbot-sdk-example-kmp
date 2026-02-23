@@ -29,7 +29,7 @@ kotlin {
             isStatic = true
         }
 
-        iosTarget.swiftPackageConfig(cinteropName = "spmScanbot") {
+        iosTarget.swiftPackageConfig {
             minIos = "13.0"
             dependency {
                 remotePackageVersion(
@@ -58,8 +58,8 @@ kotlin {
             implementation(compose.materialIconsExtended)
 
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.jetbrains.compose.navigation)
             implementation(libs.scanbot.sdk)
             implementation(libs.scanbot.compose.ui)
@@ -67,7 +67,6 @@ kotlin {
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.permissions.camera)
-
         }
     }
 }

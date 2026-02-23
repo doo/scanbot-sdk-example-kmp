@@ -1,24 +1,26 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.visual_changes
 
+// @Tag("User guidance")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
 fun rtuUiUserGuidanceConfig(): BarcodeScannerScreenConfiguration {
-    // Create the default configuration object.
-    val configuration = BarcodeScannerScreenConfiguration()
+    // Create configuration object.
+    val configuration = BarcodeScannerScreenConfiguration().apply {
 
-    // Hide/unhide the user guidance.
-    configuration.userGuidance.visible = true
+        // Hide/unhide the user guidance.
+        userGuidance.visible = true
 
-    // Configure the title.
-    configuration.userGuidance.title.text = "Move the finder over a barcode"
-    configuration.userGuidance.title.color = ScanbotColor("#FFFFFF")
+        // Configure the title.
+        userGuidance.title.text = "Move the finder over a barcode"
+        userGuidance.title.color = ScanbotColor("#FFFFFF")
 
-    // Configure the background.
-    configuration.userGuidance.background.fillColor = ScanbotColor("#0000007A")
+        // Configure the background.
+        userGuidance.background.fillColor = ScanbotColor("#0000007A")
 
-    // Configure other parameters as needed.
+        // Configure other parameters as needed.
+    }
 
     return configuration
 }
@@ -32,3 +34,4 @@ fun startUserGuidanceScanning() {
         }
     )
 }
+// @EndTag("User guidance")

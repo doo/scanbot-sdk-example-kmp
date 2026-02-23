@@ -115,7 +115,6 @@ fun BarcodeCustomUIScreen(
                 }
             )
 
-
             if (barcodes.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
