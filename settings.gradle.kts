@@ -10,7 +10,6 @@ pluginManagement {
                 includeGroupAndSubgroups("com.google")
             }
         }
-        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -26,7 +25,6 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
-        mavenLocal()
         maven { url = uri("https://nexus.scanbot.io/nexus/content/repositories/releases/") }
         maven { url = uri("https://nexus.scanbot.io/nexus/content/repositories/snapshots/") }
     }
