@@ -26,7 +26,7 @@ class ResultApiSnippets {
     fun processResultWithSwitch(result: Result<BarcodeScannerResult>) {
         when (result) {
             is Result.Success -> {
-                val barcodeResult = result.getOrNull()
+                val barcodeResult = result.value
                 // Handle successful result
             }
 
@@ -50,10 +50,6 @@ class ResultApiSnippets {
                 is InvalidImageRefError -> {
                     // Handle invalid image - prompt user to capture again
                     println("Image is corrupted or invalid")
-                }
-                is OperationCanceledError -> {
-                    // Handle cancellation - user might have cancelled
-                    println("Operation was cancelled")
                 }
                 is TimeoutError -> {
                     // Handle timeout - retry or inform user

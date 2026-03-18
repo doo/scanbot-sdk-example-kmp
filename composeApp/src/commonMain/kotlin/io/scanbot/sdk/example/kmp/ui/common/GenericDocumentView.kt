@@ -12,6 +12,7 @@ import io.scanbot.sdk.kmp.genericdocument.GenericDocument
 import io.scanbot.sdk.kmp.genericdocument.TextFieldWrapper
 import io.scanbot.sdk.kmp.genericdocument.barcode.AAMVA
 import io.scanbot.sdk.kmp.genericdocument.barcode.BoardingPass
+import io.scanbot.sdk.kmp.genericdocument.barcode.BritishColumbiaDriverLicense
 import io.scanbot.sdk.kmp.genericdocument.barcode.DEMedicalPlan
 import io.scanbot.sdk.kmp.genericdocument.barcode.GS1
 import io.scanbot.sdk.kmp.genericdocument.barcode.HIBC
@@ -23,10 +24,8 @@ import io.scanbot.sdk.kmp.genericdocument.barcode.VCard
 
 @Composable
 fun GenericDocumentView(
-    genericDocument: GenericDocument?
+    genericDocument: GenericDocument
 ) {
-    if (genericDocument == null) return
-
     val wrappedField = remember(genericDocument) {
         getGenericFieldValue(genericDocument)
     }
@@ -82,6 +81,9 @@ fun getGenericFieldValue(
 
         HIBC.DOCUMENT_TYPE ->
             HIBC(genericDocument).labelerIdentificationCode
+
+        BritishColumbiaDriverLicense.DOCUMENT_TYPE ->
+            BritishColumbiaDriverLicense(genericDocument).address
 
         else -> null
     }

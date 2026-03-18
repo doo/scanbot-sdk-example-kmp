@@ -29,6 +29,7 @@ fun scanDocumentFromImage(
 fun scanDocumentFromImageWithCustomConfig(
     image: ImageRef,
 ) {
+    // TODO Yurii: since the name is custom config, should we show/change more params (otherwise is the same as the above function)
     val configuration = DocumentScannerConfiguration()
     val result = ScanbotSDK.document.scanFromImage(
         image = image,

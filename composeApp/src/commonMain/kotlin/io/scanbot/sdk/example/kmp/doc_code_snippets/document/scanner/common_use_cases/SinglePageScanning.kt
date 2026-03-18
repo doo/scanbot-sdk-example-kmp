@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
+import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.PageSnapCheckMarkAnimation
@@ -56,13 +57,16 @@ fun rtuUiSinglePageScanningUseCase(): DocumentScanningFlow {
 }
 
 fun startSinglePageScanning(
-    onResultHandler: (String) -> Unit
+    onResultHandler: (DocumentData) -> Unit,
+    onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.document.startScanner(
         configuration = rtuUiSinglePageScanningUseCase(),
         onResult = { result ->
             result.onSuccess {
-                onResultHandler(it.toJson().toString())
+                onResultHandler(it)
+            }.onFailure {
+                onErrorHandler(it)
             }
         }
     )
@@ -75,7 +79,7 @@ fun DocumentScannerExample() {
     LaunchedEffect(Unit) {
         ScanbotSDK.initialize(
             SdkConfiguration(
-                licenseKey = "" // optional: add your license key here
+                licenseKey = "" // add your license key here
             )
         )
     }

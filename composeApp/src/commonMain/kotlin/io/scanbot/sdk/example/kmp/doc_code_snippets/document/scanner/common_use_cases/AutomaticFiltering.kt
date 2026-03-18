@@ -16,7 +16,7 @@ fun autoFilteringUseCase(): DocumentScanningFlow {
 
 fun startScanningWithAutoFiltering() {
     ScanbotSDK.document.startScanner(
-        configuration = rtuUiMultiPageScanningUseCase(),
+        configuration = autoFilteringUseCase(),
         onResult = {
             it.onSuccess { TODO("Handle scanned document result") }
             it.onFailure { TODO("Handle error") }

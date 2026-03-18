@@ -2,6 +2,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use
 
 // @Tag("Single Page Finder")
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
@@ -42,13 +43,16 @@ fun rtuUiSinglePageScanningFinderUseCase(): DocumentScanningFlow {
 }
 
 fun startSinglePageFinderScanning(
-    onResultHandler: (String) -> Unit
+    onResultHandler: (DocumentData) -> Unit,
+    onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.document.startScanner(
         configuration = rtuUiSinglePageScanningFinderUseCase(),
         onResult = { result ->
             result.onSuccess {
-                onResultHandler(it.toJson().toString())
+                onResultHandler(it)
+            }.onFailure {
+                onErrorHandler(it)
             }
         }
     )

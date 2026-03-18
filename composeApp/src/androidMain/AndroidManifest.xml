@@ -6,6 +6,8 @@
         android:required="true" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <queries>
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />

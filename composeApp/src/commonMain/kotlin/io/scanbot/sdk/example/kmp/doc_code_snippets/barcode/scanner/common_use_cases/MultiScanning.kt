@@ -3,6 +3,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_
 // @Tag("Multiple scanning")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
+import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerUiResult
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.CollapsedVisibleHeight
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.MultipleBarcodesScanningMode
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.MultipleScanningMode
@@ -33,8 +34,7 @@ fun rtuUiMutliScanningUseCase(): BarcodeScannerScreenConfiguration {
 
             // Configure the submit button.
             sheetContent.submitButton.text = "Submit"
-            sheetContent.submitButton.foreground.color =
-                ScanbotColor("#000000")
+            sheetContent.submitButton.foreground.color = ScanbotColor("#000000")
 
             // Configure other parameters as needed.
         }
@@ -43,15 +43,16 @@ fun rtuUiMutliScanningUseCase(): BarcodeScannerScreenConfiguration {
 }
 
 fun startMultiScanning(
-    onResultHandler: (barcodeResult: String) -> Unit
+    onResultHandler: (barcodeResult: BarcodeScannerUiResult) -> Unit,
+    onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiMutliScanningUseCase(),
-        onResult = { result ->
+        configuration = rtuUiMutliScanningUseCase(), onResult = { result ->
             result.onSuccess {
-                onResultHandler(it.toJson().toString())
+                onResultHandler(it)
+            }.onFailure {
+                onErrorHandler(it)
             }
-        }
-    )
+        })
 }
 // @EndTag("Multiple scanning")

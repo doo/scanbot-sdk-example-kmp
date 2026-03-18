@@ -38,35 +38,35 @@ fun MenuScreen(
     var showLicenseDialog by rememberSaveable { mutableStateOf(false) }
 
     val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
-    val controller: PermissionsController = remember(factory) { factory.createPermissionsController() }
+    val controller: PermissionsController =
+        remember(factory) { factory.createPermissionsController() }
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
     BindEffect(controller)
 
     LicenseGuard { checkLicense ->
-        Scaffold(
-            topBar = {
-                TopBar(title = "Scanbot SDK KMP Example")
-            },
-            bottomBar = {
-                Footer()
-            }
-        ) { paddingValues ->
+        Scaffold(topBar = {
+            TopBar(title = "Scanbot SDK KMP Example")
+        }, bottomBar = {
+            Footer()
+        }) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .padding(16.dp),
+                modifier = Modifier.padding(paddingValues).fillMaxSize().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MenuItem("Barcode SDK Menu", {
-                    checkLicense { navigateToBarcodeUseCases() }
+                MenuItem("Barcode Use Cases", {
+                    checkLicense {
+                        navigateToBarcodeUseCases()
+                    }
                 })
 
-                MenuItem("Document SDK Menu", {
-                    checkLicense { navigateToDocumentUseCases() }
+                MenuItem("Document Use Cases", {
+                    checkLicense {
+                        navigateToDocumentUseCases()
+                    }
                 })
 
+                // TODO Yurii: should we move this in Barcode Use Cases section ?
                 MenuItem("Barcode Custom UI", {
                     checkLicense {
                         coroutineScope.launch {
@@ -83,7 +83,7 @@ fun MenuScreen(
                 })
 
                 Spacer(modifier = Modifier.weight(1f))
-                MenuItem("View License Status", { showLicenseDialog = true })
+                MenuItem("View License Info", { showLicenseDialog = true })
             }
 
             if (showLicenseDialog) {

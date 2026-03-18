@@ -44,6 +44,7 @@ kotlin {
     }
 
     sourceSets {
+        // TODO Yurii: can we get rid of these deprecations?
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)

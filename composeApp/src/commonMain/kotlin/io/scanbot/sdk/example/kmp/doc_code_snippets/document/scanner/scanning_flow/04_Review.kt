@@ -15,7 +15,7 @@ fun reviewFlowConfig(): DocumentScanningFlow {
             zoomButton.visible = false
             bottomBar.addButton.visible = false
             bottomBar.retakeButton.visible = true
-            bottomBar.retakeButton.title.color = ScanbotColor("000000")
+            bottomBar.retakeButton.title.color = ScanbotColor("#000000")
         }
 
         // Configure the reorder pages screen.

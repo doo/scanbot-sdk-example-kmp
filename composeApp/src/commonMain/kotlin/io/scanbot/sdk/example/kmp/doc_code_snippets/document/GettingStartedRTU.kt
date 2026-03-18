@@ -15,7 +15,7 @@ fun DocumentScannerExample() {
     LaunchedEffect(Unit) {
         ScanbotSDK.initialize(
             SdkConfiguration(
-                licenseKey = "" // optional: add your license key here
+                licenseKey = "" // add your license key here
             )
         )
     }
@@ -61,21 +61,21 @@ fun handlingResult() {
     ScanbotSDK.document.startScanner(
         configuration = config,
         onResult = { result ->
-            result.onSuccess { scanResult ->
+            result.onSuccess { documentData ->
                 // The unique identifier of the scanned document
-                val documentId = scanResult.uuid
+                val documentId = documentData.uuid
 
                 // The creation timestamp of the document
-                val timestamp = scanResult.creationTimestamp
+                val timestamp = documentData.creationTimestamp
 
                 // URI to the generated PDF of the document (if configured)
-                val pdfUri = scanResult.pdfURI
+                val pdfUri = documentData.pdfURI
 
                 // URI to the generated TIFF of the document (if configured)
-                val tiffUri = scanResult.tiffURI
+                val tiffUri = documentData.tiffURI
 
                 // Iterate over scanned pages
-                scanResult.pages.forEach { page ->
+                documentData.pages.forEach { page ->
                     // Handle each scanned page (PageData)
                     println("Page ID: ${page.uuid}")
                 }

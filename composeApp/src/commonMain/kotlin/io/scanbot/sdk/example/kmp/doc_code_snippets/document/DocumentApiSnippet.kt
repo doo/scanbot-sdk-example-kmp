@@ -40,7 +40,7 @@ fun loadExistingDocument(
 
 fun loadExistingDocument(
     documentUuid: String,
-    onResult: (Result<DocumentData>) -> Unit
+    onResult: (Result<DocumentData>) -> Unit // TODO Yurii: whats the idea with this param
 ) {
     // Load an existing document by its UUID.
     ScanbotSDK.document.loadDocument(documentUuid)
@@ -48,7 +48,7 @@ fun loadExistingDocument(
 
 fun cloneExistingDocument(
     documentUuid: String,
-    onResult: (Result<DocumentData>) -> Unit
+    onResult: (Result<DocumentData>) -> Unit // TODO Yurii: whats the idea with this param
 ) {
     // Clone an existing document by its UUID and return the cloned copy.
     ScanbotSDK.document.cloneDocument(documentUuid)
@@ -106,6 +106,7 @@ fun deleteAllDocuments() {
 // @EndTag("Storing and retrieving a DocumentData")
 
 
+// TODO Yurii: should this be under the tag ?
 fun addPages(
     documentUuid: String,
     images: List<ImageRef>,

@@ -26,7 +26,7 @@ suspend fun performOcrOnImages(images: List<ImageRef>): String {
 
 
 // @Tag("Perform OCR on document")
-suspend fun performOcrOnImages(document: DocumentData): String {
+suspend fun performOcrOnDocument(document: DocumentData): String {
     // Run the OCR engine recognize call
     val result = ScanbotSDK.ocrEngine.recognizeOnDocument(document.uuid)
 

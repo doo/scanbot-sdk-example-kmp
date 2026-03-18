@@ -45,7 +45,7 @@ fun Footer() {
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Copyright 2025 Scanbot SDK GmbH. All rights reserved.",
+            text = "Copyright 2026 Scanbot SDK GmbH. All rights reserved.",
             fontSize = 10.sp,
             color = Color.Black,
             textAlign = TextAlign.Center

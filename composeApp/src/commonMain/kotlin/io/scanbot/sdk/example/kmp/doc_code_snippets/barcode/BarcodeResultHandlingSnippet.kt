@@ -5,6 +5,7 @@ import io.scanbot.sdk.kmp.barcode.BarcodeDocumentFormat
 import io.scanbot.sdk.kmp.barcode.BarcodeScannerConfiguration
 import io.scanbot.sdk.kmp.genericdocument.barcode.AAMVA
 import io.scanbot.sdk.kmp.genericdocument.barcode.BoardingPass
+import io.scanbot.sdk.kmp.genericdocument.barcode.BritishColumbiaDriverLicense
 import io.scanbot.sdk.kmp.genericdocument.barcode.DEMedicalPlan
 import io.scanbot.sdk.kmp.genericdocument.barcode.GS1
 import io.scanbot.sdk.kmp.genericdocument.barcode.HIBC
@@ -143,6 +144,12 @@ class BarcodeResultHandlingSnippets {
                         val hibc = HIBC(document)
                         val lotNumber = hibc.lotNumber
                         val serialNumber = hibc.serialNumber
+                    }
+                    BritishColumbiaDriverLicense.DOCUMENT_TYPE -> {
+                        // Handle BritishColumbiaDriverLicense document
+                        val license = BritishColumbiaDriverLicense(document)
+                        val address = license.address
+                        val expirationDate = license.cardExpiry
                     }
                 }
             }

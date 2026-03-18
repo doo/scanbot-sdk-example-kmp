@@ -31,8 +31,8 @@ fun NavigationRoot() {
 
         composable<Route.BarcodeUseCases> {
             BarcodeUseCasesScreen(
-                onResultPreview = { barcodeJson ->
-                    navController.navigate(Route.BarcodePreview(barcodeJson))
+                onResultPreview = { result ->
+                    navController.navigate(Route.BarcodePreview(result.toJsonString()))
                 },
                 onPopBackStack = onPopBackStack
             )
@@ -40,8 +40,8 @@ fun NavigationRoot() {
 
         composable<Route.DocumentUseCases> {
             DocumentUseCasesScreen(
-                onResultPreview = { documentDataJson ->
-                    navController.navigate(Route.DocumentPreview(documentDataJson))
+                onResultPreview = { documentData ->
+                    navController.navigate(Route.DocumentPreview(documentData.toJsonString()))
                 },
                 onPopBackStack = onPopBackStack
             )

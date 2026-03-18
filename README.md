@@ -14,7 +14,7 @@ With our Ready-To-Use UI (RTU UI) components, you can integrate the Scanbot SDK 
 
 Open the project in Android Studio and run it on Android/iOS.
 
-## Features of the Scanbot Scanner SDK
+## Features of the Scanbot Scanner SDK TODO Yurii: we show only BS features ?
 
 ### Out-of-the-box barcode scanning workflows
 
@@ -67,12 +67,6 @@ Integrating the Scanbot Barcode Scanner SDK into your app takes just a few minut
 Whether you're a seasoned developer or just starting, our tutorials provide clear instructions for adding scanning functionality with minimal effort.
 
 💡Check out our [developer blog](https://scanbot.io/techblog/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) for a collection of in-depth tutorials, use cases, and best practices.
-
-### Free integration support
-
-Need help integrating our barcode scanner software into your compose multiplatform project? We offer [free developer support](https://docs.scanbot.io/support/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) via Slack, MS Teams, or email.
-
-As a customer, you also get access to a dedicated support Slack or Microsoft Teams channel to talk directly to your Customer Success Manager and our engineers.
 
 ### Licensing and pricing
 

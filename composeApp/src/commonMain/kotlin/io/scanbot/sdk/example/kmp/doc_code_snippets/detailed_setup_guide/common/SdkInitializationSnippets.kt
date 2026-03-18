@@ -15,7 +15,7 @@ class StorageAndEncryptionSnippets {
 
     fun customStorageDirectory() {
         // @Tag("Custom storage directory")
-        val customStorageDir = "path/to/my-custom-storage-dir"
+        val customStorageDir = "file:///path/to/my-custom-storage-dir"
 
         val configuration = SdkConfiguration(
             licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
@@ -43,7 +43,7 @@ class StorageAndEncryptionSnippets {
         // Initialize SDK with custom storage and encryption
         val configuration = SdkConfiguration(
             licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
-            storageBaseDirectory = "path/to/custom/storage",
+            storageBaseDirectory = "file:///path/to/custom/storage",
             fileEncryptionMode = FileEncryptionMode.AES256,
             fileEncryptionPassword = "SecurePassword123!"
         )

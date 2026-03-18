@@ -13,7 +13,7 @@ class LicenseHandlingSnippets {
 
     fun checkLicenseStatus() {
         // @Tag("Check license status")
-        val licenseInfo = ScanbotSDK.Companion.getLicenseInfo()
+        val licenseInfo = ScanbotSDK.getLicenseInfo()
 
         licenseInfo.onSuccess { info ->
             println("License status: ${info.status}")
@@ -27,7 +27,7 @@ class LicenseHandlingSnippets {
 
     fun handleLicenseStatus() {
         // @Tag("Handle license status")
-        ScanbotSDK.Companion.getLicenseInfo().onSuccess { licenseInfo ->
+        ScanbotSDK.getLicenseInfo().onSuccess { licenseInfo ->
             when (licenseInfo.status) {
                 LicenseStatus.OKAY -> {
                     // License is valid - proceed with SDK operations

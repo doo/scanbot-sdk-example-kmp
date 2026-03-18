@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.outlined.LocationDisabled
+import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -28,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.compose.bundle.classic.BarcodeCameraConfiguration
-import io.scanbot.sdk.compose.bundle.classic.BarcodeOverlayTextFormat
 import io.scanbot.sdk.compose.bundle.classic.FinderViewConfiguration
 import io.scanbot.sdk.compose.bundle.classic.SelectionOverlay
 import io.scanbot.sdk.compose.bundle.classic.ui.BarcodeScannerView
@@ -39,6 +40,7 @@ import io.scanbot.sdk.kmp.barcode.BarcodeScannerConfiguration
 import io.scanbot.sdk.kmp.barcode.BarcodeScannerEngineMode
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
+// TODO Yurii: should we move this in barcodes use cases screen ?
 @Composable
 fun BarcodeCustomUIScreen(
     onPopBackStack: () -> Unit,
@@ -50,26 +52,30 @@ fun BarcodeCustomUIScreen(
     var detectionEnabled by remember { mutableStateOf(true) }
     var showPolygon by remember { mutableStateOf(true) }
 
-    val selectionOverlay = remember(showPolygon) {
-        SelectionOverlay(
-            overlayEnabled = showPolygon,
-            textFormat = BarcodeOverlayTextFormat.CODE,
+    val selectionOverlay by remember(showPolygon) {
+        mutableStateOf(
+            SelectionOverlay(
+                overlayEnabled = showPolygon
+            )
         )
     }
 
-    val finderConfiguration = remember {
-        FinderViewConfiguration(
-            enabled = true,
-            lineWidth = 3,
-            lineColor = ScanbotColor("#2196F3"),
-            backgroundColor = ScanbotColor("#33000000"),
+    var finderConfiguration by remember {
+        mutableStateOf(
+            FinderViewConfiguration(
+                enabled = true,
+                lineWidth = 3,
+                lineColor = ScanbotColor("#2196F3"),
+                backgroundColor = ScanbotColor("#33000000"),
+            )
         )
     }
 
-    val scannerConfiguration = remember {
-        BarcodeScannerConfiguration(
-            engineMode = BarcodeScannerEngineMode.NEXT_GEN,
-            returnBarcodeImage = true
+    val scannerConfiguration by remember {
+        mutableStateOf(
+            BarcodeScannerConfiguration(
+                engineMode = BarcodeScannerEngineMode.NEXT_GEN, returnBarcodeImage = true
+            )
         )
     }
 
@@ -81,24 +87,30 @@ fun BarcodeCustomUIScreen(
                 onPopBackStack = onPopBackStack,
                 actions = {
                     IconButton(
-                        onClick = { flashEnabled = !flashEnabled }
-                    ) {
+                        onClick = {
+                            flashEnabled = !flashEnabled
+                        }) {
                         Icon(
-                            imageVector = if (flashEnabled)
-                                Icons.Default.FlashOn
-                            else
-                                Icons.Default.FlashOff,
-                            contentDescription = null
+                            imageVector = if (flashEnabled) Icons.Default.FlashOn
+                            else Icons.Default.FlashOff, contentDescription = null
                         )
                     }
-                }
-            )
+
+                    IconButton(
+                        onClick = {
+                            finderConfiguration =
+                                finderConfiguration.copy(!finderConfiguration.enabled)
+                        }) {
+                        Icon(
+                            imageVector = if (finderConfiguration.enabled) Icons.Outlined.LocationDisabled
+                            else Icons.Outlined.LocationSearching, contentDescription = null
+                        )
+                    }
+                })
         },
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            modifier = Modifier.padding(paddingValues).fillMaxSize()
         ) {
             BarcodeScannerView(
                 modifier = Modifier.fillMaxWidth().weight(1f),
@@ -112,14 +124,15 @@ fun BarcodeCustomUIScreen(
                 ),
                 onBarcodesDetected = { detected ->
                     barcodes = detected
-                }
-            )
+                },
+                onError = { error ->
+                    // Handle errors here, e.g. show a message to the user
+                    println("Barcode scanner error: ${error.exception.message}")
+                })
 
             if (barcodes.isNotEmpty()) {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                    modifier = Modifier.fillMaxWidth().weight(1f),
                     contentPadding = PaddingValues(16.dp)
                 ) {
                     itemsIndexed(barcodes) { index, barcode ->
