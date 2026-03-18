@@ -1,4 +1,4 @@
-package io.scanbot.sdk.example.kmp.ui.barcode.custom
+package io.scanbot.sdk.example.kmp.ui.barcode
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,18 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.scanbot.sdk.compose.bundle.classic.BarcodeCameraConfiguration
-import io.scanbot.sdk.compose.bundle.classic.FinderViewConfiguration
-import io.scanbot.sdk.compose.bundle.classic.SelectionOverlay
-import io.scanbot.sdk.compose.bundle.classic.ui.BarcodeScannerView
-import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeItemCard
+import io.scanbot.sdk.compose.bundle.BarcodeCameraConfiguration
+import io.scanbot.sdk.compose.bundle.FinderViewConfiguration
+import io.scanbot.sdk.compose.bundle.SelectionOverlay
+import io.scanbot.sdk.compose.bundle.ui.BarcodeScannerView
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.barcode.BarcodeItem
 import io.scanbot.sdk.kmp.barcode.BarcodeScannerConfiguration
 import io.scanbot.sdk.kmp.barcode.BarcodeScannerEngineMode
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
-// TODO Yurii: should we move this in barcodes use cases screen ?
 @Composable
 fun BarcodeCustomUIScreen(
     onPopBackStack: () -> Unit,
@@ -99,7 +97,7 @@ fun BarcodeCustomUIScreen(
                     IconButton(
                         onClick = {
                             finderConfiguration =
-                                finderConfiguration.copy(!finderConfiguration.enabled)
+                                finderConfiguration.copy(enabled = !finderConfiguration.enabled)
                         }) {
                         Icon(
                             imageVector = if (finderConfiguration.enabled) Icons.Outlined.LocationDisabled

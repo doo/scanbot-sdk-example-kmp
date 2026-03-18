@@ -44,19 +44,18 @@ kotlin {
     }
 
     sourceSets {
-        // TODO Yurii: can we get rid of these deprecations?
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.materialIconsExtended)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
+            implementation(libs.compose.components.uitoolingpreview)
+            implementation(libs.compose.material.icons.extended)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -100,6 +99,6 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
 

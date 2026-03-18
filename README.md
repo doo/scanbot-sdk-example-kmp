@@ -14,7 +14,7 @@ With our Ready-To-Use UI (RTU UI) components, you can integrate the Scanbot SDK 
 
 Open the project in Android Studio and run it on Android/iOS.
 
-## Features of the Scanbot Scanner SDK TODO Yurii: we show only BS features ?
+## Features of the Scanbot Scanner SDK
 
 ### Out-of-the-box barcode scanning workflows
 

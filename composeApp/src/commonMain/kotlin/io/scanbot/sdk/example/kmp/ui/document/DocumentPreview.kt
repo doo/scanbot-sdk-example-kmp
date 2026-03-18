@@ -228,7 +228,7 @@ fun DocumentPreviewScreen(
             }
 
             resultDialogMessage?.let {
-                    InfoDialog("Result", it) { resultDialogMessage = null }
+                InfoDialog("Result", it) { resultDialogMessage = null }
             }
         }
     }

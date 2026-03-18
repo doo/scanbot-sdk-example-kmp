@@ -32,7 +32,7 @@ fun MenuItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                enabled = enabled, // TODO Yurii: do we really need this "hack".. Is it convinient ?
+                enabled = enabled,
                 onClick = {
                     enabled = false
                     onClick()

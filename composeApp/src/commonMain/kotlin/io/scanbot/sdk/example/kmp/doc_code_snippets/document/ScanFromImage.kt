@@ -1,7 +1,9 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.document
 
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.common.ProcessingMode
 import io.scanbot.sdk.kmp.documentscanner.DocumentScannerConfiguration
+import io.scanbot.sdk.kmp.documentscanner.DocumentScannerEngineMode
 import io.scanbot.sdk.kmp.documentscanner.DocumentScanningResult
 import io.scanbot.sdk.kmp.documentscanner.PartiallyVisibleDocumentConfiguration
 import io.scanbot.sdk.kmp.image.ImageRef
@@ -29,8 +31,13 @@ fun scanDocumentFromImage(
 fun scanDocumentFromImageWithCustomConfig(
     image: ImageRef,
 ) {
-    // TODO Yurii: since the name is custom config, should we show/change more params (otherwise is the same as the above function)
     val configuration = DocumentScannerConfiguration()
+    configuration.partiallyVisibleDocumentConfiguration = PartiallyVisibleDocumentConfiguration(
+        allowPartiallyVisibleDocuments = true,
+    )
+    configuration.parameters.ignoreOrientationMismatch = true
+    // Configure other parameters as needed.
+
     val result = ScanbotSDK.document.scanFromImage(
         image = image,
         configuration = configuration,

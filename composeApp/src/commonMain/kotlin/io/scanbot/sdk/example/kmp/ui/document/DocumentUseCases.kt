@@ -61,27 +61,31 @@ fun DocumentUseCasesScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MenuItem("Single Page Scanning", {
+                MenuItem("Single Page Scanning") {
                     checkLicense { startSinglePageScanning(onResultPreview, { useCaseError = it }) }
-                })
-                MenuItem("Single Page Scanning with Finder", {
-                    checkLicense { startSinglePageFinderScanning(onResultPreview, { useCaseError = it }) }
-                })
-                MenuItem("Multi Page Scanning with Finder", {
+                }
+                MenuItem("Single Page Scanning with Finder") {
+                    checkLicense {
+                        startSinglePageFinderScanning(
+                            onResultPreview
+                        ) { useCaseError = it }
+                    }
+                }
+                MenuItem("Multi Page Scanning with Finder") {
                     checkLicense { startMultiPageScanning(onResultPreview, { useCaseError = it }) }
-                })
+                }
 
                 Spacer(Modifier.height(16.dp))
 
-                MenuItem("Create Document from Images", {
+                MenuItem("Create Document from Images") {
                     checkLicense { pendingAction = Action.CreateDocument }
-                })
-                MenuItem("Analyze Document Quality", {
+                }
+                MenuItem("Analyze Document Quality") {
                     checkLicense { pendingAction = Action.AnalyzeQuality }
-                })
-                MenuItem("Perform OCR", {
+                }
+                MenuItem("Perform OCR") {
                     checkLicense { pendingAction = Action.PerformOcr }
-                })
+                }
             }
 
             pendingAction?.let { action ->
@@ -93,11 +97,15 @@ fun DocumentUseCasesScreen(
                                 Action.CreateDocument -> {
                                     createDocumentFromImages(images)?.let {
                                         onResultPreview(it)
-                                    } ?: run { useCaseError = Throwable("Failed to create document") }
+                                    } ?: run {
+                                        useCaseError = Throwable("Failed to create document")
+                                    }
                                 }
+
                                 Action.AnalyzeQuality -> images.firstOrNull()?.let {
                                     useCaseResult = analyzeDocumentQualityOnImage(it)
                                 } ?: run { useCaseError = Throwable("No image selected") }
+
                                 Action.PerformOcr -> useCaseResult = performOcrOnImages(images)
                             }
                             pendingAction = null
@@ -108,11 +116,11 @@ fun DocumentUseCasesScreen(
             }
 
             useCaseResult?.let { text ->
-                InfoDialog("Result", text) { useCaseResult = null}
+                InfoDialog("Result", text) { useCaseResult = null }
             }
 
             useCaseError?.let { error ->
-                ErrorDialog(message = error.message) { useCaseError = null}
+                ErrorDialog(message = error.message) { useCaseError = null }
             }
         }
     }

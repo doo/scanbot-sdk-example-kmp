@@ -5,10 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeCustomUIScreen
 import io.scanbot.sdk.example.kmp.ui.menu.MenuScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeUseCasesScreen
-import io.scanbot.sdk.example.kmp.ui.barcode.custom.BarcodeCustomUIScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCasesScreen
 
@@ -25,7 +25,6 @@ fun NavigationRoot() {
             MenuScreen(
                 navigateToBarcodeUseCases = { navController.navigate(Route.BarcodeUseCases) },
                 navigateToDocumentUseCases = { navController.navigate(Route.DocumentUseCases) },
-                navigateToBarcodeCustomUI = { navController.navigate(Route.BarcodeCustomUI) }
             )
         }
 
@@ -34,6 +33,7 @@ fun NavigationRoot() {
                 onResultPreview = { result ->
                     navController.navigate(Route.BarcodePreview(result.toJsonString()))
                 },
+                navigateToBarcodeCustomUI = { navController.navigate(Route.BarcodeCustomUI) },
                 onPopBackStack = onPopBackStack
             )
         }
@@ -50,7 +50,7 @@ fun NavigationRoot() {
         composable<Route.BarcodePreview> { backStackEntry ->
             val screen: Route.BarcodePreview = backStackEntry.toRoute()
             BarcodePreviewScreen(
-                resultJson  = screen.barcodeJson,
+                resultJson = screen.barcodeJson,
                 onPopBackStack = onPopBackStack
             )
         }
@@ -58,7 +58,7 @@ fun NavigationRoot() {
         composable<Route.DocumentPreview> { backStackEntry ->
             val screen: Route.DocumentPreview = backStackEntry.toRoute()
             DocumentPreviewScreen(
-                resultJson  = screen.documentDataJson,
+                resultJson = screen.documentDataJson,
                 onPopBackStack = onPopBackStack
             )
         }
