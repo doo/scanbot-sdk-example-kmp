@@ -21,7 +21,7 @@ navigation-compose = "2.9.2"
 kotlinx-serialization = "1.10.0"
 
 # Scanbot SDK
-scanbotSDK = "8.0.1-SNAPSHOT"
+scanbotSDK = "8.0.0.1-SNAPSHOT"
 
 # Third‑party libs
 moko = "0.20.1"
