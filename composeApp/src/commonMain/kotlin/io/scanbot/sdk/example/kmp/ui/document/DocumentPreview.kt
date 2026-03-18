@@ -48,14 +48,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.addPages
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.pdf.createPdfFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.pdf.createSearchablePdfFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createBinarizedTiffFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createPdfFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createSearchablePdfFromDocument
+import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.removeAllPagesFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.tiff.createBinarizedTiffFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.tiff.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
+import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
@@ -155,8 +156,8 @@ fun DocumentPreviewScreen(
                 contentPadding = PaddingValues(8.dp),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
                     .background(Color.White)
+                    .padding(paddingValues)
             ) {
                 documentData?.let {
                     items(it.pages) { page ->
@@ -190,7 +191,7 @@ fun DocumentPreviewScreen(
 
                             val onPdfCreated: (String) -> Unit = { path ->
                                 val type = if (withOcr) "Searchable PDF File" else "PDF File"
-                                resultDialogMessage = "Result\n$type created: $path"
+                                resultDialogMessage = "$type created: $path"
                             }
 
                             if (withOcr) {
@@ -208,7 +209,7 @@ fun DocumentPreviewScreen(
 
                             val onTiffCreated: (String) -> Unit = { path ->
                                 val type = if (binarized) "Binarized TIFF File" else "TIFF File"
-                                resultDialogMessage = "Result\n$type created: $path"
+                                resultDialogMessage = "$type created: $path"
                             }
 
                             if (binarized) {
@@ -226,20 +227,8 @@ fun DocumentPreviewScreen(
                 }
             }
 
-            if (resultDialogMessage != null) {
-                AlertDialog(
-                    onDismissRequest = { resultDialogMessage = null },
-                    title = { Text("Result") },
-                    text = {
-                        Text(
-                            text = resultDialogMessage ?: "",
-                            fontFamily = FontFamily.Monospace
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = { resultDialogMessage = null }) { Text("Close") }
-                    }
-                )
+            resultDialogMessage?.let {
+                InfoDialog("Result", it) { resultDialogMessage = null }
             }
         }
     }
@@ -251,12 +240,8 @@ fun PagePreviewItem(page: PageData) {
 
     LaunchedEffect(page) {
         withContext(Dispatchers.Default) {
-            page.documentImagePreviewURI?.let { uri ->
-                ImageRef.fromPath(uri)?.use { ref ->
-                    ref.encode().getOrNull()?.decodeToImageBitmap()
-                }
-            }?.let { bitmap ->
-                imageBitmap = bitmap
+            imageBitmap = (page.documentImagePreviewURI ?: page.originalImageURI).let { uri ->
+                ImageRef.fromPath(uri)?.encode()?.getOrNull()?.decodeToImageBitmap()
             }
         }
     }
@@ -271,7 +256,7 @@ fun PagePreviewItem(page: PageData) {
             Image(
                 bitmap = imageBitmap!!,
                 contentDescription = "Page Preview",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Inside,
                 modifier = Modifier.fillMaxSize()
             )
         } else {

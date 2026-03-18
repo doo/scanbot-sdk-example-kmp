@@ -10,7 +10,7 @@ fun paletteConfigurationScanning(): DocumentScanningFlow {
     val configuration = DocumentScanningFlow().apply {
 
         // Simply alter one color and keep the other default.
-        palette.sbColorPrimary = ScanbotColor("c86e19")
+        palette.sbColorPrimary = ScanbotColor("#c86e19")
 
         // ... or set an entirely new palette.
         palette.sbColorPrimary = ScanbotColor("#C8193C")
@@ -36,11 +36,9 @@ fun paletteConfigurationScanning(): DocumentScanningFlow {
 
 fun startScanningWithPaletteConfig() {
     ScanbotSDK.document.startScanner(
-        configuration = paletteConfigurationScanning(),
-        onResult = {
+        configuration = paletteConfigurationScanning(), onResult = {
             it.onSuccess { TODO("Handle scanned document result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Palette")

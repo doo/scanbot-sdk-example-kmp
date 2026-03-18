@@ -38,17 +38,8 @@ fun loadExistingDocument(
     ScanbotSDK.document.loadDocument(documentUuid)
 }
 
-fun loadExistingDocument(
-    documentUuid: String,
-    onResult: (Result<DocumentData>) -> Unit
-) {
-    // Load an existing document by its UUID.
-    ScanbotSDK.document.loadDocument(documentUuid)
-}
-
 fun cloneExistingDocument(
     documentUuid: String,
-    onResult: (Result<DocumentData>) -> Unit
 ) {
     // Clone an existing document by its UUID and return the cloned copy.
     ScanbotSDK.document.cloneDocument(documentUuid)
@@ -106,6 +97,7 @@ fun deleteAllDocuments() {
 // @EndTag("Storing and retrieving a DocumentData")
 
 
+// @Tag("Adding pages to an existing document")
 fun addPages(
     documentUuid: String,
     images: List<ImageRef>,
@@ -118,3 +110,4 @@ fun addPages(
         options = options
     )
 }
+// @EndTag("Adding pages to an existing document")

@@ -9,27 +9,22 @@ import io.scanbot.sdk.kmp.utils.Result
 
 // @Tag("CreateTiffFromDocument")
 fun createTiffFromDocument(
-    documentUuid: String,
-    outputUri: String? = null
+    documentUuid: String, outputUri: String? = null
 ): io.scanbot.sdk.kmp.utils.Result<String> {
 
     val tiffParams = TiffGeneratorParameters(
-        dpi = 200,
-        compression = TiffGeneratorParameters.defaultCompression
+        dpi = 200, compression = TiffGeneratorParameters.defaultCompression
     )
 
     return ScanbotSDK.tiffGenerator.generateFromDocument(
-        documentUuid = documentUuid,
-        tiffGeneratorParameters = tiffParams,
-        outputURI = outputUri
+        documentUuid = documentUuid, tiffGeneratorParameters = tiffParams, outputURI = outputUri
     )
 }
 // @EndTag("CreateTiffFromDocument")
 
 // @Tag("CreateBinarizedTiffFromDocument")
 fun createBinarizedTiffFromDocument(
-    documentUuid: String,
-    outputUri: String? = null
+    documentUuid: String, outputUri: String? = null
 ): Result<String> {
 
     val tiffParams = TiffGeneratorParameters(
@@ -39,28 +34,22 @@ fun createBinarizedTiffFromDocument(
     )
 
     return ScanbotSDK.tiffGenerator.generateFromDocument(
-        documentUuid = documentUuid,
-        tiffGeneratorParameters = tiffParams,
-        outputURI = outputUri
+        documentUuid = documentUuid, tiffGeneratorParameters = tiffParams, outputURI = outputUri
     )
 }
 // @EndTag("CreateBinarizedTiffFromDocument")
 
 // @Tag("CreateTiffFromImages")
 fun createTiffFromImages(
-    imageRefs: List<ImageRef>,
-    outputUri: String
+    imageRefs: List<ImageRef>, outputUri: String
 ): Result<String> {
 
     val tiffParams = TiffGeneratorParameters(
-        compression = CompressionMode.LZW,
-        jpegQuality = 80
+        compression = CompressionMode.LZW, jpegQuality = 80
     )
 
     return ScanbotSDK.tiffGenerator.generateFromImages(
-        images = imageRefs,
-        tiffGeneratorParameters = tiffParams,
-        outputURI = outputUri
+        images = imageRefs, tiffGeneratorParameters = tiffParams, outputURI = outputUri
     )
 }
 // @EndTag("CreateTiffFromImages")

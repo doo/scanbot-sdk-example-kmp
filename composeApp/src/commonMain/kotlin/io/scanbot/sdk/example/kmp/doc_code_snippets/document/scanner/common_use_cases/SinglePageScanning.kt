@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
+import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.PageSnapCheckMarkAnimation
@@ -45,27 +46,25 @@ fun rtuUiSinglePageScanningUseCase(): DocumentScanningFlow {
         palette.sbColorOnPrimary = ScanbotColor("#ffffff")
 
         // Configure the hint texts for different scenarios
-        screens.camera.userGuidance.statesTitles.tooDark =
-            "Need more lighting to detect a document"
+        screens.camera.userGuidance.statesTitles.tooDark = "Need more lighting to detect a document"
         screens.camera.userGuidance.statesTitles.tooSmall = "Document too small"
-        screens.camera.userGuidance.statesTitles.noDocumentFound =
-            "Could not detect a document"
+        screens.camera.userGuidance.statesTitles.noDocumentFound = "Could not detect a document"
 
     }
     return configuration
 }
 
 fun startSinglePageScanning(
-    onResultHandler: (String) -> Unit
+    onResultHandler: (DocumentData) -> Unit, onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.document.startScanner(
-        configuration = rtuUiSinglePageScanningUseCase(),
-        onResult = { result ->
+        configuration = rtuUiSinglePageScanningUseCase(), onResult = { result ->
             result.onSuccess {
-                onResultHandler(it.toJson().toString())
+                onResultHandler(it)
+            }.onFailure {
+                onErrorHandler(it)
             }
-        }
-    )
+        })
 }
 
 @Composable
@@ -75,7 +74,7 @@ fun DocumentScannerExample() {
     LaunchedEffect(Unit) {
         ScanbotSDK.initialize(
             SdkConfiguration(
-                licenseKey = "" // optional: add your license key here
+                licenseKey = "" // add your license key here
             )
         )
     }
@@ -87,24 +86,20 @@ fun DocumentScannerExample() {
         }
 
         // Launch the document scanner:
-        ScanbotSDK.document.startScanner(
-            configuration = config,
-            onResult = { result ->
-                result.onSuccess { scanResult ->
-                    // Document Scanner result callback:
-                    // Get the first scanned page from the result object...
-                    val firstPage = scanResult.pages.firstOrNull()
-                    // ... and process the result as needed, for example, print to console:
-                    println("Scanned page count: ${scanResult.pages.size}")
-                }.onFailure { error ->
-                    // Optional failure handling to understand why scanner result is not provided
-                    println("Scanning failed: ${error.message}")
-                }
-            },
-            onCanceled = {
-                // Optional: handle user cancellation
+        ScanbotSDK.document.startScanner(configuration = config, onResult = { result ->
+            result.onSuccess { scanResult ->
+                // Document Scanner result callback:
+                // Get the first scanned page from the result object...
+                val firstPage = scanResult.pages.firstOrNull()
+                // ... and process the result as needed, for example, print to console:
+                println("Scanned page count: ${scanResult.pages.size}")
+            }.onFailure { error ->
+                // Optional failure handling to understand why scanner result is not provided
+                println("Scanning failed: ${error.message}")
             }
-        )
+        }, onCanceled = {
+            // Optional: handle user cancellation
+        })
     }) {
         Text("Start Document Scanner")
     }

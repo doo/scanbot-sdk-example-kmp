@@ -27,11 +27,9 @@ fun rtuUiUserGuidanceConfig(): BarcodeScannerScreenConfiguration {
 
 fun startUserGuidanceScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiUserGuidanceConfig(),
-        onResult = {
+        configuration = rtuUiUserGuidanceConfig(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("User guidance")

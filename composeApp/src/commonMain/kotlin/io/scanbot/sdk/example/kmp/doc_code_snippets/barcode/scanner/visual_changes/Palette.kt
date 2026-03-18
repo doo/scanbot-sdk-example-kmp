@@ -10,7 +10,7 @@ fun rtuUiPaletteConfig(): BarcodeScannerScreenConfiguration {
     val config = BarcodeScannerScreenConfiguration().apply {
 
         // Simply alter one color and keep the other default.
-        palette.sbColorPrimary = ScanbotColor("c86e19")
+        palette.sbColorPrimary = ScanbotColor("#c86e19")
 
         // ... or set an entirely new palette.
         palette.sbColorPrimary = ScanbotColor("#C8193C")
@@ -35,11 +35,9 @@ fun rtuUiPaletteConfig(): BarcodeScannerScreenConfiguration {
 
 fun startPaletteScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiPaletteConfig(),
-        onResult = {
+        configuration = rtuUiPaletteConfig(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Palette")

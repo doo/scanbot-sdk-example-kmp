@@ -15,7 +15,7 @@ import io.scanbot.sdk.kmp.utils.Result
 fun processDocumentPage(
     documentUuid: String,
     pageUuid: Int,
-) : Result<DocumentData> {
+): Result<DocumentData> {
     // Create filters to apply (e.g., binarization and brightness)
     val filter1 = ScanbotBinarizationFilter(outputMode = OutputMode.ANTIALIASED)
     val filter2 = BrightnessFilter(brightness = 0.4)

@@ -6,6 +6,10 @@
         android:required="true" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- INTERNET permission is required only for loading images from URLs in the expectedBarcode list (e.g., image = "https://..."). of Find And Pick showcase
+    The SDK itself works without internet access. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <queries>
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />

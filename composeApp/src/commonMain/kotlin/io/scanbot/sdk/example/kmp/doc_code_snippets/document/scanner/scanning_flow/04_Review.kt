@@ -15,7 +15,7 @@ fun reviewFlowConfig(): DocumentScanningFlow {
             zoomButton.visible = false
             bottomBar.addButton.visible = false
             bottomBar.retakeButton.visible = true
-            bottomBar.retakeButton.title.color = ScanbotColor("000000")
+            bottomBar.retakeButton.title.color = ScanbotColor("#000000")
         }
 
         // Configure the reorder pages screen.
@@ -25,22 +25,16 @@ fun reviewFlowConfig(): DocumentScanningFlow {
         }
 
         // Configure the cropping screen.
-        screens.cropping
-            .bottomBar
-            .resetButton
-            .visible = false
+        screens.cropping.bottomBar.resetButton.visible = false
     }
 
     return configuration
 
 }
 
-fun startScanningWithReviewFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = reviewFlowConfig(),
-        onResult = {
-            it.onSuccess { TODO("Handle scanned document result") }
-            it.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithReviewFlow() = ScanbotSDK.document.startScanner(
+    configuration = reviewFlowConfig(), onResult = {
+        it.onSuccess { TODO("Handle scanned document result") }
+        it.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Review Screen")

@@ -23,12 +23,9 @@ fun cropFlowConfig(): DocumentScanningFlow {
     return configuration
 }
 
-fun startScanningWithCropFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = cropFlowConfig(),
-        onResult = {
-            it.onSuccess { TODO("Handle scanned document result") }
-            it.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithCropFlow() = ScanbotSDK.document.startScanner(
+    configuration = cropFlowConfig(), onResult = {
+        it.onSuccess { TODO("Handle scanned document result") }
+        it.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Crop")

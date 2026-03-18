@@ -26,7 +26,7 @@ class ResultApiSnippets {
     fun processResultWithSwitch(result: Result<BarcodeScannerResult>) {
         when (result) {
             is Result.Success -> {
-                val barcodeResult = result.getOrNull()
+                val barcodeResult = result.value
                 // Handle successful result
             }
 
@@ -47,30 +47,32 @@ class ResultApiSnippets {
                     // Handle license error - show license activation UI
                     println("License is invalid or expired")
                 }
+
                 is InvalidImageRefError -> {
                     // Handle invalid image - prompt user to capture again
                     println("Image is corrupted or invalid")
                 }
-                is OperationCanceledError -> {
-                    // Handle cancellation - user might have cancelled
-                    println("Operation was cancelled")
-                }
+
                 is TimeoutError -> {
                     // Handle timeout - retry or inform user
                     println("Operation timed out, please try again")
                 }
+
                 is InvalidDataError -> {
                     // Handle invalid data
                     println("Invalid data encountered")
                 }
+
                 is OutOfMemoryError -> {
                     // Handle out of memory
                     println("Out of memory error")
                 }
+
                 is IoError -> {
                     // Handle I/O error - check storage permissions
                     println("File operation failed: ${exception.message}")
                 }
+
                 else -> {
                     // Handle other errors
                     println("Error: ${exception.message}")

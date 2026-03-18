@@ -30,7 +30,7 @@ fun analyzeDocumentQualityOnImage(image: ImageRef): String {
 fun analyzeDocumentPagesQuality(document: DocumentData) {
     document.pages.forEach { page ->
         // Create an ImageRef from the original image URI path
-        val imageRef = ImageRef.fromPath(page.originalImageURI)
+        val imageRef = ImageRef.fromPath(page.documentImageURI ?: page.originalImageURI)
 
         imageRef?.use { image ->
             // Run the quality check using the KMP Document module
@@ -46,7 +46,8 @@ fun analyzeDocumentPagesQuality(document: DocumentData) {
             }.onFailure { exception ->
                 println("Failed to analyze page ${page.uuid}: ${exception.message}")
             }
-        } ?: println("Could not load image from path: ${page.originalImageURI}")
+        }
+            ?: println("Could not load image from path: ${page.documentImageURI ?: page.originalImageURI}")
     }
 }
 // @EndTag("Analyze quality of document pages")

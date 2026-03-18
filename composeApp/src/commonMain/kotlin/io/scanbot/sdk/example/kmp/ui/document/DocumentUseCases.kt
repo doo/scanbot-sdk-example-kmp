@@ -25,20 +25,24 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases.startSinglePageFinderScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases.startSinglePageScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrOnImages
+import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
+import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.kmp.page.DocumentData
 import kotlinx.coroutines.launch
 
 @Composable
 fun DocumentUseCasesScreen(
-    onResultPreview: (String) -> Unit,
+    onResultPreview: (DocumentData) -> Unit,
     onPopBackStack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     var pendingAction by remember { mutableStateOf<Action?>(null) }
-    var dialogText by remember { mutableStateOf<String?>(null) }
+    var useCaseResult by remember { mutableStateOf<String?>(null) }
+    var useCaseError by remember { mutableStateOf<Throwable?>(null) }
 
     LicenseGuard { checkLicense ->
         Scaffold(
@@ -57,27 +61,31 @@ fun DocumentUseCasesScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MenuItem("Single Page Scanning", {
-                    checkLicense { startSinglePageScanning(onResultPreview) }
-                })
-                MenuItem("Single Page Scanning with Finder", {
-                    checkLicense { startSinglePageFinderScanning(onResultPreview) }
-                })
-                MenuItem("Multi Page Scanning with Finder", {
-                    checkLicense { startMultiPageScanning(onResultPreview) }
-                })
+                MenuItem("Single Page Scanning") {
+                    checkLicense { startSinglePageScanning(onResultPreview, { useCaseError = it }) }
+                }
+                MenuItem("Single Page Scanning with Finder") {
+                    checkLicense {
+                        startSinglePageFinderScanning(
+                            onResultPreview
+                        ) { useCaseError = it }
+                    }
+                }
+                MenuItem("Multi Page Scanning with Finder") {
+                    checkLicense { startMultiPageScanning(onResultPreview, { useCaseError = it }) }
+                }
 
                 Spacer(Modifier.height(16.dp))
 
-                MenuItem("Create Document from Images", {
+                MenuItem("Create Document from Images") {
                     checkLicense { pendingAction = Action.CreateDocument }
-                })
-                MenuItem("Analyze Document Quality", {
+                }
+                MenuItem("Analyze Document Quality") {
                     checkLicense { pendingAction = Action.AnalyzeQuality }
-                })
-                MenuItem("Perform OCR", {
+                }
+                MenuItem("Perform OCR") {
                     checkLicense { pendingAction = Action.PerformOcr }
-                })
+                }
             }
 
             pendingAction?.let { action ->
@@ -87,14 +95,18 @@ fun DocumentUseCasesScreen(
                         scope.launch {
                             when (action) {
                                 Action.CreateDocument -> {
-                                    onResultPreview(
-                                        createDocumentFromImages(images)
-                                    )
+                                    createDocumentFromImages(images)?.let {
+                                        onResultPreview(it)
+                                    } ?: run {
+                                        useCaseError = Throwable("Failed to create document")
+                                    }
                                 }
+
                                 Action.AnalyzeQuality -> images.firstOrNull()?.let {
-                                    dialogText = analyzeDocumentQualityOnImage(it)
-                                } ?: "No image selected"
-                                Action.PerformOcr -> dialogText = performOcrOnImages(images)
+                                    useCaseResult = analyzeDocumentQualityOnImage(it)
+                                } ?: run { useCaseError = Throwable("No image selected") }
+
+                                Action.PerformOcr -> useCaseResult = performOcrOnImages(images)
                             }
                             pendingAction = null
                         }
@@ -103,15 +115,12 @@ fun DocumentUseCasesScreen(
                 )
             }
 
-            dialogText?.let { text ->
-                AlertDialog(
-                    onDismissRequest = { dialogText = null },
-                    title = { Text("Result") },
-                    text = { Text(text = text, fontFamily = FontFamily.Monospace) },
-                    confirmButton = {
-                        TextButton(onClick = { dialogText = null }) { Text("Close") }
-                    }
-                )
+            useCaseResult?.let { text ->
+                InfoDialog("Result", text) { useCaseResult = null }
+            }
+
+            useCaseError?.let { error ->
+                ErrorDialog(message = error.message) { useCaseError = null }
             }
         }
     }

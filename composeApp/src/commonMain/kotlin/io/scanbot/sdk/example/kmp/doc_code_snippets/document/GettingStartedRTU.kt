@@ -15,7 +15,7 @@ fun DocumentScannerExample() {
     LaunchedEffect(Unit) {
         ScanbotSDK.initialize(
             SdkConfiguration(
-                licenseKey = "" // optional: add your license key here
+                licenseKey = "" // add your license key here
             )
         )
     }
@@ -27,24 +27,20 @@ fun DocumentScannerExample() {
         }
 
         // Launch the document scanner:
-        ScanbotSDK.document.startScanner(
-            configuration = config,
-            onResult = { result ->
-                result.onSuccess { scanResult ->
-                    // Document Scanner result callback:
-                    // Get the first scanned page from the result object...
-                    val firstPage = scanResult.pages.firstOrNull()
-                    // ... and process the result as needed, for example, print to console:
-                    println("Scanned page count: ${scanResult.pages.size}")
-                }.onFailure { error ->
-                    // Optional failure handling to understand why scanner result is not provided
-                    println("Scanning failed: ${error.message}")
-                }
-            },
-            onCanceled = {
-                // Optional: handle user cancellation
+        ScanbotSDK.document.startScanner(configuration = config, onResult = { result ->
+            result.onSuccess { scanResult ->
+                // Document Scanner result callback:
+                // Get the first scanned page from the result object...
+                val firstPage = scanResult.pages.firstOrNull()
+                // ... and process the result as needed, for example, print to console:
+                println("Scanned page count: ${scanResult.pages.size}")
+            }.onFailure { error ->
+                // Optional failure handling to understand why scanner result is not provided
+                println("Scanning failed: ${error.message}")
             }
-        )
+        }, onCanceled = {
+            // Optional: handle user cancellation
+        })
     }) {
         Text("Start Document Scanner")
     }
@@ -58,35 +54,31 @@ fun handlingResult() {
         // TODO: configure as needed
     }
     // @Tag("Handling the result")
-    ScanbotSDK.document.startScanner(
-        configuration = config,
-        onResult = { result ->
-            result.onSuccess { scanResult ->
-                // The unique identifier of the scanned document
-                val documentId = scanResult.uuid
+    ScanbotSDK.document.startScanner(configuration = config, onResult = { result ->
+        result.onSuccess { documentData ->
+            // The unique identifier of the scanned document
+            val documentId = documentData.uuid
 
-                // The creation timestamp of the document
-                val timestamp = scanResult.creationTimestamp
+            // The creation timestamp of the document
+            val timestamp = documentData.creationTimestamp
 
-                // URI to the generated PDF of the document (if configured)
-                val pdfUri = scanResult.pdfURI
+            // URI to the generated PDF of the document (if configured)
+            val pdfUri = documentData.pdfURI
 
-                // URI to the generated TIFF of the document (if configured)
-                val tiffUri = scanResult.tiffURI
+            // URI to the generated TIFF of the document (if configured)
+            val tiffUri = documentData.tiffURI
 
-                // Iterate over scanned pages
-                scanResult.pages.forEach { page ->
-                    // Handle each scanned page (PageData)
-                    println("Page ID: ${page.uuid}")
-                }
-            }.onFailure { error ->
-                // Handle failure — error is a Throwable
-                println("Scanning failed: ${error.message}")
+            // Iterate over scanned pages
+            documentData.pages.forEach { page ->
+                // Handle each scanned page (PageData)
+                println("Page ID: ${page.uuid}")
             }
-        },
-        onCanceled = {
-            // Handle cancellation if needed
+        }.onFailure { error ->
+            // Handle failure — error is a Throwable
+            println("Scanning failed: ${error.message}")
         }
-    )
+    }, onCanceled = {
+        // Handle cancellation if needed
+    })
     // @EndTag("Handling the result")
 }

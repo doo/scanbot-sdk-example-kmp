@@ -3,6 +3,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_
 // @Tag("Single scanning mode")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
+import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerUiResult
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.SingleScanningMode
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 
@@ -45,15 +46,16 @@ fun rtuUiSingleScanningUseCase(): BarcodeScannerScreenConfiguration {
 }
 
 fun startSingleScanning(
-    onResultHandler: (barcodeResult: String) -> Unit
+    onResultHandler: (barcodeResult: BarcodeScannerUiResult) -> Unit,
+    onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiSingleScanningUseCase(),
-        onResult = { result ->
+        configuration = rtuUiSingleScanningUseCase(), onResult = { result ->
             result.onSuccess {
-                onResultHandler(it.toJson().toString())
+                onResultHandler(it)
+            }.onFailure {
+                onErrorHandler(it)
             }
-        }
-    )
+        })
 }
 // @EndTag("Single scanning mode")

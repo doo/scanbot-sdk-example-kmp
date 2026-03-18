@@ -24,28 +24,23 @@ fun Footer() {
     val uriHandler = LocalUriHandler.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFFEEEEEE))
-            .padding(10.dp),
+        modifier = Modifier.fillMaxWidth().background(Color(0xFFEEEEEE)).padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextButton(
             onClick = {
                 uriHandler.openUri("https://scanbot.io")
-            },
-            contentPadding = PaddingValues(0.dp)
+            }, contentPadding = PaddingValues(0.dp)
         ) {
             Text(
-                text = "Learn More About Scanbot SDK",
-                color = ScanbotRed
+                text = "Learn More About Scanbot SDK", color = ScanbotRed
             )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Copyright 2025 Scanbot SDK GmbH. All rights reserved.",
+            text = "Copyright 2026 Scanbot SDK GmbH. All rights reserved.",
             fontSize = 10.sp,
             color = Color.Black,
             textAlign = TextAlign.Center
