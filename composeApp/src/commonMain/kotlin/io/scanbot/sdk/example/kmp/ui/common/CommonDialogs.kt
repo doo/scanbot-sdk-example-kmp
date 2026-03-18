@@ -30,14 +30,11 @@ fun ErrorDialog(
 @Composable
 fun LicenseInfoDialog(onDismiss: () -> Unit) {
 
-    val text = ScanbotSDK.getLicenseInfo().fold(
-        onSuccess = { info ->
-            "Status: ${info.status.name}\nExpirationDate: ${info.expirationDateString}"
-        },
-        onFailure = {
-            "Error getting license status"
-        }
-    )
+    val text = ScanbotSDK.getLicenseInfo().fold(onSuccess = { info ->
+        "Status: ${info.status.name}\nExpirationDate: ${info.expirationDateString}"
+    }, onFailure = {
+        "Error getting license status"
+    })
 
     InfoDialog("License Info", text, onDismiss)
 }

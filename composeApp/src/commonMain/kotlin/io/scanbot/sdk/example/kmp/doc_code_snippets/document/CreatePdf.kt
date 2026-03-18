@@ -12,19 +12,14 @@ import io.scanbot.sdk.kmp.utils.Result
 
 // @Tag("CreatePdfFromDocument")
 fun createPdfFromDocument(
-    documentId: String,
-    outputUri: String? = null
+    documentId: String, outputUri: String? = null
 ): Result<String> {
 
     // Create PDF with default config (empty attributes, CUSTOM page size, AUTO orientation).
     // Customize PdfConfiguration for DPI, page size, OCR, etc.
     val pdfConfig = PdfConfiguration(
         attributes = PdfAttributes(
-            author = "",
-            title = "",
-            subject = "",
-            keywords = "",
-            creator = ""
+            author = "", title = "", subject = "", keywords = "", creator = ""
         ),
         pageSize = PageSize.A4,
         pageDirection = PageDirection.AUTO,
@@ -45,16 +40,11 @@ fun createPdfFromDocument(
 
 // @Tag("CreateSearchablePdfFromDocument")
 fun createSearchablePdfFromDocument(
-    documentId: String,
-    outputUri: String? = null
+    documentId: String, outputUri: String? = null
 ): Result<String> {
     val pdfConfig = PdfConfiguration(
         attributes = PdfAttributes(
-            author = "",
-            title = "",
-            subject = "",
-            keywords = "",
-            creator = ""
+            author = "", title = "", subject = "", keywords = "", creator = ""
         ),
         pageSize = PageSize.A4,
         pageDirection = PageDirection.AUTO,
@@ -75,8 +65,7 @@ fun createSearchablePdfFromDocument(
 
 // @Tag("CreatePdfFromImages")
 fun createPdfFromImages(
-    imageRefs: List<ImageRef>,
-    outputUri: String
+    imageRefs: List<ImageRef>, outputUri: String
 ): Result<String> {
 
     val pdfConfig = PdfConfiguration.default()
@@ -91,8 +80,7 @@ fun createPdfFromImages(
 
 // @Tag("CreateSearchablePdfFromImages")
 fun createSearchablePdfFromImages(
-    imageRefs: List<ImageRef>,
-    outputUri: String
+    imageRefs: List<ImageRef>, outputUri: String
 ): Result<String> {
     val pdfConfig = PdfConfiguration.default()
 

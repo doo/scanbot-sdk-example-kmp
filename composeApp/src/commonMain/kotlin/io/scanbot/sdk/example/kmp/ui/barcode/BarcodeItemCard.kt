@@ -42,15 +42,27 @@ fun BarcodeItemCard(
                     )
                 }
 
-            Text(text = "Format:", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 5.dp))
+            Text(
+                text = "Format:",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 5.dp)
+            )
             Text(text = barcode.format.name)
 
-            Text(text = "Text:", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 5.dp))
+            Text(
+                text = "Text:",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 5.dp)
+            )
             Text(text = barcode.text)
 
             barcode.extractedDocument?.let {
                 Spacer(Modifier.height(8.dp))
-                Text(text = "Extracted Document:", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 5.dp))
+                Text(
+                    text = "Extracted Document:",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = 5.dp)
+                )
                 GenericDocumentView(it)
             }
         }

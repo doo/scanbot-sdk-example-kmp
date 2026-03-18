@@ -25,22 +25,16 @@ fun reviewFlowConfig(): DocumentScanningFlow {
         }
 
         // Configure the cropping screen.
-        screens.cropping
-            .bottomBar
-            .resetButton
-            .visible = false
+        screens.cropping.bottomBar.resetButton.visible = false
     }
 
     return configuration
 
 }
 
-fun startScanningWithReviewFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = reviewFlowConfig(),
-        onResult = {
-            it.onSuccess { TODO("Handle scanned document result") }
-            it.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithReviewFlow() = ScanbotSDK.document.startScanner(
+    configuration = reviewFlowConfig(), onResult = {
+        it.onSuccess { TODO("Handle scanned document result") }
+        it.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Review Screen")

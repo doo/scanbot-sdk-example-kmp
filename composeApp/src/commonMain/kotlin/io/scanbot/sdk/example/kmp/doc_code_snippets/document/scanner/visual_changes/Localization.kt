@@ -9,8 +9,7 @@ fun localizationConfigurationScanning(): DocumentScanningFlow {
     val configuration = DocumentScanningFlow().apply {
         localization.cameraTopBarTitle = "document.camera.title"
         localization.reviewScreenSubmitButtonTitle = "review.submit.title"
-        localization.cameraUserGuidanceNoDocumentFound =
-            "camera.userGuidance.noDocumentFound"
+        localization.cameraUserGuidanceNoDocumentFound = "camera.userGuidance.noDocumentFound"
         localization.cameraUserGuidanceTooDark = "camera.userGuidance.tooDark"
     }
 
@@ -19,11 +18,9 @@ fun localizationConfigurationScanning(): DocumentScanningFlow {
 
 fun startScanningWithLocalizationConfig() {
     ScanbotSDK.document.startScanner(
-        configuration = localizationConfigurationScanning(),
-        onResult = {
+        configuration = localizationConfigurationScanning(), onResult = {
             it.onSuccess { TODO("Handle scanned document result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Localization")

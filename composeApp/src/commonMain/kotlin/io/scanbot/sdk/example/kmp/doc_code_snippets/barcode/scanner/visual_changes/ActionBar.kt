@@ -43,11 +43,9 @@ fun rtuUiActionBarConfiguration(): BarcodeScannerScreenConfiguration {
 
 fun startActionBarScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiActionBarConfiguration(),
-        onResult = {
+        configuration = rtuUiActionBarConfiguration(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Action Bar")

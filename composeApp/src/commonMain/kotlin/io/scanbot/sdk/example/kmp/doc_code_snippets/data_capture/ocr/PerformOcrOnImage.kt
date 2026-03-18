@@ -11,16 +11,13 @@ suspend fun performOcrOnImages(images: List<ImageRef>): String {
     val result = ScanbotSDK.ocrEngine.recognizeOnImages(images = images)
 
     // Handle Success and Failure to return a result to show in the UI
-    return result.fold(
-        onSuccess = { ocrResult ->
-            // Return the plain text from the OCR result
-            ocrResult.plainText
-        },
-        onFailure = { error ->
-            // Return a descriptive error message
-            "OCR recognition failed: ${error.message ?: "Unknown error"}"
-        }
-    )
+    return result.fold(onSuccess = { ocrResult ->
+        // Return the plain text from the OCR result
+        ocrResult.plainText
+    }, onFailure = { error ->
+        // Return a descriptive error message
+        "OCR recognition failed: ${error.message ?: "Unknown error"}"
+    })
 }
 // @EndTag("Perform OCR on images")
 
@@ -31,15 +28,12 @@ suspend fun performOcrOnDocument(document: DocumentData): String {
     val result = ScanbotSDK.ocrEngine.recognizeOnDocument(document.uuid)
 
     // Handle Success and Failure to return a result to show in the UI
-    return result.fold(
-        onSuccess = { ocrResult ->
-            // Return the plain text from the OCR result
-            ocrResult.plainText
-        },
-        onFailure = { error ->
-            // Return a descriptive error message
-            "OCR recognition failed: ${error.message ?: "Unknown error"}"
-        }
-    )
+    return result.fold(onSuccess = { ocrResult ->
+        // Return the plain text from the OCR result
+        ocrResult.plainText
+    }, onFailure = { error ->
+        // Return a descriptive error message
+        "OCR recognition failed: ${error.message ?: "Unknown error"}"
+    })
 }
 // @EndTag("Perform OCR on document")

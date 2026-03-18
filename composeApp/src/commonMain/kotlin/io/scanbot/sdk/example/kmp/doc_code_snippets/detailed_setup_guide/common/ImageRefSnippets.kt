@@ -15,12 +15,12 @@ import io.scanbot.sdk.kmp.utils.Result
 class ImageRefSnippets {
 
     fun createImageRefFromPath() {
-    // @Tag("Create ImageRef from file path")
+        // @Tag("Create ImageRef from file path")
         val imageRef = ImageRef.fromPath(
             path = "path/to/image.jpg",
             options = PathImageLoadOptions()
         )
-    // @EndTag("Create ImageRef from file path")
+        // @EndTag("Create ImageRef from file path")
     }
 
     // @Tag("Create ImageRef from encoded buffer")
@@ -33,7 +33,7 @@ class ImageRefSnippets {
     // @EndTag("Create ImageRef from encoded buffer")
 
     fun getImageInformation() {
-    // @Tag("Get image information")
+        // @Tag("Get image information")
         val imageRef = ImageRef.fromPath("path/to/image.jpg")
 
         imageRef?.info()?.onSuccess { info ->
@@ -43,11 +43,11 @@ class ImageRefSnippets {
         }?.onFailure { error ->
             println("Failed to get image info: ${error.message}")
         }
-    // @EndTag("Get image information")
+        // @EndTag("Get image information")
     }
 
     fun saveImageToFile(imageBytes: ByteArray) {
-    // @Tag("Save image to file")
+        // @Tag("Save image to file")
         val imageRef = ImageRef.fromEncodedBuffer(imageBytes)
 
         imageRef?.save(
@@ -58,11 +58,11 @@ class ImageRefSnippets {
         }?.onFailure { error ->
             println("Failed to save image: ${error.message}")
         }
-    // @EndTag("Save image to file")
+        // @EndTag("Save image to file")
     }
 
     fun encodeImageToBytes() {
-    // @Tag("Encode image to bytes")
+        // @Tag("Encode image to bytes")
         val imageRef = ImageRef.fromPath("path/to/image.jpg")
 
         imageRef?.encode(
@@ -73,6 +73,6 @@ class ImageRefSnippets {
         }?.onFailure { error ->
             println("Failed to encode image: ${error.message}")
         }
-    // @EndTag("Encode image to bytes")
+        // @EndTag("Encode image to bytes")
     }
 }

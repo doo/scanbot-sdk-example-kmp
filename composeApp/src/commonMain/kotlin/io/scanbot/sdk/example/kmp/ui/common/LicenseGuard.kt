@@ -30,7 +30,7 @@ fun LicenseGuard(
     if (licenseError != null) {
         ErrorDialog(
             "License Error",
-            "Your Scanbot SDK license is not valid. $licenseError",
-            { licenseError = null })
+            "Your Scanbot SDK license is not valid. $licenseError"
+        ) { licenseError = null }
     }
 }

@@ -30,7 +30,8 @@ fun rtuUiArOverlayScanningUseCase(): BarcodeScannerScreenConfiguration {
 }
 
 fun startArOverlayScanning(
-    onResultHandler: (barcodeResult: BarcodeScannerUiResult) -> Unit, onErrorHandler: (error: Throwable) -> Unit
+    onResultHandler: (barcodeResult: BarcodeScannerUiResult) -> Unit,
+    onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.barcode.startScanner(
         configuration = rtuUiArOverlayScanningUseCase(), onResult = { result ->

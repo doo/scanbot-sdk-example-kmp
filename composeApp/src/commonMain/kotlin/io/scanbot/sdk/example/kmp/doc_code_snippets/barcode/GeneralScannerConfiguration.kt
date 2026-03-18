@@ -21,23 +21,23 @@ import io.scanbot.sdk.kmp.image.ImageRef
 class GeneralScannerConfiguration {
 
     fun filterIndividualBarcodeSymbologies() {
-    // @Tag("Filter individual barcode symbologies")
+        // @Tag("Filter individual barcode symbologies")
         val baseConfig = BarcodeFormatCommonConfiguration.default().copy(
             formats = listOf(BarcodeFormat.QR_CODE, BarcodeFormat.AZTEC, BarcodeFormat.CODE_128)
         )
-    // @EndTag("Filter individual barcode symbologies")
+        // @EndTag("Filter individual barcode symbologies")
     }
 
     fun filterGroupsOfBarcodeSymbologies() {
-    // @Tag("Filter groups of barcode symbologies")
+        // @Tag("Filter groups of barcode symbologies")
         val baseConfig = BarcodeFormatCommonConfiguration.default().copy(
             formats = BarcodeFormats.common
         )
-    // @EndTag("Filter groups of barcode symbologies")
+        // @EndTag("Filter groups of barcode symbologies")
     }
 
     fun advancedBarcodeScannerConfiguration(imageRef: ImageRef) {
-    // @Tag("Advanced barcode scanner configuration")
+        // @Tag("Advanced barcode scanner configuration")
         val configuration = BarcodeScannerConfiguration()
 
         val configs = mutableListOf<BarcodeFormatConfigurationBase>()
@@ -117,11 +117,11 @@ class GeneralScannerConfiguration {
             image = imageRef,
             configuration = configuration
         )
-    // @EndTag("Advanced barcode scanner configuration")
+        // @EndTag("Advanced barcode scanner configuration")
     }
 
     fun configureDocumentParsers(imageRef: ImageRef) {
-    // @Tag("Configure document parsers")
+        // @Tag("Configure document parsers")
         val configuration = BarcodeScannerConfiguration().apply {
             barcodeFormatConfigurations = mutableListOf(BarcodeFormatCommonConfiguration())
             // Example of adding a specific configuration for parsed documents
@@ -146,11 +146,11 @@ class GeneralScannerConfiguration {
             image = imageRef,
             configuration = configuration
         )
-    // @EndTag("Configure document parsers")
+        // @EndTag("Configure document parsers")
     }
 
     fun configureRegexFilter(imageRef: ImageRef) {
-    // @Tag("Configure regex filter")
+        // @Tag("Configure regex filter")
         val configuration = BarcodeScannerConfiguration().apply {
             barcodeFormatConfigurations = mutableListOf<BarcodeFormatConfigurationBase>(
                 BarcodeFormatCommonConfiguration.default().copy(
@@ -175,6 +175,6 @@ class GeneralScannerConfiguration {
             image = imageRef,
             configuration = configuration
         )
-    // @EndTag("Configure regex filter")
+        // @EndTag("Configure regex filter")
     }
 }

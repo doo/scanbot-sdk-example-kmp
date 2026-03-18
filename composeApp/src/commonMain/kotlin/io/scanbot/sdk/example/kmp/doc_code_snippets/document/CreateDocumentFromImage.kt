@@ -13,18 +13,14 @@ fun createDocumentFromImages(images: List<ImageRef>): DocumentData? {
 
     // Run the document creation and transform the Result into a displayable string
     return ScanbotSDK.document.createDocumentFromImages(
-        images = images,
-        options = options
-    ).fold(
-        onSuccess = { documentData ->
-            // Return the JSON string representation of the created document
-            documentData
-        },
-        onFailure = { error ->
-            // Print a descriptive error message
-            print("Failed to create document: ${error.message ?: "Unknown error"}")
-            null
-        }
-    )
+        images = images, options = options
+    ).fold(onSuccess = { documentData ->
+        // Return the JSON string representation of the created document
+        documentData
+    }, onFailure = { error ->
+        // Print a descriptive error message
+        print("Failed to create document: ${error.message ?: "Unknown error"}")
+        null
+    })
 // @EndTag("Create document from images")
 }

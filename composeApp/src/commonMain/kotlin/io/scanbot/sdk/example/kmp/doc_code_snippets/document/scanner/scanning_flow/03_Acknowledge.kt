@@ -41,12 +41,9 @@ fun acknowledgeFlowConfig(): DocumentScanningFlow {
     return configuration
 }
 
-fun startScanningWithAcknowledgeFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = acknowledgeFlowConfig(),
-        onResult = { result ->
-            result.onSuccess { TODO("Handle scanned document result") }
-            result.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithAcknowledgeFlow() = ScanbotSDK.document.startScanner(
+    configuration = acknowledgeFlowConfig(), onResult = { result ->
+        result.onSuccess { TODO("Handle scanned document result") }
+        result.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Acknowledge")

@@ -11,21 +11,15 @@ fun GalleryPicker(
     onImagesSelected: (List<ImageRef>) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    GalleryPickerLauncher(
-        allowMultiple = allowMultiple,
-        onPhotosSelected = { photos ->
-            val imageRefs = photos.mapNotNull { photo ->
-                photo.loadBytes()
-                    .let(ImageRef::fromEncodedBuffer)
-            }
+    GalleryPickerLauncher(allowMultiple = allowMultiple, onPhotosSelected = { photos ->
+        val imageRefs = photos.mapNotNull { photo ->
+            photo.loadBytes().let(ImageRef::fromEncodedBuffer)
+        }
 
-            if (imageRefs.isNotEmpty()) {
-                onImagesSelected(imageRefs)
-            } else {
-                onDismiss()
-            }
-        },
-        onDismiss = onDismiss,
-        onError = {}
-    )
+        if (imageRefs.isNotEmpty()) {
+            onImagesSelected(imageRefs)
+        } else {
+            onDismiss()
+        }
+    }, onDismiss = onDismiss, onError = {})
 }

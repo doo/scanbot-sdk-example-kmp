@@ -32,11 +32,9 @@ fun rtuUiTopBarConfiguration(): BarcodeScannerScreenConfiguration {
 
 fun startTopBarScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiTopBarConfiguration(),
-        onResult = {
+        configuration = rtuUiTopBarConfiguration(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Top Bar")

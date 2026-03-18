@@ -19,11 +19,9 @@ fun rtuUiLocalizationConfig(): BarcodeScannerScreenConfiguration {
 
 fun startLocalizationScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiLocalizationConfig(),
-        onResult = {
+        configuration = rtuUiLocalizationConfig(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Localization")

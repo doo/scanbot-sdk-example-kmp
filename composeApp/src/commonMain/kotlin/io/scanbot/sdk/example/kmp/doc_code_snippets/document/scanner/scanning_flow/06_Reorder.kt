@@ -25,12 +25,9 @@ fun reorderFlowConfig(): DocumentScanningFlow {
     return configuration
 }
 
-fun startScanningWithReorderFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = reorderFlowConfig(),
-        onResult = {
-            it.onSuccess { TODO("Handle scanned document result") }
-            it.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithReorderFlow() = ScanbotSDK.document.startScanner(
+    configuration = reorderFlowConfig(), onResult = {
+        it.onSuccess { TODO("Handle scanned document result") }
+        it.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Reorder")

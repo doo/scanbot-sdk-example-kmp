@@ -37,11 +37,9 @@ fun rtuUiMultipleScanningPreviewConfig(): BarcodeScannerScreenConfiguration {
 
 fun startMultipleScanningPreview() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiMultipleScanningPreviewConfig(),
-        onResult = {
+        configuration = rtuUiMultipleScanningPreviewConfig(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Sheet mode")

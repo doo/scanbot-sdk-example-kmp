@@ -36,11 +36,9 @@ fun paletteConfigurationScanning(): DocumentScanningFlow {
 
 fun startScanningWithPaletteConfig() {
     ScanbotSDK.document.startScanner(
-        configuration = paletteConfigurationScanning(),
-        onResult = {
+        configuration = paletteConfigurationScanning(), onResult = {
             it.onSuccess { TODO("Handle scanned document result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Palette")

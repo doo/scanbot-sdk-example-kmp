@@ -51,6 +51,7 @@ class ResultApiSnippets {
                         val documentUuid = documentData.uuid
                         val pageCount = documentData.pages.size
                     }
+
                     is Result.Failure -> {
                         println("UI error: ${result.exception.message}")
                     }
@@ -68,26 +69,32 @@ class ResultApiSnippets {
                     // Handle license error - show license activation UI
                     println("License is invalid or expired")
                 }
+
                 is InvalidImageRefError -> {
                     // Handle invalid image - prompt user to capture again
                     println("Image is corrupted or invalid")
                 }
+
                 is OperationCanceledError -> {
                     // Handle cancellation - user might have cancelled
                     println("Operation was cancelled")
                 }
+
                 is TimeoutError -> {
                     // Handle timeout - retry or inform user
                     println("Operation timed out, please try again")
                 }
+
                 is OutOfMemoryError -> {
                     // Handle memory error - reduce image quality or clear cache
                     println("Not enough memory to process image")
                 }
+
                 is IoError -> {
                     // Handle I/O error - check storage permissions
                     println("File operation failed: ${exception.message}")
                 }
+
                 else -> {
                     // Handle other errors
                     println("Error: ${exception.message}")

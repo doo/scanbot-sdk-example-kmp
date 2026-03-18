@@ -25,11 +25,9 @@ fun rtuUiMultiPageScanningUseCase(): DocumentScanningFlow {
         palette.sbColorOnPrimary = ScanbotColor("#ffffff")
 
         // Configure the hint texts for different scenarios
-        screens.camera.userGuidance.statesTitles.tooDark =
-            "Need more lighting to detect a document"
+        screens.camera.userGuidance.statesTitles.tooDark = "Need more lighting to detect a document"
         screens.camera.userGuidance.statesTitles.tooSmall = "Document too small"
-        screens.camera.userGuidance.statesTitles.noDocumentFound =
-            "Could not detect a document"
+        screens.camera.userGuidance.statesTitles.noDocumentFound = "Could not detect a document"
 
         // Enable/Disable the review screen.
         screens.review.enabled = true
@@ -61,18 +59,15 @@ fun rtuUiMultiPageScanningUseCase(): DocumentScanningFlow {
 }
 
 fun startMultiPageScanning(
-    onResultHandler: (DocumentData) -> Unit,
-    onErrorHandler: (error: Throwable) -> Unit
+    onResultHandler: (DocumentData) -> Unit, onErrorHandler: (error: Throwable) -> Unit
 ) {
     ScanbotSDK.document.startScanner(
-        configuration = rtuUiMultiPageScanningUseCase(),
-        onResult = { result ->
+        configuration = rtuUiMultiPageScanningUseCase(), onResult = { result ->
             result.onSuccess {
                 onResultHandler(it)
             }.onFailure {
                 onErrorHandler(it)
             }
-        }
-    )
+        })
 }
 // @EndTag("SinglePageScanningFinder")

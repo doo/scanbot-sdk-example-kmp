@@ -43,6 +43,7 @@ fun BarcodeScannerExample() {
                         is InvalidLicenseError -> {
                             // Indicates that the Scanbot SDK license is invalid
                         }
+
                         else -> {
                             // Handle other errors
                         }
@@ -71,7 +72,8 @@ fun handlingResult() {
                     // Handle the detected barcode(s) from result
                     val barcodeText = barcodeUiItem.barcode.text
                     val barcodeFormat = barcodeUiItem.barcode.format
-                    val textWithExtension = barcodeUiItem.barcode.text + barcodeUiItem.barcode.upcEanExtension
+                    val textWithExtension =
+                        barcodeUiItem.barcode.text + barcodeUiItem.barcode.upcEanExtension
 
                     // The barcodeItem contains the scanned barcode data as ByteArray
                     val barcodeRawData = barcodeUiItem.barcode.rawBytes

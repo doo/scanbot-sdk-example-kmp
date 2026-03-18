@@ -16,8 +16,7 @@ fun initSDKSnippet() {
     val customStorageDir = "file:///path/to/my-custom-storage-dir"
 
     val configuration = SdkConfiguration(
-        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
-        storageBaseDirectory = customStorageDir
+        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY", storageBaseDirectory = customStorageDir
     )
 
     ScanbotSDK.initialize(configuration)

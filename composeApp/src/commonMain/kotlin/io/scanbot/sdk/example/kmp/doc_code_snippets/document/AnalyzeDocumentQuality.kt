@@ -46,7 +46,8 @@ fun analyzeDocumentPagesQuality(document: DocumentData) {
             }.onFailure { exception ->
                 println("Failed to analyze page ${page.uuid}: ${exception.message}")
             }
-        } ?: println("Could not load image from path: ${page.documentImageURI ?: page.originalImageURI}")
+        }
+            ?: println("Could not load image from path: ${page.documentImageURI ?: page.originalImageURI}")
     }
 }
 // @EndTag("Analyze quality of document pages")

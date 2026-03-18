@@ -35,11 +35,9 @@ fun rtuUiPaletteConfig(): BarcodeScannerScreenConfiguration {
 
 fun startPaletteScanning() {
     ScanbotSDK.barcode.startScanner(
-        configuration = rtuUiPaletteConfig(),
-        onResult = {
+        configuration = rtuUiPaletteConfig(), onResult = {
             it.onSuccess { TODO("Handle scanned result") }
             it.onFailure { TODO("Handle error") }
-        }
-    )
+        })
 }
 // @EndTag("Palette")

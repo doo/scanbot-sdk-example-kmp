@@ -38,8 +38,7 @@ fun GenericDocumentView(
                 Document: ${genericDocument.type.name}
                 Field: ${wrappedField?.type?.name ?: "N/A"}
                 Value: ${wrappedField?.value?.text ?: "N/A"}
-            """.trimIndent(),
-            color = Color.Black
+            """.trimIndent(), color = Color.Black
         )
     }
 }
@@ -49,41 +48,27 @@ fun getGenericFieldValue(
 ): TextFieldWrapper? {
     return when (genericDocument.type.name) {
 
-        BoardingPass.DOCUMENT_TYPE ->
-            BoardingPass(genericDocument).electronicTicketIndicator
+        BoardingPass.DOCUMENT_TYPE -> BoardingPass(genericDocument).electronicTicketIndicator
 
-        SwissQR.DOCUMENT_TYPE ->
-            SwissQR(genericDocument).iban
+        SwissQR.DOCUMENT_TYPE -> SwissQR(genericDocument).iban
 
-        DEMedicalPlan.DOCUMENT_TYPE ->
-            DEMedicalPlan(genericDocument).doctor.issuerName
+        DEMedicalPlan.DOCUMENT_TYPE -> DEMedicalPlan(genericDocument).doctor.issuerName
 
-        IDCardPDF417.DOCUMENT_TYPE ->
-            IDCardPDF417(genericDocument).dateExpired
+        IDCardPDF417.DOCUMENT_TYPE -> IDCardPDF417(genericDocument).dateExpired
 
-        GS1.DOCUMENT_TYPE ->
-            GS1(genericDocument)
-                .elements
-                .firstOrNull()
-                ?.applicationIdentifier
+        GS1.DOCUMENT_TYPE -> GS1(genericDocument).elements.firstOrNull()?.applicationIdentifier
 
-        SEPA.DOCUMENT_TYPE ->
-            SEPA(genericDocument).receiverIBAN
+        SEPA.DOCUMENT_TYPE -> SEPA(genericDocument).receiverIBAN
 
-        MedicalCertificate.DOCUMENT_TYPE ->
-            MedicalCertificate(genericDocument).doctorNumber
+        MedicalCertificate.DOCUMENT_TYPE -> MedicalCertificate(genericDocument).doctorNumber
 
-        VCard.DOCUMENT_TYPE ->
-            VCard(genericDocument).formattedName?.rawValue
+        VCard.DOCUMENT_TYPE -> VCard(genericDocument).formattedName?.rawValue
 
-        AAMVA.DOCUMENT_TYPE ->
-            AAMVA(genericDocument).issuerIdentificationNumber
+        AAMVA.DOCUMENT_TYPE -> AAMVA(genericDocument).issuerIdentificationNumber
 
-        HIBC.DOCUMENT_TYPE ->
-            HIBC(genericDocument).labelerIdentificationCode
+        HIBC.DOCUMENT_TYPE -> HIBC(genericDocument).labelerIdentificationCode
 
-        BritishColumbiaDriverLicense.DOCUMENT_TYPE ->
-            BritishColumbiaDriverLicense(genericDocument).address
+        BritishColumbiaDriverLicense.DOCUMENT_TYPE -> BritishColumbiaDriverLicense(genericDocument).address
 
         else -> null
     }

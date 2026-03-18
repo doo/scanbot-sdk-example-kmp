@@ -14,47 +14,41 @@ fun introductionFlowConfig(): DocumentScanningFlow {
     val configuration = DocumentScanningFlow().apply {
 
         // Configure the introduction screen
-        screens.camera.introduction =
-            IntroductionScreenConfiguration().apply {
+        screens.camera.introduction = IntroductionScreenConfiguration().apply {
 
-                showAutomatically = true
+            showAutomatically = true
 
-                items = listOf(
-                    // First introduction item
-                    IntroListEntry().apply {
-                        image = IntroImage.receiptsIntroImage()
-                        text = StyledText(
-                            text = "Some text explaining how to scan a receipt",
-                            color = ScanbotColor("#000000")
-                        )
-                    },
+            items = listOf(
+                // First introduction item
+                IntroListEntry().apply {
+                    image = IntroImage.receiptsIntroImage()
+                    text = StyledText(
+                        text = "Some text explaining how to scan a receipt",
+                        color = ScanbotColor("#000000")
+                    )
+                },
 
-                    // Second introduction item
-                    IntroListEntry().apply {
-                        image = IntroImage.checkIntroImage()
-                        text = StyledText(
-                            text = "Some text explaining how to scan a check",
-                            color = ScanbotColor("#000000")
-                        )
-                    }
-                )
+                // Second introduction item
+                IntroListEntry().apply {
+                    image = IntroImage.checkIntroImage()
+                    text = StyledText(
+                        text = "Some text explaining how to scan a check",
+                        color = ScanbotColor("#000000")
+                    )
+                })
 
-                title = StyledText(
-                    text = "Introduction",
-                    color = ScanbotColor("#000000")
-                )
-            }
+            title = StyledText(
+                text = "Introduction", color = ScanbotColor("#000000")
+            )
+        }
     }
 
     return configuration
 }
 
-fun startScanningWithIntroductionFlow() =
-    ScanbotSDK.document.startScanner(
-        configuration = introductionFlowConfig(),
-        onResult = {
-            it.onSuccess { TODO("Handle scanned document result") }
-            it.onFailure { TODO("Handle error") }
-        }
-    )
+fun startScanningWithIntroductionFlow() = ScanbotSDK.document.startScanner(
+    configuration = introductionFlowConfig(), onResult = {
+        it.onSuccess { TODO("Handle scanned document result") }
+        it.onFailure { TODO("Handle error") }
+    })
 // @EndTag("Introduction")

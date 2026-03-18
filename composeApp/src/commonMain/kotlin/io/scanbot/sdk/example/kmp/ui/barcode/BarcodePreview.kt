@@ -32,9 +32,7 @@ fun BarcodePreviewScreen(
         },
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.padding(paddingValues).fillMaxSize(),
             contentPadding = PaddingValues(16.dp)
         ) {
             itemsIndexed(parsedResult.items) { index, item ->

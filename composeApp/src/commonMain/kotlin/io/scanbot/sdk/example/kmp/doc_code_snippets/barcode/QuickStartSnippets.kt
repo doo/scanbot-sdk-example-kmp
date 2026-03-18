@@ -75,7 +75,10 @@ class QuickStartSnippetKMP {
         // @Tag("Scan barcode from image")
         // Create barcode scanner configuration
         val scannerConfig = BarcodeScannerConfiguration(
-            barcodeFormatConfigurations = listOf(BarcodeFormatQrCodeConfiguration(), BarcodeFormatUpcEanConfiguration())
+            barcodeFormatConfigurations = listOf(
+                BarcodeFormatQrCodeConfiguration(),
+                BarcodeFormatUpcEanConfiguration()
+            )
             // Add more configuration as needed
         )
 

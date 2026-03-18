@@ -45,7 +45,8 @@ fun handleResult(imageRef: ImageRef) {
     result.getOrNull()?.let { barcodeData ->
         val barcodesTextResult = StringBuilder()
         for (item in barcodeData.barcodes) {
-            barcodesTextResult.append(item.format.name + ": " + item.text).append("\n-------------------\n")
+            barcodesTextResult.append(item.format.name + ": " + item.text)
+                .append("\n-------------------\n")
         }
         // Display or process the result as needed
     }

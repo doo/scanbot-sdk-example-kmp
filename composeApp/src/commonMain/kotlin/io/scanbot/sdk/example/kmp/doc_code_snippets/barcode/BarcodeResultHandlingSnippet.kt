@@ -24,7 +24,7 @@ import io.scanbot.sdk.kmp.image.ImageRef
 class BarcodeResultHandlingSnippets {
 
     fun handlingBarcodeResult(imageRef: ImageRef) {
-    // @Tag("Handling barcode result")
+        // @Tag("Handling barcode result")
         val configuration = BarcodeScannerConfiguration()
         val result = ScanbotSDK.barcode.scanFromImage(
             image = imageRef,
@@ -42,11 +42,11 @@ class BarcodeResultHandlingSnippets {
             // This is the image of the barcode that was scanned (SDK's internal representation)
             val barcodeImage = barcodeItem.sourceImage
         }
-    // @EndTag("Handling barcode result")
+        // @EndTag("Handling barcode result")
     }
 
     fun configureBarcodeParsers(imageRef: ImageRef) {
-    // @Tag("Configure barcode parsers")
+        // @Tag("Configure barcode parsers")
         val configuration = BarcodeScannerConfiguration()
 
         // Enable parsing of specific document formats
@@ -63,11 +63,11 @@ class BarcodeResultHandlingSnippets {
             image = imageRef,
             configuration = configuration
         )
-    // @EndTag("Configure barcode parsers")
+        // @EndTag("Configure barcode parsers")
     }
 
     fun handleParsedDocumentResult(imageRef: ImageRef) {
-    // @Tag("Handle parsed document result")
+        // @Tag("Handle parsed document result")
         val configuration = BarcodeScannerConfiguration()
         configuration.extractedDocumentFormats = listOf(
             BarcodeDocumentFormat.AAMVA,
@@ -93,58 +93,68 @@ class BarcodeResultHandlingSnippets {
                         val vehicleData = aamva.vehicleData
                         val registrationData = aamva.registrationData
                     }
+
                     BoardingPass.DOCUMENT_TYPE -> {
                         // Handle Boarding Pass document
                         val boardingPass = BoardingPass(document)
                         val passengerName = boardingPass.passengerName
                         val legs = boardingPass.legs
                     }
+
                     MedicalCertificate.DOCUMENT_TYPE -> {
                         // Handle Medical Certificate document
                         val medicalCertificate = MedicalCertificate(document)
                         val firstName = medicalCertificate.firstName
                     }
+
                     DEMedicalPlan.DOCUMENT_TYPE -> {
                         // Handle DeMedical Plan document
                         val deMedicalPlan = DEMedicalPlan(document)
                         val doctor = deMedicalPlan.doctor
                         val patient = deMedicalPlan.patient
                     }
+
                     IDCardPDF417.DOCUMENT_TYPE -> {
                         // Handle ID Card PDF 417 document
                         val idCardPdf417 = IDCardPDF417(document)
                         val firstName = idCardPdf417.firstName
                         val lastName = idCardPdf417.lastName
                     }
+
                     GS1.DOCUMENT_TYPE -> {
                         // Handle GS1 document
                         val gs1 = GS1(document)
                         val elements = gs1.elements
                     }
+
                     SEPA.DOCUMENT_TYPE -> {
                         // Handle SEPA document
                         val sepa = SEPA(document)
                         val receiverName = sepa.receiverName
                         val amount = sepa.amount
                     }
+
                     SwissQR.DOCUMENT_TYPE -> {
                         // Handle Swiss QR document
                         val swissQr = SwissQR(document)
                         val payeeName = swissQr.payeeName
                         val amount = swissQr.amount
                     }
+
                     VCard.DOCUMENT_TYPE -> {
                         // Handle vCard document
                         val vCard = VCard(document)
                         val name = vCard.name
                         val emails = vCard.emails
                     }
+
                     HIBC.DOCUMENT_TYPE -> {
                         // Handle HIBC document
                         val hibc = HIBC(document)
                         val lotNumber = hibc.lotNumber
                         val serialNumber = hibc.serialNumber
                     }
+
                     BritishColumbiaDriverLicense.DOCUMENT_TYPE -> {
                         // Handle BritishColumbiaDriverLicense document
                         val license = BritishColumbiaDriverLicense(document)
@@ -154,11 +164,11 @@ class BarcodeResultHandlingSnippets {
                 }
             }
         }
-    // @EndTag("Handle parsed document result")
+        // @EndTag("Handle parsed document result")
     }
 
     fun handleBarcodeImageResult(imageRef: ImageRef) {
-    // @Tag("Handle barcode image result")
+        // @Tag("Handle barcode image result")
         val configuration = BarcodeScannerConfiguration()
         val result = ScanbotSDK.barcode.scanFromImage(
             image = imageRef,
@@ -176,6 +186,6 @@ class BarcodeResultHandlingSnippets {
             // This is the image of the barcode that was scanned (SDK's internal representation)
             val barcodeImage = barcodeItem.sourceImage
         }
-    // @EndTag("Handle barcode image result")
+        // @EndTag("Handle barcode image result")
     }
 }

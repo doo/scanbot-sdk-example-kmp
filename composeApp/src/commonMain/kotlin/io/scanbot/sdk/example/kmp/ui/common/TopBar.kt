@@ -31,19 +31,15 @@ fun TopBar(
     TopAppBar(
         title = {
             Text(
-                text = title,
-                fontSize = 20.sp,
-                color = Color.White
+                text = title, fontSize = 20.sp, color = Color.White
             )
-        },
-        navigationIcon = {
+        }, navigationIcon = {
             if (showBackButton) {
                 IconButton(
                     onClick = {
                         enabled = false
                         onPopBackStack()
-                    },
-                    enabled = enabled
+                    }, enabled = enabled
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -52,9 +48,7 @@ fun TopBar(
                     )
                 }
             }
-        },
-        actions = actions,
-        colors = TopAppBarDefaults.topAppBarColors(
+        }, actions = actions, colors = TopAppBarDefaults.topAppBarColors(
             containerColor = ScanbotRed,
             titleContentColor = Color.White,
             navigationIconContentColor = Color.White,
