@@ -66,21 +66,22 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DocumentPreviewScreen(
-    resultJson: String,
+    documentUuid: String,
     navigateToPagePreview: (documentUuid: String, pageUuid: String) -> Unit,
     onPopBackStack: () -> Unit,
 ) {
-    var documentData by remember(resultJson) {
-        mutableStateOf<DocumentData?>(
-            DocumentData.fromJson(
-                resultJson
-            )
-        )
-    }
+    var documentData by remember { mutableStateOf<DocumentData?>(null) }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
     var showImagePicker by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
+
+    LaunchedEffect(documentUuid) {
+        ScanbotSDK.document.loadDocument(documentUuid).fold(
+            onSuccess = { documentData = it },
+            onFailure = { println("Load document error: ${it.message}") }
+        )
+    }
 
     LicenseGuard { checkLicense ->
         Scaffold(topBar = {

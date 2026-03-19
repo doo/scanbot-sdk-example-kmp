@@ -42,7 +42,7 @@ fun NavigationRoot() {
         composable<Route.DocumentUseCases> {
             DocumentUseCasesScreen(
                 onResultPreview = { documentData ->
-                    navController.navigate(Route.DocumentPreview(documentData.toJsonString()))
+                    navController.navigate(Route.DocumentPreview(documentData.uuid))
                 }, onPopBackStack = onPopBackStack
             )
         }
@@ -57,7 +57,7 @@ fun NavigationRoot() {
         composable<Route.DocumentPreview> { backStackEntry ->
             val screen: Route.DocumentPreview = backStackEntry.toRoute()
             DocumentPreviewScreen(
-                resultJson = screen.documentDataJson,
+                documentUuid = screen.documentUuid,
                 navigateToPagePreview = { documentUuid, pageUuid ->
                     navController.navigate(Route.DocumentPagePreview(documentUuid, pageUuid))
                 },
