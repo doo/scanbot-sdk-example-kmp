@@ -67,8 +67,7 @@ fun createSearchablePdfFromDocument(
 fun createPdfFromImages(
     imageRefs: List<ImageRef>, outputUri: String
 ): Result<String> {
-
-    val pdfConfig = PdfConfiguration.default()
+    val pdfConfig = PdfConfiguration()
 
     return ScanbotSDK.pdfGenerator.generateFromImages(
         imageRefs,
@@ -82,7 +81,7 @@ fun createPdfFromImages(
 fun createSearchablePdfFromImages(
     imageRefs: List<ImageRef>, outputUri: String
 ): Result<String> {
-    val pdfConfig = PdfConfiguration.default()
+    val pdfConfig = PdfConfiguration()
 
     return ScanbotSDK.pdfGenerator.generateFromImages(
         imageRefs,

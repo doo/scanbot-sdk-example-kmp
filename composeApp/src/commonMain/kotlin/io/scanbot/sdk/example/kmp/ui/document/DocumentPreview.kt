@@ -23,7 +23,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -38,14 +37,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.addPages
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createBinarizedTiffFromDocument
@@ -54,9 +51,9 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createSearchablePdf
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.doc_code_snippets.document.removeAllPagesFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
-import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
+import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
@@ -70,7 +67,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun DocumentPreviewScreen(
     resultJson: String,
-    onPopBackStack: () -> Unit
+    navigateToPagePreview: (documentUuid: String, pageUuid: String) -> Unit,
+    onPopBackStack: () -> Unit,
 ) {
     var documentData by remember(resultJson) {
         mutableStateOf<DocumentData?>(
@@ -82,149 +80,152 @@ fun DocumentPreviewScreen(
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
     var showImagePicker by remember { mutableStateOf(false) }
+    var showDeleteAllConfirmation by remember { mutableStateOf(false) }
 
     LicenseGuard { checkLicense ->
-        Scaffold(
-            topBar = {
-                TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
-            },
-            bottomBar = {
-                BottomAppBar(
-                    containerColor = ScanbotRed,
-                    contentColor = Color.White
+        Scaffold(topBar = {
+            TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
+        }, bottomBar = {
+            BottomAppBar(
+                containerColor = ScanbotRed, contentColor = Color.White
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        TextButton(onClick = {
-                            checkLicense {
-                                documentData?.let {
-                                    ScanbotSDK.document.startScanner(
-                                        configuration = DocumentScanningFlow(documentUuid = it.uuid),
-                                        onResult = { result ->
-                                            documentData = result.getOrNull()
-                                        }
-                                    )
-                                }
+                    TextButton(onClick = {
+                        checkLicense {
+                            documentData?.let {
+                                ScanbotSDK.document.startScanner(
+                                    configuration = DocumentScanningFlow(documentUuid = it.uuid),
+                                    onResult = { result ->
+                                        documentData = result.getOrNull()
+                                    })
                             }
-                        }) {
-                            Text(
-                                "Continue\nScanning",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelMedium
-                            )
                         }
+                    }) {
+                        Text(
+                            "Continue\nScanning",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
 
-                        TextButton(onClick = { checkLicense { showImagePicker = true } }) {
-                            Text(
-                                "Add Page",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
+                    TextButton(onClick = { checkLicense { showImagePicker = true } }) {
+                        Text(
+                            "Add Page",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
 
-                        TextButton(onClick = { checkLicense { showExportSheet = true } }) {
-                            Text(
-                                "Export",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
+                    TextButton(onClick = { checkLicense { showExportSheet = true } }) {
+                        Text(
+                            "Export",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
 
-                        TextButton(onClick = {
-                            checkLicense {
-                                documentData = documentData?.let {
-                                    removeAllPagesFromDocument(
-                                        documentUuid = it.uuid,
-                                    ).getOrNull()
-                                }
-                            }
-                        }) {
-                            Text(
-                                "Delete All",
-                                color = Color.White,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
+                    TextButton(onClick = {
+                        checkLicense { showDeleteAllConfirmation = true }
+                    }) {
+                        Text(
+                            "Delete All",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
                     }
                 }
             }
-        ) { paddingValues ->
+        }) { paddingValues ->
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 100.dp),
                 contentPadding = PaddingValues(8.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-                    .padding(paddingValues)
+                modifier = Modifier.fillMaxSize().background(Color.White).padding(paddingValues)
             ) {
                 documentData?.let {
                     items(it.pages) { page ->
-                        PagePreviewItem(page = page)
+                        PagePreviewItem(page = page, onClick = {
+                            navigateToPagePreview(it.uuid, page.uuid)
+                        })
                     }
                 }
             }
 
             if (showImagePicker) {
-                GalleryPicker(
-                    allowMultiple = true,
-                    onImagesSelected = { images ->
-                        showImagePicker = false
-                        documentData?.uuid?.let { uuid ->
-                            addPages(documentUuid = uuid, images = images)
-                                .onSuccess { updatedDoc -> documentData = updatedDoc }
-                                .onFailure { error ->
-                                    resultDialogMessage = "Add pages failed: ${error.message}"
-                                }
+                GalleryPicker(allowMultiple = true, onImagesSelected = { images ->
+                    showImagePicker = false
+                    documentData?.uuid?.let { uuid ->
+                        addPages(
+                            documentUuid = uuid, images = images
+                        ).onSuccess { updatedDoc -> documentData = updatedDoc }.onFailure { error ->
+                            resultDialogMessage = "Add pages failed: ${error.message}"
                         }
-                    },
-                    onDismiss = { showImagePicker = false }
-                )
+                    }
+                }, onDismiss = { showImagePicker = false })
             }
 
             if (showExportSheet) {
                 ModalBottomSheet(onDismissRequest = { showExportSheet = false }) {
-                    ExportBottomSheetContent(
-                        onExportPdf = { withOcr ->
-                            showExportSheet = false
+                    ExportBottomSheetContent(onExportPdf = { withOcr ->
+                        showExportSheet = false
 
-                            val onPdfCreated: (String) -> Unit = { path ->
-                                val type = if (withOcr) "Searchable PDF File" else "PDF File"
-                                resultDialogMessage = "$type created: $path"
-                            }
+                        val onPdfCreated: (String) -> Unit = { path ->
+                            val type = if (withOcr) "Searchable PDF File" else "PDF File"
+                            resultDialogMessage = "$type created: $path"
+                        }
 
-                            if (withOcr) {
-                                createSearchablePdfFromDocument(
-                                    documentId = documentData!!.uuid
-                                ).onSuccess(onPdfCreated)
-                            } else {
-                                createPdfFromDocument(
-                                    documentId = documentData!!.uuid
-                                ).onSuccess(onPdfCreated)
-                            }
-                        },
-                        onExportTiff = { binarized ->
-                            showExportSheet = false
+                        if (withOcr) {
+                            createSearchablePdfFromDocument(
+                                documentId = documentData!!.uuid
+                            ).onSuccess(onPdfCreated)
+                        } else {
+                            createPdfFromDocument(
+                                documentId = documentData!!.uuid
+                            ).onSuccess(onPdfCreated)
+                        }
+                    }, onExportTiff = { binarized ->
+                        showExportSheet = false
 
-                            val onTiffCreated: (String) -> Unit = { path ->
-                                val type = if (binarized) "Binarized TIFF File" else "TIFF File"
-                                resultDialogMessage = "$type created: $path"
-                            }
+                        val onTiffCreated: (String) -> Unit = { path ->
+                            val type = if (binarized) "Binarized TIFF File" else "TIFF File"
+                            resultDialogMessage = "$type created: $path"
+                        }
 
-                            if (binarized) {
-                                createBinarizedTiffFromDocument(
-                                    documentUuid = documentData!!.uuid
-                                ).onSuccess(onTiffCreated)
-                            } else {
-                                createTiffFromDocument(
-                                    documentUuid = documentData!!.uuid
-                                ).onSuccess(onTiffCreated)
-                            }
-                        },
-                        onCancel = { showExportSheet = false }
-                    )
+                        if (binarized) {
+                            createBinarizedTiffFromDocument(
+                                documentUuid = documentData!!.uuid
+                            ).onSuccess(onTiffCreated)
+                        } else {
+                            createTiffFromDocument(
+                                documentUuid = documentData!!.uuid
+                            ).onSuccess(onTiffCreated)
+                        }
+                    }, onCancel = { showExportSheet = false })
                 }
+            }
+
+            if (showDeleteAllConfirmation) {
+                AlertDialog(
+                    onDismissRequest = { showDeleteAllConfirmation = false },
+                    title = { Text("Delete All Pages") },
+                    text = { Text("Are you sure you want to delete all pages?") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showDeleteAllConfirmation = false
+                            documentData = documentData?.let {
+                                removeAllPagesFromDocument(documentUuid = it.uuid).getOrNull()
+                            }
+                        }) {
+                            Text("Delete", color = MaterialTheme.colorScheme.error)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDeleteAllConfirmation = false }) {
+                            Text("Cancel")
+                        }
+                    })
             }
 
             resultDialogMessage?.let {
@@ -235,7 +236,7 @@ fun DocumentPreviewScreen(
 }
 
 @Composable
-fun PagePreviewItem(page: PageData) {
+fun PagePreviewItem(page: PageData, onClick: () -> Unit) {
     var imageBitmap by remember(page) { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(page) {
@@ -247,23 +248,17 @@ fun PagePreviewItem(page: PageData) {
     }
 
     Card(
-        modifier = Modifier
-            .padding(4.dp)
-            .aspectRatio(0.7f),
+        modifier = Modifier.padding(4.dp).aspectRatio(0.7f).clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        if (imageBitmap != null) {
+        imageBitmap?.let {
             Image(
-                bitmap = imageBitmap!!,
+                bitmap = it,
                 contentDescription = "Page Preview",
                 contentScale = ContentScale.Inside,
                 modifier = Modifier.fillMaxSize()
             )
-        } else {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+        } ?: Box(Modifier.fillMaxSize())
     }
 }
 

@@ -14,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.ui.common.Footer
+import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.kmp.ScanbotSDK
 
 @Composable
 fun MenuScreen(
@@ -25,6 +27,7 @@ fun MenuScreen(
     navigateToDocumentUseCases: () -> Unit,
 ) {
     var showLicenseDialog by rememberSaveable { mutableStateOf(false) }
+    var cleanupStorageResult by rememberSaveable { mutableStateOf<String?>(null) }
 
     LicenseGuard { checkLicense ->
         Scaffold(topBar = {
@@ -49,11 +52,25 @@ fun MenuScreen(
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
+                MenuItem("Clean up Storage") {
+                    ScanbotSDK.cleanupStorage().fold(
+                        onSuccess = { cleanupStorageResult = "Storage cleaned up successfully." },
+                        onFailure = { cleanupStorageResult = it.message }
+                    )
+                }
                 MenuItem("View License Info") { showLicenseDialog = true }
             }
 
             if (showLicenseDialog) {
                 LicenseInfoDialog(onDismiss = { showLicenseDialog = false })
+            }
+
+            cleanupStorageResult?.let {
+                InfoDialog(
+                    title = "Clean up Storage",
+                    text = it,
+                    onDismiss = { cleanupStorageResult = null }
+                )
             }
         }
     }

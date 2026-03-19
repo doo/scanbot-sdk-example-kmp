@@ -17,22 +17,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.permissions.Permission
-import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.compose.BindEffect
-import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanBarcodeFromImageWithResult
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startArOverlayScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startFindAndPickScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startMappingItemScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startMultiScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startSingleScanning
 import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
+import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
+import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerUiResult
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,15 +41,16 @@ fun BarcodeUseCasesScreen(
     navigateToBarcodeCustomUI: () -> Unit,
     onPopBackStack: () -> Unit,
 ) {
-
+    var scanFromImageResult by remember { mutableStateOf<String?>(null) }
     var useCaseError by remember { mutableStateOf<Throwable?>(null) }
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
-    val controller: PermissionsController =
-        remember(factory) { factory.createPermissionsController() }
+    val factory = rememberPermissionsControllerFactory()
+    val controller = remember(factory) { factory.createPermissionsController() }
 
     BindEffect(controller)
+
+    var showGalleryPicker by remember { mutableStateOf(false) }
 
     LicenseGuard { checkLicense ->
         Scaffold(
@@ -65,43 +66,30 @@ fun BarcodeUseCasesScreen(
                 modifier = Modifier.padding(paddingValues).fillMaxSize().padding(16.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                MenuItem(
-                    "Single Scan with confirmation"
-                ) {
+                MenuItem("Single Scan with confirmation") {
                     checkLicense {
-                        startSingleScanning(
-                            onResultPreview, onErrorHandler = { useCaseError = it })
+                        startSingleScanning(onResultPreview, onErrorHandler = { useCaseError = it })
                     }
                 }
-                MenuItem(
-                    "Multiple Scan"
-                ) {
+                MenuItem("Multiple Scan") {
                     checkLicense {
-                        startMultiScanning(
-                            onResultPreview, onErrorHandler = { useCaseError = it })
+                        startMultiScanning(onResultPreview, onErrorHandler = { useCaseError = it })
                     }
                 }
-                MenuItem(
-                    "Find and Pick"
-                ) {
+                MenuItem("Find and Pick") {
                     checkLicense {
                         startFindAndPickScanning(
                             onResultPreview, onErrorHandler = { useCaseError = it })
                     }
                 }
-                MenuItem(
-                    "Multiple Scan With AR Overlay"
-                ) {
+                MenuItem("Multiple Scan With AR Overlay") {
                     checkLicense {
                         startArOverlayScanning(
                             onResultPreview, onErrorHandler = { useCaseError = it })
                     }
                 }
-                MenuItem(
-                    "Multiple Scan with Info Mapping"
-                ) {
+                MenuItem("Multiple Scan with Info Mapping") {
                     checkLicense {
                         startMappingItemScanning(
                             onResultPreview, onErrorHandler = { useCaseError = it })
@@ -116,11 +104,30 @@ fun BarcodeUseCasesScreen(
                                 }
                                 navigateToBarcodeCustomUI()
                             } catch (e: Exception) {
-                                // Log or handle permission error
+                                println("Camera permission error: ${e.message}")
                             }
                         }
                     }
                 }
+                MenuItem("Scan from Image") {
+                    checkLicense {
+                        showGalleryPicker = true
+                    }
+                }
+            }
+
+            if (showGalleryPicker) {
+                GalleryPicker(allowMultiple = false, onImagesSelected = { images ->
+                    showGalleryPicker = false
+                    scanFromImageResult = scanBarcodeFromImageWithResult(images.first())
+                }, onDismiss = { showGalleryPicker = false })
+            }
+
+            scanFromImageResult?.let {
+                InfoDialog(
+                    title = "Scanned Result:",
+                    text = it,
+                    onDismiss = { scanFromImageResult = null })
             }
 
             useCaseError?.let {

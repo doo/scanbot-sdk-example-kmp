@@ -29,31 +29,20 @@ fun MenuItem(
     var enabled by remember { mutableStateOf(true) }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = enabled,
-                onClick = {
-                    enabled = false
-                    onClick()
-                    enabled = true
-                }
-            )
-            .padding(vertical = 4.dp)
+        modifier = Modifier.fillMaxWidth().clickable(
+            enabled = enabled, onClick = {
+                enabled = false
+                onClick()
+                enabled = true
+            }).padding(vertical = 4.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth().height(46.dp).padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Text(
-                title,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                title, style = MaterialTheme.typography.bodyLarge.copy(
+                    fontSize = 16.sp, fontWeight = FontWeight.Medium
                 )
             )
         }

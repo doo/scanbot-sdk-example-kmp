@@ -49,8 +49,7 @@ fun BarcodeScannerExample() {
                         }
                     }
                 }
-            }
-        )
+            })
     }) {
         Text("Start Barcode Scanner")
     }
@@ -89,6 +88,5 @@ fun handlingResult() {
                     }
                 }
             }
-        }
-    )
+        })
 }

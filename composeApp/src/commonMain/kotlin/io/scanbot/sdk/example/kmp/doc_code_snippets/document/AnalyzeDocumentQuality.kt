@@ -13,16 +13,14 @@ fun analyzeDocumentQualityOnImage(image: ImageRef): String {
     }
 
     // Run the analysis and transform the Result into a displayable string
-    return ScanbotSDK.document.analyzeQualityOnImage(image, configuration).fold(
-        onSuccess = { result ->
+    return ScanbotSDK.document.analyzeQualityOnImage(image, configuration)
+        .fold(onSuccess = { result ->
             // Handle Success: return a summary of the quality and orientation
             "Quality: ${result.quality}\nOrientation: ${result.orientation}"
-        },
-        onFailure = { error ->
+        }, onFailure = { error ->
             // Handle Failure: return a descriptive error message
             "Analysis failed: ${error.message ?: "Unknown error"}"
-        }
-    )
+        })
 }
 // @EndTag("Analyze document quality on image")
 

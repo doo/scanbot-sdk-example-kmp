@@ -62,12 +62,10 @@ class QuickStartSnippetKMP {
                     // Handle scanning error
                     println("Scan error: ${error.message}")
                 }
-            },
-            onCancel = {
+            }, onCancel = {
                 // Handle user cancellation
                 println("Scanning cancelled by user")
-            }
-        )
+            })
         // @EndTag("Launch barcode scanner RTU UI")
     }
 
@@ -76,8 +74,7 @@ class QuickStartSnippetKMP {
         // Create barcode scanner configuration
         val scannerConfig = BarcodeScannerConfiguration(
             barcodeFormatConfigurations = listOf(
-                BarcodeFormatQrCodeConfiguration(),
-                BarcodeFormatUpcEanConfiguration()
+                BarcodeFormatQrCodeConfiguration(), BarcodeFormatUpcEanConfiguration()
             )
             // Add more configuration as needed
         )
