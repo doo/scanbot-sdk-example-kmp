@@ -22,12 +22,10 @@ fun applyFilterToDocumentPage(
     )
 ): Result<DocumentData> {
 
-    // Modify page: rotate clockwise 90° and apply filters
     return ScanbotSDK.document.modifyPage(
         documentUuid = documentUuid,
         pageUuid = pageUuid,
         options = ModifyPageOptions(
-            rotation = ImageRotation.CLOCKWISE_90, 
             filters = filters
         )
     )
