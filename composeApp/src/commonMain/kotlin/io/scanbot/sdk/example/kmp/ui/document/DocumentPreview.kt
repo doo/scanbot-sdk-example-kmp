@@ -142,7 +142,10 @@ fun DocumentPreviewScreen(
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 100.dp),
                 contentPadding = PaddingValues(8.dp),
-                modifier = Modifier.fillMaxSize().background(Color.White).padding(paddingValues)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(paddingValues)
             ) {
                 documentData?.let {
                     items(it.pages) { page ->
@@ -159,7 +162,9 @@ fun DocumentPreviewScreen(
                     documentData?.uuid?.let { uuid ->
                         addPages(
                             documentUuid = uuid, images = images
-                        ).onSuccess { updatedDoc -> documentData = updatedDoc }.onFailure { error ->
+                        ).onSuccess {
+                            updatedDoc -> documentData = updatedDoc
+                        }.onFailure { error ->
                             resultDialogMessage = "Add pages failed: ${error.message}"
                         }
                     }
@@ -248,7 +253,10 @@ fun PagePreviewItem(page: PageData, onClick: () -> Unit) {
     }
 
     Card(
-        modifier = Modifier.padding(4.dp).aspectRatio(0.7f).clickable(onClick = onClick),
+        modifier = Modifier
+            .padding(4.dp)
+            .aspectRatio(0.7f)
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         imageBitmap?.let {
