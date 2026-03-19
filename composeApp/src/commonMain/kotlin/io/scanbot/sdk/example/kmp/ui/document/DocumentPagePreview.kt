@@ -81,7 +81,9 @@ fun DocumentPagePreviewScreen(
     }
 
     LaunchedEffect(page) {
-        imageBitmap = page?.documentImagePreviewURI?.let { uri ->
+        val previewImageUri = page?.let { it.documentImagePreviewURI ?: it.originalImageURI }
+
+        imageBitmap = previewImageUri?.let { uri ->
             ImageRef.fromPath(uri)?.encode()?.getOrNull()?.decodeToImageBitmap()
         }
         isLoading = false
@@ -102,15 +104,13 @@ fun DocumentPagePreviewScreen(
                 ) {
                     TextButton(onClick = {
                         checkLicense {
-                            documentData?.let { doc ->
-                                startCroppingScreen(
-                                    documentUuid = doc.uuid,
-                                    pageUuid = pageUuid,
-                                    handleResult = { updatedDocument ->
-                                        documentData = updatedDocument
-                                    },
-                                    handleError = { resultDialogMessage = it.message })
-                            }
+                            startCroppingScreen(
+                                documentUuid = documentUuid,
+                                pageUuid = pageUuid,
+                                handleResult = { updatedDocument ->
+                                    documentData = updatedDocument
+                                },
+                                handleError = { resultDialogMessage = it.message })
                         }
                     }) {
                         Text(
@@ -133,7 +133,7 @@ fun DocumentPagePreviewScreen(
                         checkLicense {
                             page?.let { p ->
                                 val imageRef = ImageRef.fromPath(
-                                    p.documentImageURI ?: return@let
+                                    p.documentImageURI ?: p.originalImageURI
                                 )
                                 imageRef?.let {
                                     resultDialogMessage = analyzeDocumentQualityOnImage(it)
@@ -192,15 +192,11 @@ fun DocumentPagePreviewScreen(
                     confirmButton = {
                         TextButton(onClick = {
                             showDeleteConfirmation = false
-                            documentData?.uuid?.let { docUuid ->
-                                page?.uuid?.let { pUuid ->
-                                    ScanbotSDK.document.removePages(
-                                        documentUuid = docUuid, pageUuids = listOf(pUuid)
-                                    ).fold(
-                                        onSuccess = { onPopBackStack() },
-                                        onFailure = { println("Delete error: ${it.message}") })
-                                }
-                            }
+                            ScanbotSDK.document.removePages(
+                                documentUuid = documentUuid, pageUuids = listOf(pageUuid)
+                            ).fold(
+                                onSuccess = { onPopBackStack() },
+                                onFailure = { println("Delete error: ${it.message}") })
                         }) {
                             Text("Delete", color = MaterialTheme.colorScheme.error)
                         }
@@ -239,17 +235,13 @@ fun DocumentPagePreviewScreen(
                             TextButton(
                                 onClick = {
                                     showFilterSheet = false
-                                    documentData?.uuid?.let { docUuid ->
-                                        page?.uuid?.let { pUuid ->
-                                            applyFilterToDocumentPage(
-                                                documentUuid = docUuid,
-                                                pageUuid = pUuid,
-                                                filters = filterList
-                                            ).fold(
-                                                onSuccess = { documentData = it },
-                                                onFailure = { resultDialogMessage = it.message })
-                                        }
-                                    }
+                                    applyFilterToDocumentPage(
+                                        documentUuid = documentUuid,
+                                        pageUuid = pageUuid,
+                                        filters = filterList
+                                    ).fold(
+                                        onSuccess = { documentData = it },
+                                        onFailure = { resultDialogMessage = it.message })
                                 }, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                             ) {
                                 Text(label, style = MaterialTheme.typography.bodyLarge)
