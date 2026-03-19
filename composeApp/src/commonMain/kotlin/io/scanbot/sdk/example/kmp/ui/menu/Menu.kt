@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +31,7 @@ fun MenuScreen(
     navigateToDocumentUseCases: () -> Unit,
 ) {
     var showLicenseDialog by rememberSaveable { mutableStateOf(false) }
+    var showCleanupConfirmation by rememberSaveable { mutableStateOf(false) }
     var cleanupStorageResult by rememberSaveable { mutableStateOf<String?>(null) }
 
     LicenseGuard { checkLicense ->
@@ -53,13 +58,36 @@ fun MenuScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
                 MenuItem("Clean up Storage") {
-                    ScanbotSDK.cleanupStorage().fold(
-                        onSuccess = { cleanupStorageResult = "Storage cleaned up successfully." },
-                        onFailure = { cleanupStorageResult = it.message }
-                    )
+                    showCleanupConfirmation = true
                 }
+
                 MenuItem("View License Info") { showLicenseDialog = true }
             }
+
+            if (showCleanupConfirmation) {
+                AlertDialog(
+                    onDismissRequest = { showCleanupConfirmation = false },
+                    title = { Text("Clean up Storage") },
+                    text = { Text("Are you sure you want to clean up the storage?") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showCleanupConfirmation = false
+                            ScanbotSDK.cleanupStorage().fold(
+                                onSuccess = { cleanupStorageResult = "Storage cleaned up successfully." },
+                                onFailure = { cleanupStorageResult = it.message }
+                            )
+                        }) {
+                            Text("Clean up", color = MaterialTheme.colorScheme.error)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showCleanupConfirmation = false }) {
+                            Text("Cancel")
+                        }
+                    }
+                )
+            }
+
 
             if (showLicenseDialog) {
                 LicenseInfoDialog(onDismiss = { showLicenseDialog = false })
