@@ -14,23 +14,17 @@ fun LicenseGuard(
     var licenseError by rememberSaveable { mutableStateOf<String?>(null) }
 
     val checkLicense: (() -> Unit) -> Unit = { action ->
-        ScanbotSDK.getLicenseInfo().onSuccess { info ->
-            if (info.isValid) {
-                action()
-            } else {
-                licenseError = info.licenseStatusMessage
-            }
-        }.onFailure { error ->
-            licenseError = "Error getting license info. ${error.message}"
-        }
+        ScanbotSDK.getLicenseInfo().fold(onSuccess = { info ->
+            if (info.isValid) action()
+            else licenseError = info.licenseStatusMessage
+        }, onFailure = { licenseError = "Error getting license info. ${it.message}" })
     }
 
     content(checkLicense)
 
-    if (licenseError != null) {
-        ErrorDialog(
-            "License Error",
-            "Your Scanbot SDK license is not valid. $licenseError"
-        ) { licenseError = null }
+    licenseError?.let {
+        ErrorDialog("License Error", "Your Scanbot SDK license is not valid. $it") {
+            licenseError = null
+        }
     }
 }

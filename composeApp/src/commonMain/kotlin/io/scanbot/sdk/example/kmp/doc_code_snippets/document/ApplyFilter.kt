@@ -7,26 +7,26 @@ import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.image.ImageRotation
 import io.scanbot.sdk.kmp.imageprocessing.BrightnessFilter
 import io.scanbot.sdk.kmp.imageprocessing.OutputMode
+import io.scanbot.sdk.kmp.imageprocessing.ParametricFilter
 import io.scanbot.sdk.kmp.imageprocessing.ScanbotBinarizationFilter
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.utils.Result
 
 // @Tag("Apply filter to document page")
-fun processDocumentPage(
+fun applyFilterToDocumentPage(
     documentUuid: String,
-    pageUuid: Int,
+    pageUuid: String,
+    filters: List<ParametricFilter> = listOf(
+        ScanbotBinarizationFilter(outputMode = OutputMode.ANTIALIASED),
+        BrightnessFilter(brightness = 0.4)
+    )
 ): Result<DocumentData> {
-    // Create filters to apply (e.g., binarization and brightness)
-    val filter1 = ScanbotBinarizationFilter(outputMode = OutputMode.ANTIALIASED)
-    val filter2 = BrightnessFilter(brightness = 0.4)
 
-    // Modify page: rotate clockwise 90° and apply filters
     return ScanbotSDK.document.modifyPage(
         documentUuid = documentUuid,
         pageUuid = pageUuid,
         options = ModifyPageOptions(
-            rotation = ImageRotation.CLOCKWISE_90,
-            filters = listOf(filter1, filter2)
+            filters = filters
         )
     )
 }
@@ -43,14 +43,9 @@ fun processRawImage(image: ImageRef): ImageRef? {
     val polygon = detectionResult?.pointsNormalized ?: return null
 
     // Step 2: Chain processing steps
-    return image
-        .let { ScanbotSDK.imageProcessor.crop(it, polygon) }
-        .getOrNull()
-        ?.let { ScanbotSDK.imageProcessor.rotate(it, ImageRotation.CLOCKWISE_90) }
-        ?.getOrNull()
-        ?.let { ScanbotSDK.imageProcessor.resize(it, 700) }
-        ?.getOrNull()
-        ?.let { img ->
+    return image.let { ScanbotSDK.imageProcessor.crop(it, polygon) }.getOrNull()
+        ?.let { ScanbotSDK.imageProcessor.rotate(it, ImageRotation.CLOCKWISE_90) }?.getOrNull()
+        ?.let { ScanbotSDK.imageProcessor.resize(it, 700) }?.getOrNull()?.let { img ->
             val filters = listOf(
                 ScanbotBinarizationFilter(outputMode = OutputMode.ANTIALIASED),
                 BrightnessFilter(brightness = 0.4)

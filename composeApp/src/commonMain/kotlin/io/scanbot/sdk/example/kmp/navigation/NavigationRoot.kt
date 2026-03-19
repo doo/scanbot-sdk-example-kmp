@@ -9,6 +9,7 @@ import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeCustomUIScreen
 import io.scanbot.sdk.example.kmp.ui.menu.MenuScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.barcode.BarcodeUseCasesScreen
+import io.scanbot.sdk.example.kmp.ui.document.DocumentPagePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCasesScreen
 
@@ -41,24 +42,34 @@ fun NavigationRoot() {
         composable<Route.DocumentUseCases> {
             DocumentUseCasesScreen(
                 onResultPreview = { documentData ->
-                    navController.navigate(Route.DocumentPreview(documentData.toJsonString()))
-                },
-                onPopBackStack = onPopBackStack
+                    navController.navigate(Route.DocumentPreview(documentData.uuid))
+                }, onPopBackStack = onPopBackStack
             )
         }
 
         composable<Route.BarcodePreview> { backStackEntry ->
             val screen: Route.BarcodePreview = backStackEntry.toRoute()
             BarcodePreviewScreen(
-                resultJson = screen.barcodeJson,
-                onPopBackStack = onPopBackStack
+                resultJson = screen.barcodeJson, onPopBackStack = onPopBackStack
             )
         }
 
         composable<Route.DocumentPreview> { backStackEntry ->
             val screen: Route.DocumentPreview = backStackEntry.toRoute()
             DocumentPreviewScreen(
-                resultJson = screen.documentDataJson,
+                documentUuid = screen.documentUuid,
+                navigateToPagePreview = { documentUuid, pageUuid ->
+                    navController.navigate(Route.DocumentPagePreview(documentUuid, pageUuid))
+                },
+                onPopBackStack = onPopBackStack
+            )
+        }
+
+        composable<Route.DocumentPagePreview> { backStackEntry ->
+            val screen: Route.DocumentPagePreview = backStackEntry.toRoute()
+            DocumentPagePreviewScreen(
+                documentUuid = screen.documentUuid,
+                pageUuid = screen.pageUuid,
                 onPopBackStack = onPopBackStack
             )
         }

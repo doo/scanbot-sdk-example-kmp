@@ -17,7 +17,10 @@ sealed interface Route {
     data class BarcodePreview(val barcodeJson: String) : Route
 
     @Serializable
-    data class DocumentPreview(val documentDataJson: String) : Route
+    data class DocumentPagePreview(val documentUuid: String, val pageUuid: String) : Route
+
+    @Serializable
+    data class DocumentPreview(val documentUuid: String) : Route
 
     @Serializable
     data object BarcodeCustomUI : Route

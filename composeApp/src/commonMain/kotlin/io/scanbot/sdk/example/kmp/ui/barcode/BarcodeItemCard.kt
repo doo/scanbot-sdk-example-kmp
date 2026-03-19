@@ -28,19 +28,13 @@ fun BarcodeItemCard(
             modifier = Modifier.padding(12.dp)
         ) {
 
-            barcode.sourceImage
-                ?.encode()
-                ?.getOrNull()
-                ?.decodeToImageBitmap()
-                ?.let { bitmap ->
-                    Image(
-                        bitmap = bitmap,
-                        contentDescription = "Barcode image",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
-                }
+            barcode.sourceImage?.encode()?.getOrNull()?.decodeToImageBitmap()?.let { bitmap ->
+                Image(
+                    bitmap = bitmap,
+                    contentDescription = "Barcode image",
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+            }
 
             Text(
                 text = "Format:",
