@@ -1,5 +1,10 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.document.scanner.common_use_cases
 
+/*
+    NOTE: this snippet of code is to be used only as a part of the website documentation.
+    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
+*/
+
 // @Tag("Single Page Finder")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
@@ -52,4 +57,4 @@ fun startSinglePageFinderScanning(
             }
         })
 }
-// @EndTag("SinglePageScanningFinder")
+// @EndTag("Single Page Finder")

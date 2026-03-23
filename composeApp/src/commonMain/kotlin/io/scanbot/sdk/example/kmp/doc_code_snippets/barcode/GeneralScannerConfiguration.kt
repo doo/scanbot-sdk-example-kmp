@@ -17,6 +17,10 @@ import io.scanbot.sdk.kmp.barcode.Gs1Handling
 import io.scanbot.sdk.kmp.barcode.MsiPlesseyChecksumAlgorithm
 import io.scanbot.sdk.kmp.image.ImageRef
 
+/*
+    NOTE: this snippet of code is to be used only as a part of the website documentation.
+    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
+*/
 
 class GeneralScannerConfiguration {
 

@@ -12,6 +12,27 @@ import io.scanbot.sdk.kmp.imageprocessing.ScanbotBinarizationFilter
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.utils.Result
 
+// @Tag("Apply filter to document page with rotation")
+fun applyFilterToDocumentPageWithRotation(
+    documentUuid: String,
+    pageUuid: String,
+) : Result<DocumentData> {
+    // Create filters to apply (e.g., binarization and brightness)
+    val filter1 = ScanbotBinarizationFilter(outputMode = OutputMode.ANTIALIASED)
+    val filter2 = BrightnessFilter(brightness = 0.4)
+
+    // Modify page: rotate clockwise 90° and apply filters
+    return ScanbotSDK.document.modifyPage(
+        documentUuid = documentUuid,
+        pageUuid = pageUuid,
+        options = ModifyPageOptions(
+            rotation = ImageRotation.CLOCKWISE_90,
+            filters = listOf(filter1, filter2)
+        )
+    )
+}
+// @EndTag("Apply filter to document page with rotation")
+
 // @Tag("Apply filter to document page")
 fun applyFilterToDocumentPage(
     documentUuid: String,

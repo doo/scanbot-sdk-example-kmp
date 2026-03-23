@@ -9,6 +9,11 @@ import io.scanbot.sdk.kmp.common.InvalidLicenseError
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
 import io.scanbot.sdk.kmp.ui_v2.barcode.configuration.BarcodeScannerScreenConfiguration
 
+/*
+    NOTE: this snippet of code is to be used only as a part of the website documentation.
+    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
+*/
+
 // @Tag("Barcode Scanner")
 @Composable
 fun BarcodeScannerExample() {
@@ -88,5 +93,7 @@ fun handlingResult() {
                     }
                 }
             }
-        })
+        }
+    )
 }
+// @EndTag("Handling the result")
