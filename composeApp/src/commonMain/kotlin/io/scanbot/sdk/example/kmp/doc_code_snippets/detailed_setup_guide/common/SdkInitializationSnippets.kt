@@ -5,51 +5,107 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.detailed_setup_guide.common
     This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
 */
 
-// @Tag("Storage and encryption imports")
+// @Tag("SDK initialization imports")
 import io.scanbot.sdk.kmp.ScanbotSDK
-import io.scanbot.sdk.kmp.common.sdk.configuration.FileEncryptionMode
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
+// @EndTag("SDK initialization imports")
 
-// @EndTag("Storage and encryption imports")
 
-class StorageAndEncryptionSnippets {
+fun basicInitialization() {
+    // @Tag("Basic initialization")
+    val configuration = SdkConfiguration(
+        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY"
+    )
 
-    fun customStorageDirectory() {
-        // @Tag("Custom storage directory")
-        val customStorageDir = "file:///path/to/my-custom-storage-dir"
+    val result = ScanbotSDK.initialize(configuration)
 
-        val configuration = SdkConfiguration(
-            licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
-            storageBaseDirectory = customStorageDir
-        )
-
-        ScanbotSDK.initialize(configuration)
-        // @EndTag("Custom storage directory")
+    result.onSuccess { licenseInfo ->
+        // SDK initialized successfully
+        println("License is valid: ${licenseInfo.isValid}")
+    }.onFailure { error ->
+        // Handle initialization error
+        println("SDK initialization failed: ${error.message}")
     }
 
-    fun enablingEncryption() {
-        // @Tag("Enabling encryption")
-        val configuration = SdkConfiguration(
-            licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
-            fileEncryptionMode = FileEncryptionMode.AES256,
-            fileEncryptionPassword = "any_user_password"
-        )
+    ScanbotSDK.initialize(configuration)
+    // @EndTag("Basic initialization")
+}
 
-        ScanbotSDK.initialize(configuration)
-        // @EndTag("Enabling encryption")
+fun settingLicenseKye() {
+    // @Tag("Setting license key")
+    val LICENSE_KEY = "YOUR_SCANBOT_SDK_LICENSE_KEY"
+
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY
+    )
+
+    ScanbotSDK.initialize(configuration)
+    // @EndTag("Setting license key")
+}
+
+fun checkingLicenseStatus() {
+    // @Tag("Checking license status")
+    val result = ScanbotSDK.getLicenseInfo()
+
+    result.onSuccess { licenseInfo ->
+        if (licenseInfo.isValid) {
+            // License is valid, proceed with SDK usage
+        } else {
+            // License is invalid or expired, disable SDK features
+        }
     }
+    // @EndTag("Checking license status")
+}
 
-    fun completeInitializationWithEncryption() {
-        // @Tag("Complete initialization with encryption")
-        // Initialize SDK with custom storage and encryption
-        val configuration = SdkConfiguration(
-            licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
-            storageBaseDirectory = "file:///path/to/custom/storage",
-            fileEncryptionMode = FileEncryptionMode.AES256,
-            fileEncryptionPassword = "SecurePassword123!"
-        )
+const val LICENSE_KEY = "YOUR_SCANBOT_SDK_LICENSE_KEY"
 
-        ScanbotSDK.initialize(configuration)
-        // @EndTag("Complete initialization with encryption")
-    }
+fun enableLogging() {
+    // @Tag("Enable logging")
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY,
+        loggingEnabled = true,
+        enableNativeLogging = true  // Android only
+    )
+    // @EndTag("Enable logging")
+}
+
+
+fun XNNPACKAcceleration() {
+    // @Tag("XNNPACK acceleration")
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY,
+        allowXnnpackAcceleration = false
+    )
+    // @EndTag("XNNPACK acceleration")
+}
+
+fun disableGpuAcceleration() {
+    // @Tag("Disable GPU acceleration")
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY,
+        allowGpuAcceleration = false
+    )
+    // @EndTag("Disable GPU acceleration")
+}
+
+fun performanceHint() {
+    // @Tag("Performance hint")
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY,
+        performanceHintApi = true
+    )
+    // @EndTag("Performance hint")
+}
+
+fun disableOptimizations() {
+    // @Tag("Disable all optimizations")
+    val configuration = SdkConfiguration(
+        licenseKey = LICENSE_KEY,
+
+        // Disable all Android optimizations
+        performanceHintApi = false,
+        allowGpuAcceleration = false,
+        allowXnnpackAcceleration = false
+    )
+    // @EndTag("Disable all optimizations")
 }

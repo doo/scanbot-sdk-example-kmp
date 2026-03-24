@@ -25,6 +25,7 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_c
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startFindAndPickScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startMappingItemScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startMultiScanning
+import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startScanAndCount
 import io.scanbot.sdk.example.kmp.doc_code_snippets.barcode.scanner.common_use_cases.startSingleScanning
 import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
@@ -75,6 +76,12 @@ fun BarcodeUseCasesScreen(
                 MenuItem("Multiple Scan") {
                     checkLicense {
                         startMultiScanning(onResultPreview, onErrorHandler = { useCaseError = it })
+                    }
+                }
+                MenuItem("Scan and Count") {
+                    checkLicense {
+                        startScanAndCount(
+                            onResultPreview, onErrorHandler = { useCaseError = it })
                     }
                 }
                 MenuItem("Find and Pick") {

@@ -1,8 +1,11 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.detailed_setup_guide.common
 
+// @Tag("Storage and encryption imports")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.FileEncryptionMode
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
+// @EndTag("Storage and encryption imports")
+
 import io.scanbot.sdk.kmp.utils.Result
 
 /*
@@ -10,17 +13,17 @@ import io.scanbot.sdk.kmp.utils.Result
     This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
 */
 
-fun initSDKSnippet() {
-    // @Tag("Initialize SDK")
-    // Example for using a custom storage directory:
+fun customStorageDirectory() {
+    // @Tag("Custom storage directory")
     val customStorageDir = "file:///path/to/my-custom-storage-dir"
 
     val configuration = SdkConfiguration(
-        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY", storageBaseDirectory = customStorageDir
+        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
+        storageBaseDirectory = customStorageDir
     )
 
     ScanbotSDK.initialize(configuration)
-    // @EndTag("Initialize SDK")
+    // @EndTag("Custom storage directory")
 }
 
 fun enableEncryptionInSDKInitializerSnippet() {
@@ -33,4 +36,18 @@ fun enableEncryptionInSDKInitializerSnippet() {
 
     ScanbotSDK.initialize(configuration)
     // @EndTag("Enable Encryption")
+}
+
+fun completeInitializationWithEncryption() {
+    // @Tag("Complete initialization with encryption")
+    // Initialize SDK with custom storage and encryption
+    val configuration = SdkConfiguration(
+        licenseKey = "YOUR_SCANBOT_SDK_LICENSE_KEY",
+        storageBaseDirectory = "file:///path/to/custom/storage",
+        fileEncryptionMode = FileEncryptionMode.AES256,
+        fileEncryptionPassword = "SecurePassword123!"
+    )
+
+    ScanbotSDK.initialize(configuration)
+    // @EndTag("Complete initialization with encryption")
 }
