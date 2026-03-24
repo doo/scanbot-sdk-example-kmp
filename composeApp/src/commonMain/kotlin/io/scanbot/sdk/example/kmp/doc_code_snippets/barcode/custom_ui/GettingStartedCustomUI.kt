@@ -277,6 +277,41 @@ fun FinderViewConfigurationExample() {
     // @EndTag("Configuring Finder View")
 }
 
+@Composable
+fun SelectionOverlayConfigurationExample() {
+    // @Tag("Configuring Selection Overlay")
+    val overlayConfiguration = SelectionOverlay(
+        overlayEnabled = true,
+        loadingText = "Scanning...",
+        textFormat = BarcodeOverlayTextFormat.CODE_AND_TYPE,
+        colors = OverlayColors(
+            polygonColor = ScanbotColor("#00CFA633"),
+            strokeColor = ScanbotColor("#00CFA6CC"),
+            highlightedPolygonColor = ScanbotColor("#C81A3C33"),
+            highlightedStrokeColor = ScanbotColor("#C81A3CCC"),
+            textColor = ScanbotColor("#000000"),
+            textContainerColor = ScanbotColor("#00CFA6CC"),
+            highlightedTextColor = ScanbotColor("#FFFFFF"),
+            highlightedTextContainerColor = ScanbotColor("#C81A3CCC")
+        )
+    )
+
+    val configuration = BarcodeCameraConfiguration(
+        overlayConfiguration = overlayConfiguration
+    )
+
+    BarcodeScannerView(
+        modifier = Modifier.fillMaxSize(),
+        configuration = configuration,
+        onBarcodesDetected = { barcodes ->
+            // Handle barcodes
+        },
+        onBarcodeTap = { barcode, highlighted ->
+            // Handle tap on highlighted barcode
+        }
+    )
+    // @EndTag("Configuring Selection Overlay")
+}
 
 @Composable
 fun CustomBarcodeOverlayExample() {
