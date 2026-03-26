@@ -5,23 +5,11 @@ import kotlinx.serialization.Serializable
 sealed interface Route {
 
     @Serializable
-    data object Menu : Route
-
-    @Serializable
-    data object BarcodeUseCases : Route
-
-    @Serializable
     data object DocumentUseCases : Route
-
-    @Serializable
-    data class BarcodePreview(val barcodeJson: String) : Route
 
     @Serializable
     data class DocumentPagePreview(val documentUuid: String, val pageUuid: String) : Route
 
     @Serializable
     data class DocumentPreview(val documentUuid: String) : Route
-
-    @Serializable
-    data object BarcodeCustomUI : Route
 }

@@ -44,12 +44,6 @@ import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.addPages
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createBinarizedTiffFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createPdfFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createSearchablePdfFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.createTiffFromDocument
-import io.scanbot.sdk.example.kmp.doc_code_snippets.document.removeAllPagesFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
