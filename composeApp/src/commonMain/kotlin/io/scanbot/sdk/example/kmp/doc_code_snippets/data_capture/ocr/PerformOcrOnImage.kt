@@ -3,7 +3,6 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.page.DocumentData
-import io.scanbot.sdk.kmp.utils.Result
 
 // @Tag("Perform OCR on images")
 suspend fun performOcrOnImages(images: List<ImageRef>): String {
