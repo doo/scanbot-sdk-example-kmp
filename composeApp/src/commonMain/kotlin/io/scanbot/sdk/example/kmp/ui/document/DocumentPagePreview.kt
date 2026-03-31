@@ -36,6 +36,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import io.scanbot.sdk.example.kmp.doc_code_snippets.analyzeDocumentQualityOnImage
+import io.scanbot.sdk.example.kmp.doc_code_snippets.applyFilterToDocumentPage
+import io.scanbot.sdk.example.kmp.doc_code_snippets.startCroppingScreen
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
