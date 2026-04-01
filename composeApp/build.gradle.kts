@@ -34,7 +34,7 @@ kotlin {
             dependency {
                 remotePackageVersion(
                     url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
-                    version = "8.0.4",
+                    version = libs.versions.scanbot.sdk.ios.bundle.get(),
                     products = {
                         add("ScanbotSDK", exportToKotlin = true)
                     },
