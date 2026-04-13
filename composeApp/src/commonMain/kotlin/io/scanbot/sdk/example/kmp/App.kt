@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.scanbot.sdk.example.kmp.navigation.NavigationRoot
+import io.scanbot.sdk.example.kmp.utils.getDemoStorageBaseDirectory
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.FileEncryptionMode
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
@@ -18,6 +19,7 @@ fun App() {
             val config = SdkConfiguration(
                 licenseKey = SCANBOT_SDK_LICENSE_KEY,
                 loggingEnabled = true, // Consider switching logging OFF in production builds for security and performance reasons!
+                storageBaseDirectory = getDemoStorageBaseDirectory()
             )
 
             // Set the following properties to enable encryption.
