@@ -60,23 +60,23 @@ fun checkingLicenseStatus() {
 const val LICENSE_KEY = "YOUR_SCANBOT_SDK_LICENSE_KEY"
 
 fun enableLogging() {
-    // @Tag("Enable logging")
+    // @Tag("Enable SDK logging")
     val configuration = SdkConfiguration(
         licenseKey = LICENSE_KEY,
         loggingEnabled = true,
         enableNativeLogging = true  // Android only
     )
-    // @EndTag("Enable logging")
+    // @EndTag("Enable SDK logging")
 }
 
 
 fun XNNPACKAcceleration() {
-    // @Tag("XNNPACK acceleration")
+    // @Tag("Disable XNNPACK acceleration")
     val configuration = SdkConfiguration(
         licenseKey = LICENSE_KEY,
         allowXnnpackAcceleration = false
     )
-    // @EndTag("XNNPACK acceleration")
+    // @EndTag("Disable XNNPACK acceleration")
 }
 
 fun disableGpuAcceleration() {
