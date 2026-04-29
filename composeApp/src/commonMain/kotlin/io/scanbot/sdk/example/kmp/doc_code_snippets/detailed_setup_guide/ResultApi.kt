@@ -22,7 +22,7 @@ import io.scanbot.sdk.kmp.utils.Result
 
 class ResultApiSnippets {
 
-    // @Tag("Handle result with when expression")
+    // @Tag("Handle Result with when expression")
     fun processResultWithSwitch(result: Result<DocumentScanningResult>) = when (result) {
         is Result.Success -> {
             val documentResult = result.value
@@ -37,7 +37,7 @@ class ResultApiSnippets {
             println("Error scanning document: ${exception.message}")
         }
     }
-    // @EndTag("Handle result with when expression")
+    // @EndTag("Handle Result with when expression")
 
     fun startDocumentScanner() {
         // @Tag("Start document scanner with result handling")
