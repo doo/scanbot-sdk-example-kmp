@@ -6,7 +6,7 @@
 </p>
 
 # Example app for the Scanbot Kotlin Multiplatform SDK
-This example app shows how to integrate the [Scanbot Document Scanner SDK](https://deploy-preview-1545--sensational-tiramisu-56a165.netlify.app/kmp/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) for KMP. 
+This example app shows how to integrate the [Scanbot Document Scanner SDK](https://docs.scanbot.io/kmp/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) for KMP. 
 
 ## What is the Scanbot SDK?
 
@@ -14,7 +14,7 @@ The Scanbot SDK is a set of high-level APIs that lets you integrate document sca
 
 With our Ready-To-Use UI (RTU UI) components, you can integrate the Scanbot SDK into your app in less than an hour.
 
-💡 For more details about the Scanbot Document Scanner SDK, please check out our [documentation](https://deploy-preview-1545--sensational-tiramisu-56a165.netlify.app/kmp/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites).
+💡 For more details about the Scanbot Document Scanner SDK, please check out our [documentation](https://docs.scanbot.io/kmp/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites).
 
 ## Overview of the Scanbot SDK
 
