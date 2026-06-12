@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import io.scanbot.sdk.example.kmp.ui.StraightenImagePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPagePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCasesScreen
@@ -23,6 +24,9 @@ fun NavigationRoot() {
             DocumentUseCasesScreen(
                 onResultPreview = { documentData ->
                     navController.navigate(Route.DocumentPreview(documentData.uuid))
+                },
+                onStraightenedImagePreview = { result ->
+                    navController.navigate(Route.StraightenedImagePreview(result.toJsonString()))
                 }
             )
         }
@@ -43,6 +47,14 @@ fun NavigationRoot() {
             DocumentPagePreviewScreen(
                 documentUuid = screen.documentUuid,
                 pageUuid = screen.pageUuid,
+                onPopBackStack = onPopBackStack
+            )
+        }
+
+        composable<Route.StraightenedImagePreview> { backStackEntry ->
+            val screen: Route.StraightenedImagePreview = backStackEntry.toRoute()
+            StraightenImagePreviewScreen(
+                straighteningResultJson = screen.straighteningResultJson,
                 onPopBackStack = onPopBackStack
             )
         }

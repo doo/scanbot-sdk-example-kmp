@@ -26,6 +26,7 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrO
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startMultiPageScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageFinderScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageScanning
+import io.scanbot.sdk.example.kmp.doc_code_snippets.straightening.straighteningImage
 import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
 import io.scanbot.sdk.example.kmp.ui.common.Footer
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
@@ -35,12 +36,14 @@ import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.documentscanner.DocumentStraighteningResult
 import io.scanbot.sdk.kmp.page.DocumentData
 import kotlinx.coroutines.launch
 
 @Composable
 fun DocumentUseCasesScreen(
     onResultPreview: (DocumentData) -> Unit,
+    onStraightenedImagePreview: (DocumentStraighteningResult) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var pendingAction by remember { mutableStateOf<Action?>(null) }
@@ -86,6 +89,9 @@ fun DocumentUseCasesScreen(
                 MenuItem("Perform OCR") {
                     checkLicense { pendingAction = Action.PerformOcr }
                 }
+                MenuItem("Straighten Image") {
+                    checkLicense { pendingAction = Action.StraightenImage }
+                }
                 Spacer(modifier = Modifier.weight(1f))
                 MenuItem("Clean up Storage") {
                     showCleanupConfirmation = true
@@ -113,11 +119,22 @@ fun DocumentUseCasesScreen(
                                 } ?: run { useCaseError = Throwable("No image selected") }
 
                                 Action.PerformOcr -> useCaseResult = performOcrOnImages(images)
+
+                                Action.StraightenImage ->  {
+                                    straighteningImage(images.first())?.let {
+                                        if (it.straightenedImage != null) {
+                                            onStraightenedImagePreview(it)
+                                        } else {
+                                            useCaseResult = "Could not straighten the image"
+                                        }
+                                    }
+                                }
                             }
                             pendingAction = null
                         }
                     },
-                    onDismiss = { pendingAction = null })
+                    onDismiss = { pendingAction = null }
+                )
             }
 
             useCaseResult?.let { text ->
@@ -152,7 +169,6 @@ fun DocumentUseCasesScreen(
                 )
             }
 
-
             if (showLicenseDialog) {
                 LicenseInfoDialog(onDismiss = { showLicenseDialog = false })
             }
@@ -169,5 +185,5 @@ fun DocumentUseCasesScreen(
 }
 
 private enum class Action {
-    CreateDocument, PerformOcr, AnalyzeQuality
+    CreateDocument, PerformOcr, AnalyzeQuality, StraightenImage
 }
