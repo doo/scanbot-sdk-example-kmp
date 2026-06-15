@@ -7,6 +7,7 @@ import io.scanbot.sdk.kmp.documentscanner.DocumentStraighteningParameters
 import io.scanbot.sdk.kmp.geometry.AspectRatio
 
 fun straighteningPage(pageUuid: String, documentUuid: String) {
+    // @Tag("Straightening a scanned page")
     /** Create the default configuration instance */
     val straighteningParameters = DocumentStraighteningParameters()
 
@@ -32,4 +33,5 @@ fun straighteningPage(pageUuid: String, documentUuid: String) {
             straighteningParameters = straighteningParameters
         )
     )
+    // @EndTag("Straightening a scanned page")
 }

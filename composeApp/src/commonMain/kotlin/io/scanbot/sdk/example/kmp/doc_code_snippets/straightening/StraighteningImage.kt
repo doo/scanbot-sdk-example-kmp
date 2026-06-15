@@ -10,7 +10,7 @@ import io.scanbot.sdk.kmp.image.ImageRef
 fun straighteningImage(
     imageRef: ImageRef
 ): DocumentStraighteningResult? {
-
+    // @Tag("Straightening an image")
     /** Create the default configuration instance */
     val straighteningParameters = DocumentStraighteningParameters(
         straighteningMode = DocumentStraighteningMode.STRAIGHTEN
@@ -36,4 +36,5 @@ fun straighteningImage(
         print("Failed to straighten image: ${error.message ?: "Unknown error"}")
         null
     })
+    // @EndTag("Straightening an image")
 }

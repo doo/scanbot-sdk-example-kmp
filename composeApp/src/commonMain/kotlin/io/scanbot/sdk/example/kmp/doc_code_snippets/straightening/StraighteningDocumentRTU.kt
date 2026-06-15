@@ -6,6 +6,7 @@ import io.scanbot.sdk.kmp.geometry.AspectRatio
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
 fun straighteningDocument() {
+    // @Tag("Document Straightening")
     /** Create the default configuration instance */
     val configuration = DocumentScanningFlow()
     val straighteningParameters = configuration.outputSettings.straighteningParameters
@@ -34,4 +35,5 @@ fun straighteningDocument() {
             }
         }
     )
+    // @EndTag("Document Straightening")
 }
