@@ -23,7 +23,7 @@ import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.documentscanner.DocumentStraighteningResult
 
 @Composable
-fun StraightenImagePreviewScreen(
+fun ImagePreviewScreen(
     straighteningResultJson: String,
     onPopBackStack: () -> Unit,
 ) {
@@ -50,19 +50,14 @@ fun StraightenImagePreviewScreen(
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-
-            if (imageBitmap != null) {
-                imageBitmap?.let {
-                    Image(
-                        bitmap = it,
-                        contentDescription = "Straightened image preview",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            }
-
-            if (imageBitmap == null) {
+            imageBitmap?.let {
+                Image(
+                    bitmap = it,
+                    contentDescription = "Straightened image preview",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } ?: run {
                 Text("No straightened image to preview.", color = Color.White)
             }
         }

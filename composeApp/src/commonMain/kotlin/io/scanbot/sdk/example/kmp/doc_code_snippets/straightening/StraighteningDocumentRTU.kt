@@ -3,13 +3,9 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.straightening
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.documentscanner.DocumentStraighteningMode
 import io.scanbot.sdk.kmp.geometry.AspectRatio
-import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
-fun straighteningDocument(
-    onResultHandler: (DocumentData) -> Unit,
-    onErrorHandler: (error: Throwable) -> Unit
-) {
+fun straighteningDocument() {
     /** Create the default configuration instance */
     val configuration = DocumentScanningFlow()
     val straighteningParameters = configuration.outputSettings.straighteningParameters
@@ -32,9 +28,9 @@ fun straighteningDocument(
     ScanbotSDK.document.startScanner(
         configuration = configuration, onResult = { result ->
             result.onSuccess {
-                onResultHandler(it)
+                // Handle the scanned document result with straightening applied
             }.onFailure {
-                onErrorHandler(it)
+                // Handle error
             }
         }
     )

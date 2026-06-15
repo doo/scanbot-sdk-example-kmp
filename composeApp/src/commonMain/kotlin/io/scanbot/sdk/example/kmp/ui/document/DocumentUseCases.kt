@@ -89,7 +89,7 @@ fun DocumentUseCasesScreen(
                 MenuItem("Perform OCR") {
                     checkLicense { pendingAction = Action.PerformOcr }
                 }
-                MenuItem("Straighten Image") {
+                MenuItem("Straighten Document") {
                     checkLicense { pendingAction = Action.StraightenImage }
                 }
                 Spacer(modifier = Modifier.weight(1f))

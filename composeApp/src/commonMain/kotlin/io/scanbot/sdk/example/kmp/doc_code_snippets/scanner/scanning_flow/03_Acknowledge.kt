@@ -34,12 +34,9 @@ fun acknowledgeFlowConfig(): DocumentScanningFlow {
         screens.camera.acknowledgement.bottomBar.retakeButton.visible = false
         /** Hide the titles of the buttons. */
         screens.camera.acknowledgement.bottomBar.acceptWhenAcceptableButton.title.visible = false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.unacceptableQuality.title.visible =
-            false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.documentNotFound.title.visible =
-            false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.uncertainQuality.title.visible =
-            false
+        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.unacceptableQuality.title.visible = false
+        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.documentNotFound.title.visible = false
+        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.uncertainQuality.title.visible = false
         screens.camera.acknowledgement.bottomBar.retakeButton.title.visible = false
         /** Configure the acknowledgment screen's hint message which is shown. */
         screens.camera.acknowledgement.documentNotFoundWarning.title.text = "No document found";
