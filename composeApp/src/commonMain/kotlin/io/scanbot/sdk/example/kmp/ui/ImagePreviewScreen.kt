@@ -20,25 +20,25 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
-import io.scanbot.sdk.kmp.documentscanner.DocumentStraighteningResult
+import io.scanbot.sdk.kmp.image.ImageRef
+import io.scanbot.sdk.kmp.utils.UUID
 
 @Composable
 fun ImagePreviewScreen(
-    straighteningResultJson: String,
+    imageUuid: String,
     onPopBackStack: () -> Unit,
 ) {
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
 
-    LaunchedEffect(straighteningResultJson) {
-        val documentStraighteningResult =
-            DocumentStraighteningResult.fromJson(straighteningResultJson)
-        imageBitmap = documentStraighteningResult.straightenedImage?.encode()?.getOrNull()
+    LaunchedEffect(imageUuid) {
+        val imageRef = ImageRef(UUID.fromString(imageUuid))
+        imageBitmap = imageRef.encode().getOrNull()
             ?.decodeToImageBitmap()
     }
 
     Scaffold(topBar = {
         TopBar(
-            title = "Straightened Image",
+            title = "Image Preview",
             showBackButton = true,
             onPopBackStack = onPopBackStack
         )
@@ -53,12 +53,12 @@ fun ImagePreviewScreen(
             imageBitmap?.let {
                 Image(
                     bitmap = it,
-                    contentDescription = "Straightened image preview",
+                    contentDescription = "image preview",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize()
                 )
             } ?: run {
-                Text("No straightened image to preview.", color = Color.White)
+                Text("No image to preview.", color = Color.White)
             }
         }
     }

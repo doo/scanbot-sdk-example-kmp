@@ -14,5 +14,5 @@ sealed interface Route {
     data class DocumentPreview(val documentUuid: String) : Route
 
     @Serializable
-    data class ImagePreview(val straighteningResultJson: String) : Route
+    data class ImagePreview(val imageUuid: String) : Route
 }

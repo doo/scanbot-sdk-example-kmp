@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun DocumentUseCasesScreen(
     onResultPreview: (DocumentData) -> Unit,
-    onStraightenedImagePreview: (DocumentStraighteningResult) -> Unit,
+    onStraightenedImagePreview: (String) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var pendingAction by remember { mutableStateOf<Action?>(null) }
@@ -122,10 +122,10 @@ fun DocumentUseCasesScreen(
 
                                 Action.StraightenImage ->  {
                                     straighteningImage(images.first())?.let {
-                                        if (it.straightenedImage != null) {
-                                            onStraightenedImagePreview(it)
-                                        } else {
-                                            useCaseResult = "Could not straighten the image"
+                                        it.straightenedImage?.uniqueId?.let { uuid ->
+                                            onStraightenedImagePreview(uuid.toString())
+                                        } ?: run {
+                                             useCaseResult = "Could not straighten the image"
                                         }
                                     }
                                 }

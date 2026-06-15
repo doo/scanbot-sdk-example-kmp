@@ -25,8 +25,8 @@ fun NavigationRoot() {
                 onResultPreview = { documentData ->
                     navController.navigate(Route.DocumentPreview(documentData.uuid))
                 },
-                onStraightenedImagePreview = { result ->
-                    navController.navigate(Route.ImagePreview(result.toJsonString()))
+                onStraightenedImagePreview = { imageUuid ->
+                    navController.navigate(Route.ImagePreview(imageUuid))
                 }
             )
         }
@@ -54,7 +54,7 @@ fun NavigationRoot() {
         composable<Route.ImagePreview> { backStackEntry ->
             val screen: Route.ImagePreview = backStackEntry.toRoute()
             ImagePreviewScreen(
-                straighteningResultJson = screen.straighteningResultJson,
+                imageUuid = screen.imageUuid,
                 onPopBackStack = onPopBackStack
             )
         }
