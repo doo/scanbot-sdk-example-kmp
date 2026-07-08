@@ -12,4 +12,7 @@ sealed interface Route {
 
     @Serializable
     data class DocumentPreview(val documentUuid: String) : Route
+
+    @Serializable
+    data class ImagePreview(val imageUuid: String) : Route
 }

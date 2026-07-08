@@ -7,9 +7,7 @@ import io.scanbot.sdk.kmp.page.DocumentData
 
 // @Tag("Analyze document quality on image")
 fun analyzeDocumentQualityOnImage(image: ImageRef): String {
-    val configuration = DocumentQualityAnalyzerConfiguration().apply {
-        detectOrientation = true
-    }
+    val configuration = DocumentQualityAnalyzerConfiguration()
 
     // Run the analysis and transform the Result into a displayable string
     return ScanbotSDK.document.analyzeQualityOnImage(image, configuration)
