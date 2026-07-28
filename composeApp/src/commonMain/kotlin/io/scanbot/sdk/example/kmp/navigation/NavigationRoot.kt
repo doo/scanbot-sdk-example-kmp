@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import io.scanbot.sdk.example.kmp.ui.ImagePreviewScreen
+import io.scanbot.sdk.example.kmp.ui.UseCasesMenuScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPagePreviewScreen
 import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
-import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCasesScreen
 
 @Composable
 fun NavigationRoot() {
@@ -21,7 +21,7 @@ fun NavigationRoot() {
     ) {
 
         composable<Route.DocumentUseCases> {
-            DocumentUseCasesScreen(
+            UseCasesMenuScreen(
                 onResultPreview = { documentData ->
                     navController.navigate(Route.DocumentPreview(documentData.uuid))
                 },
