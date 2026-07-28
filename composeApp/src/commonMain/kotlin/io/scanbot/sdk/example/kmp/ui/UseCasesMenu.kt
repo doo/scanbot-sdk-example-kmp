@@ -15,46 +15,36 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.scanbot.sdk.example.kmp.doc_code_snippets.analyzeDocumentQualityOnImage
-import io.scanbot.sdk.example.kmp.doc_code_snippets.createDocumentFromImages
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrOnImages
-import io.scanbot.sdk.example.kmp.doc_code_snippets.straightening.straighteningImage
 import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
 import io.scanbot.sdk.example.kmp.ui.common.Footer
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
+import io.scanbot.sdk.example.kmp.ui.common.MenuSection
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureUseCases
-import io.scanbot.sdk.example.kmp.ui.document.DocumentAction
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCases
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
-import kotlinx.coroutines.launch
 
 @Composable
 fun UseCasesMenuScreen(
     onResultPreview: (DocumentData) -> Unit,
-    onStraightenedImagePreview: (String) -> Unit,
+    onImagePreview: (String) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    var pendingAction by remember { mutableStateOf<DocumentAction?>(null) }
-    var useCaseResult by remember { mutableStateOf<String?>(null) }
-    var useCaseError by remember { mutableStateOf<Throwable?>(null) }
+    var useCaseResult by rememberSaveable { mutableStateOf<String?>(null) }
+    var useCaseError by rememberSaveable { mutableStateOf<String?>(null) }
     var showLicenseDialog by rememberSaveable { mutableStateOf(false) }
     var showCleanupConfirmation by rememberSaveable { mutableStateOf(false) }
     var cleanupStorageResult by rememberSaveable { mutableStateOf<String?>(null) }
 
-    LicenseGuard { checkLicense ->
+    LicenseGuard { runWithValidLicense ->
         Scaffold(
             topBar = { TopBar(title = "Scanbot SDK KMP Example") },
             bottomBar = { Footer() }
@@ -68,75 +58,32 @@ fun UseCasesMenuScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 DocumentUseCases(
-                    checkLicense = checkLicense,
+                    runWithValidLicense = runWithValidLicense,
                     onResultPreview = onResultPreview,
-                    onAction = { pendingAction = it },
-                    onError = { useCaseError = it }
+                    onImagePreview = onImagePreview,
+                    onResult = { useCaseResult = it },
+                    onError = { useCaseError = it.message },
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DataCaptureUseCases(
-                    checkLicense = checkLicense,
+                    runWithValidLicense = runWithValidLicense,
                     onResult = { useCaseResult = it },
-                    onError = { useCaseError = it }
+                    onError = { useCaseError = it.message },
                 )
 
                 Spacer(Modifier.height(24.dp))
 
-                MenuItem("Clean up Storage") { showCleanupConfirmation = true }
                 MenuItem("View License Info") { showLicenseDialog = true }
-            }
-
-            pendingAction?.let { action ->
-                GalleryPicker(
-                    allowMultiple = action == DocumentAction.CreateDocument ||
-                        action == DocumentAction.PerformOcr,
-                    onImagesSelected = { images ->
-                        scope.launch {
-                            when (action) {
-                                DocumentAction.CreateDocument -> {
-                                    createDocumentFromImages(images)?.let(onResultPreview)
-                                        ?: run {
-                                            useCaseError = Throwable("Failed to create document")
-                                        }
-                                }
-
-                                DocumentAction.AnalyzeQuality -> images.firstOrNull()?.let {
-                                    useCaseResult = analyzeDocumentQualityOnImage(it)
-                                } ?: run {
-                                    useCaseError = Throwable("No image selected")
-                                }
-
-                                DocumentAction.PerformOcr -> {
-                                    useCaseResult = performOcrOnImages(images)
-                                }
-
-                                DocumentAction.StraightenImage -> {
-                                    val image = images.firstOrNull()
-                                    if (image == null) {
-                                        useCaseError = Throwable("No image selected")
-                                    } else {
-                                        straighteningImage(image)?.straightenedImage?.uniqueId?.let {
-                                            onStraightenedImagePreview(it.toString())
-                                        } ?: run {
-                                            useCaseResult = "Could not straighten the image"
-                                        }
-                                    }
-                                }
-                            }
-                            pendingAction = null
-                        }
-                    },
-                    onDismiss = { pendingAction = null }
-                )
+                MenuItem("Clean up Storage") { showCleanupConfirmation = true }
             }
 
             useCaseResult?.let { text ->
                 InfoDialog("Result", text) { useCaseResult = null }
             }
-            useCaseError?.let { error ->
-                ErrorDialog(message = error.message) { useCaseError = null }
+            useCaseError?.let { message ->
+                ErrorDialog(message = message) { useCaseError = null }
             }
 
             if (showCleanupConfirmation) {

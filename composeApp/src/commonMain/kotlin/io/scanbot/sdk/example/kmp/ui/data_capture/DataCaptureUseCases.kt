@@ -1,87 +1,110 @@
 package io.scanbot.sdk.example.kmp.ui.data_capture
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrOnImages
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startCheckScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startCreditCardScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startDocumentDataExtractor
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startMrzScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startTextPatternScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startVinScanner
+import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
+import io.scanbot.sdk.example.kmp.ui.common.MenuSection
+import kotlinx.coroutines.launch
 
 @Composable
 fun DataCaptureUseCases(
-    checkLicense: (() -> Unit) -> Unit,
+    runWithValidLicense: (action: () -> Unit) -> Unit,
     onResult: (String) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
-    Text("Data Capture Use Cases", style = MaterialTheme.typography.titleMedium)
-    Spacer(Modifier.height(8.dp))
+    val scope = rememberCoroutineScope()
+    var showOcrImagePicker by remember { mutableStateOf(false) }
 
-    MenuItem("VIN Scanner") {
-        checkLicense {
-            startVinScanner(
-                onResultHandler = { onResult(it.toString()) },
-                onErrorHandler = onError
-            )
+    MenuSection("Data Capture Use Cases") {
+        MenuItem("VIN Scanner") {
+            runWithValidLicense {
+                startVinScanner(
+                    onResultHandler = { onResult(it.toString()) },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("Check Scanner") {
+            runWithValidLicense {
+                startCheckScanner(
+                    onResultHandler = {
+                        onResult(it.toString())
+                        it.close()
+                    },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("MRZ Scanner") {
+            runWithValidLicense {
+                startMrzScanner(
+                    onResultHandler = {
+                        onResult(it.toString())
+                        it.close()
+                    },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("Document Data Extractor") {
+            runWithValidLicense {
+                startDocumentDataExtractor(
+                    onResultHandler = {
+                        onResult(it.toString())
+                        it.close()
+                    },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("Text Pattern Scanner") {
+            runWithValidLicense {
+                startTextPatternScanner(
+                    onResultHandler = { onResult(it.toString()) },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("Credit Card Scanner") {
+            runWithValidLicense {
+                startCreditCardScanner(
+                    onResultHandler = {
+                        onResult(it.toString())
+                        it.close()
+                    },
+                    onErrorHandler = onError
+                )
+            }
+        }
+        MenuItem("Perform OCR") {
+            runWithValidLicense {
+                showOcrImagePicker = true
+            }
         }
     }
-    MenuItem("Check Scanner") {
-        checkLicense {
-            startCheckScanner(
-                onResultHandler = {
-                    onResult(it.toString())
-                    it.close()
-                },
-                onErrorHandler = onError
-            )
-        }
-    }
-    MenuItem("MRZ Scanner") {
-        checkLicense {
-            startMrzScanner(
-                onResultHandler = {
-                    onResult(it.toString())
-                    it.close()
-                },
-                onErrorHandler = onError
-            )
-        }
-    }
-    MenuItem("Document Data Extractor") {
-        checkLicense {
-            startDocumentDataExtractor(
-                onResultHandler = {
-                    onResult(it.toString())
-                    it.close()
-                },
-                onErrorHandler = onError
-            )
-        }
-    }
-    MenuItem("Text Pattern Scanner") {
-        checkLicense {
-            startTextPatternScanner(
-                onResultHandler = { onResult(it.toString()) },
-                onErrorHandler = onError
-            )
-        }
-    }
-    MenuItem("Credit Card Scanner") {
-        checkLicense {
-            startCreditCardScanner(
-                onResultHandler = {
-                    onResult(it.toString())
-                    it.close()
-                },
-                onErrorHandler = onError
-            )
-        }
+
+    if (showOcrImagePicker) {
+        GalleryPicker(
+            allowMultiple = true,
+            onImagesSelected = { images ->
+                scope.launch {
+                    onResult(performOcrOnImages(images))
+                    showOcrImagePicker = false
+                }
+            },
+            onDismiss = { showOcrImagePicker = false },
+        )
     }
 }

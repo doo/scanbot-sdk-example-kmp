@@ -25,7 +25,7 @@ fun NavigationRoot() {
                 onResultPreview = { documentData ->
                     navController.navigate(Route.DocumentPreview(documentData.uuid))
                 },
-                onStraightenedImagePreview = { imageUuid ->
+                onImagePreview = { imageUuid ->
                     navController.navigate(Route.ImagePreview(imageUuid))
                 }
             )
