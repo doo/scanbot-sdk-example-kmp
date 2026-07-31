@@ -9,6 +9,8 @@ import io.scanbot.sdk.kmp.utils.Result
 // @Tag("Scan credit card from image")
 fun scanCreditCard(image: ImageRef): Result<CreditCardScanningResult> {
     val configuration = CreditCardScannerConfiguration()
+    configuration.requireCardholderName = true;
+    // Configure other parameters as needed.
 
     return ScanbotSDK.creditCard.scanFromImage(
         image = image,
