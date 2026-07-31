@@ -15,4 +15,22 @@ sealed interface Route {
 
     @Serializable
     data class ImagePreview(val imageUuid: String) : Route
+
+    @Serializable
+    data object VinResult : Route
+
+    @Serializable
+    data object CheckResult : Route
+
+    @Serializable
+    data object MrzResult : Route
+
+    @Serializable
+    data object DocumentDataResult : Route
+
+    @Serializable
+    data object TextPatternResult : Route
+
+    @Serializable
+    data object CreditCardResult : Route
 }

@@ -25,7 +25,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun DataCaptureUseCases(
     runWithValidLicense: (action: () -> Unit) -> Unit,
-    onResult: (String) -> Unit,
+    resultNavigator: DataCaptureResultNavigator,
+    onOcrResult: (String) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -35,7 +36,7 @@ fun DataCaptureUseCases(
         MenuItem("VIN Scanner") {
             runWithValidLicense {
                 startVinScanner(
-                    onResultHandler = { onResult(it.toString()) },
+                    onResultHandler = resultNavigator::showVinResult,
                     onErrorHandler = onError
                 )
             }
@@ -43,10 +44,7 @@ fun DataCaptureUseCases(
         MenuItem("Check Scanner") {
             runWithValidLicense {
                 startCheckScanner(
-                    onResultHandler = {
-                        onResult(it.toString())
-                        it.close()
-                    },
+                    onResultHandler = resultNavigator::showCheckResult,
                     onErrorHandler = onError
                 )
             }
@@ -54,10 +52,7 @@ fun DataCaptureUseCases(
         MenuItem("MRZ Scanner") {
             runWithValidLicense {
                 startMrzScanner(
-                    onResultHandler = {
-                        onResult(it.toString())
-                        it.close()
-                    },
+                    onResultHandler = resultNavigator::showMrzResult,
                     onErrorHandler = onError
                 )
             }
@@ -65,10 +60,7 @@ fun DataCaptureUseCases(
         MenuItem("Document Data Extractor") {
             runWithValidLicense {
                 startDocumentDataExtractor(
-                    onResultHandler = {
-                        onResult(it.toString())
-                        it.close()
-                    },
+                    onResultHandler = resultNavigator::showDocumentDataResult,
                     onErrorHandler = onError
                 )
             }
@@ -76,7 +68,7 @@ fun DataCaptureUseCases(
         MenuItem("Text Pattern Scanner") {
             runWithValidLicense {
                 startTextPatternScanner(
-                    onResultHandler = { onResult(it.toString()) },
+                    onResultHandler = resultNavigator::showTextPatternResult,
                     onErrorHandler = onError
                 )
             }
@@ -84,10 +76,7 @@ fun DataCaptureUseCases(
         MenuItem("Credit Card Scanner") {
             runWithValidLicense {
                 startCreditCardScanner(
-                    onResultHandler = {
-                        onResult(it.toString())
-                        it.close()
-                    },
+                    onResultHandler = resultNavigator::showCreditCardResult,
                     onErrorHandler = onError
                 )
             }
@@ -125,40 +114,28 @@ fun DataCaptureUseCases(
             onImagesSelected = { images ->
                 scope.launch {
                     when (action) {
-                        DataCaptureImageAction.Ocr -> onResult(performOcrOnImages(images))
+                        DataCaptureImageAction.Ocr -> onOcrResult(performOcrOnImages(images))
                         DataCaptureImageAction.Mrz -> images.firstOrNull()?.let { image ->
                             scanMrzFrom(image)
-                                .onSuccess {
-                                    onResult(it.toString())
-                                    it.close()
-                                }
+                                .onSuccess(resultNavigator::showMrzImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.Check -> images.firstOrNull()?.let { image ->
                             scanCheck(image)
-                                .onSuccess {
-                                    onResult(it.toString())
-                                    it.close()
-                                }
+                                .onSuccess(resultNavigator::showCheckImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.DocumentData -> images.firstOrNull()?.let { image ->
                             extractDocumentData(image)
-                                .onSuccess {
-                                    onResult(it.toString())
-                                    it.close()
-                                }
+                                .onSuccess(resultNavigator::showDocumentDataImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.CreditCard -> images.firstOrNull()?.let { image ->
                             scanCreditCard(image)
-                                .onSuccess {
-                                    onResult(it.toString())
-                                    it.close()
-                                }
+                                .onSuccess(resultNavigator::showCreditCardImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
                     }
@@ -176,4 +153,5 @@ private enum class DataCaptureImageAction {
     Check,
     DocumentData,
     CreditCard,
+
 }

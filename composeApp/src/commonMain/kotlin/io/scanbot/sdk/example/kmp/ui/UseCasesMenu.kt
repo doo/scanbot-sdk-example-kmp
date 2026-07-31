@@ -27,6 +27,7 @@ import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureUseCases
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCases
 import io.scanbot.sdk.kmp.ScanbotSDK
@@ -36,6 +37,7 @@ import io.scanbot.sdk.kmp.page.DocumentData
 fun UseCasesMenuScreen(
     onResultPreview: (DocumentData) -> Unit,
     onImagePreview: (String) -> Unit,
+    dataCaptureResultNavigator: DataCaptureResultNavigator,
 ) {
     var useCaseResult by rememberSaveable { mutableStateOf<String?>(null) }
     var useCaseError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -68,7 +70,8 @@ fun UseCasesMenuScreen(
 
                 DataCaptureUseCases(
                     runWithValidLicense = runWithValidLicense,
-                    onResult = { useCaseResult = it },
+                    resultNavigator = dataCaptureResultNavigator,
+                    onOcrResult = { useCaseResult = it },
                     onError = { useCaseError = it.message },
                 )
 

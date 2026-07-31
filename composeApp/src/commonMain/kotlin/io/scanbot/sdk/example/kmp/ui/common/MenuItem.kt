@@ -27,7 +27,8 @@ fun MenuSection(
         Text(
             text = title,
             modifier = Modifier.padding(horizontal = 16.dp),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
         )
         Spacer(Modifier.height(8.dp))
         content()

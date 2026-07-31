@@ -1,6 +1,7 @@
 package io.scanbot.sdk.example.kmp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,12 +15,14 @@ import io.scanbot.sdk.example.kmp.ui.document.DocumentPreviewScreen
 fun NavigationRoot() {
     val navController = rememberNavController()
     val onPopBackStack: () -> Unit = { navController.popBackStack() }
+    val dataCaptureNavigation = remember(navController) {
+        DataCaptureNavigationState { route -> navController.navigate(route) }
+    }
 
     NavHost(
         navController = navController,
         startDestination = Route.DocumentUseCases
     ) {
-
         composable<Route.DocumentUseCases> {
             UseCasesMenuScreen(
                 onResultPreview = { documentData ->
@@ -27,7 +30,8 @@ fun NavigationRoot() {
                 },
                 onImagePreview = { imageUuid ->
                     navController.navigate(Route.ImagePreview(imageUuid))
-                }
+                },
+                dataCaptureResultNavigator = dataCaptureNavigation
             )
         }
 
@@ -58,5 +62,10 @@ fun NavigationRoot() {
                 onPopBackStack = onPopBackStack
             )
         }
+
+        dataCaptureResultDestinations(
+            state = dataCaptureNavigation,
+            onPopBackStack = onPopBackStack
+        )
     }
 }
