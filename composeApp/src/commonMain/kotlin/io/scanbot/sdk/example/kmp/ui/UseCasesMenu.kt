@@ -27,7 +27,7 @@ import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
-import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureResultNavigator
+import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureUseCases
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCases
 import io.scanbot.sdk.kmp.ScanbotSDK

@@ -7,7 +7,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.scanbot.sdk.example.kmp.ui.data_capture.CheckResultPreview
 import io.scanbot.sdk.example.kmp.ui.data_capture.CreditCardResultPreview
-import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.data_capture.DocumentDataResultPreview
 import io.scanbot.sdk.example.kmp.ui.data_capture.MrzResultPreview
 import io.scanbot.sdk.example.kmp.ui.data_capture.TextPatternResultPreview

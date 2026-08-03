@@ -1,4 +1,4 @@
-package io.scanbot.sdk.example.kmp.ui.data_capture
+package io.scanbot.sdk.example.kmp.navigation
 
 import io.scanbot.sdk.kmp.check.CheckScanningResult
 import io.scanbot.sdk.kmp.creditcard.CreditCardScanningResult

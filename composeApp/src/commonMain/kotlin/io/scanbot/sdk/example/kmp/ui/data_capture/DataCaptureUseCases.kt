@@ -17,6 +17,7 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startMrzScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startTextPatternScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startVinScanner
+import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
