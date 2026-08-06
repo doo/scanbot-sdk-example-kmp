@@ -1,22 +1,19 @@
 package io.scanbot.sdk.example.kmp.ui.data_capture
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.extractDocumentData
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrOnImages
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.scanCheck
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.scanCreditCard
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.scanMrzFrom
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startCheckScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startCreditCardScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startDocumentDataExtractor
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startMrzScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startTextPatternScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ready_to_use_ui.startVinScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.extractDocumentData
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCheckOnImage
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCreditCardOnImage
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeMrzDocumentOnImage
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_check.startCheckScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_credit_card.startCreditCardScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_dde.startDocumentDataExtractor
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_mrz.startMrzScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_text_pattern.startTextPatternScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_vin.startVinScanner
 import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
@@ -27,11 +24,10 @@ import kotlinx.coroutines.launch
 fun DataCaptureUseCases(
     runWithValidLicense: (action: () -> Unit) -> Unit,
     resultNavigator: DataCaptureResultNavigator,
-    onOcrResult: (String) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var pendingImageAction by remember { mutableStateOf<DataCaptureImageAction?>(null) }
+    val pendingImageAction = remember { mutableStateOf<DataCaptureImageAction?>(null) }
 
     MenuSection("Data Capture Use Cases") {
         MenuItem("VIN Scanner") {
@@ -82,48 +78,42 @@ fun DataCaptureUseCases(
                 )
             }
         }
-        MenuItem("Perform OCR") {
-            runWithValidLicense {
-                pendingImageAction = DataCaptureImageAction.Ocr
-            }
-        }
         MenuItem("Scan MRZ from Image") {
             runWithValidLicense {
-                pendingImageAction = DataCaptureImageAction.Mrz
+                pendingImageAction.value = DataCaptureImageAction.Mrz
             }
         }
         MenuItem("Scan Check from Image") {
             runWithValidLicense {
-                pendingImageAction = DataCaptureImageAction.Check
+                pendingImageAction.value = DataCaptureImageAction.Check
             }
         }
         MenuItem("Extract Document Data from Image") {
             runWithValidLicense {
-                pendingImageAction = DataCaptureImageAction.DocumentData
+                pendingImageAction.value = DataCaptureImageAction.DocumentData
             }
         }
         MenuItem("Scan Credit Card from Image") {
             runWithValidLicense {
-                pendingImageAction = DataCaptureImageAction.CreditCard
+                pendingImageAction.value = DataCaptureImageAction.CreditCard
             }
         }
     }
 
-    pendingImageAction?.let { action ->
+    pendingImageAction.value?.let { action ->
         GalleryPicker(
-            allowMultiple = action == DataCaptureImageAction.Ocr,
+            allowMultiple = false,
             onImagesSelected = { images ->
                 scope.launch {
                     when (action) {
-                        DataCaptureImageAction.Ocr -> onOcrResult(performOcrOnImages(images))
                         DataCaptureImageAction.Mrz -> images.firstOrNull()?.let { image ->
-                            scanMrzFrom(image)
+                            recognizeMrzDocumentOnImage(image)
                                 .onSuccess(resultNavigator::showMrzImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.Check -> images.firstOrNull()?.let { image ->
-                            scanCheck(image)
+                            recognizeCheckOnImage(image)
                                 .onSuccess(resultNavigator::showCheckImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
@@ -135,21 +125,20 @@ fun DataCaptureUseCases(
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.CreditCard -> images.firstOrNull()?.let { image ->
-                            scanCreditCard(image)
+                            recognizeCreditCardOnImage(image)
                                 .onSuccess(resultNavigator::showCreditCardImageResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
                     }
-                    pendingImageAction = null
+                    pendingImageAction.value = null
                 }
             },
-            onDismiss = { pendingImageAction = null },
+            onDismiss = { pendingImageAction.value = null },
         )
     }
 }
 
 private enum class DataCaptureImageAction {
-    Ocr,
     Mrz,
     Check,
     DocumentData,

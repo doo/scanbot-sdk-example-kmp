@@ -4,9 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -32,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -72,43 +69,34 @@ internal fun DataCapturePreview(
             )
         }
     ) { paddingValues ->
-        BoxWithConstraints(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            val compactLayout = maxWidth < 600.dp
-            val contentPadding = if (compactLayout) 12.dp else 24.dp
-            val contentSpacing = if (compactLayout) 12.dp else 16.dp
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(contentPadding),
-                verticalArrangement = Arrangement.spacedBy(contentSpacing)
-            ) {
-                imageBitmap?.let {
-                    ResultImageCard(it, compactLayout)
-                }
-
-                if (sections.isEmpty()) {
-                    EmptyResultCard()
-                } else {
-                    sections.forEach { section ->
-                        ResultSectionCard(section, compactLayout)
-                    }
-                }
-
-                RawJsonCard(rawJson, compactLayout)
+            imageBitmap?.let {
+                ResultImageCard(it)
             }
+
+            if (sections.isEmpty()) {
+                EmptyResultCard()
+            } else {
+                sections.forEach { section ->
+                    ResultSectionCard(section)
+                }
+            }
+
+            RawJsonCard(rawJson)
         }
     }
 }
 
 @Composable
-private fun ResultImageCard(image: ImageBitmap, compactLayout: Boolean) {
+private fun ResultImageCard(image: ImageBitmap) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle("Captured image")
         Card(
@@ -121,7 +109,7 @@ private fun ResultImageCard(image: ImageBitmap, compactLayout: Boolean) {
                 contentDescription = "Captured result",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = if (compactLayout) 240.dp else 360.dp),
+                    .heightIn(max = 240.dp),
                 contentScale = ContentScale.Fit
             )
         }
@@ -129,7 +117,7 @@ private fun ResultImageCard(image: ImageBitmap, compactLayout: Boolean) {
 }
 
 @Composable
-private fun ResultSectionCard(section: ResultSection, compactLayout: Boolean) {
+private fun ResultSectionCard(section: ResultSection) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle(section.title)
         Card(
@@ -141,7 +129,7 @@ private fun ResultSectionCard(section: ResultSection, compactLayout: Boolean) {
         ) {
             Column {
                 section.fields.forEachIndexed { index, field ->
-                    ResultFieldRow(field, compactLayout)
+                    ResultFieldRow(field)
                     if (index < section.fields.lastIndex) {
                         HorizontalDivider(
                             modifier = Modifier.padding(horizontal = 16.dp),
@@ -155,25 +143,18 @@ private fun ResultSectionCard(section: ResultSection, compactLayout: Boolean) {
 }
 
 @Composable
-private fun ResultFieldRow(field: ResultField, compactLayout: Boolean) {
+private fun ResultFieldRow(field: ResultField) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(if (compactLayout) 12.dp else 16.dp),
+            .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = field.label,
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = field.label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         SelectionContainer {
             Text(
                 text = field.value,
@@ -207,7 +188,7 @@ private fun EmptyResultCard() {
 }
 
 @Composable
-private fun RawJsonCard(rawJson: String, compactLayout: Boolean) {
+private fun RawJsonCard(rawJson: String) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -240,9 +221,9 @@ private fun RawJsonCard(rawJson: String, compactLayout: Boolean) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                start = if (compactLayout) 12.dp else 16.dp,
-                                end = if (compactLayout) 12.dp else 16.dp,
-                                bottom = if (compactLayout) 12.dp else 16.dp
+                                start = 12.dp,
+                                end = 12.dp,
+                                bottom = 12.dp
                             ),
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,

@@ -1,17 +1,13 @@
 package io.scanbot.sdk.example.kmp.ui.document
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import io.scanbot.sdk.example.kmp.doc_code_snippets.analyzeDocumentQualityOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.createDocumentFromImages
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startMultiPageScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageFinderScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageScanning
-import io.scanbot.sdk.example.kmp.doc_code_snippets.straightening.straighteningImage
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
@@ -22,12 +18,10 @@ import kotlinx.coroutines.launch
 fun DocumentUseCases(
     runWithValidLicense: (action: () -> Unit) -> Unit,
     onResultPreview: (DocumentData) -> Unit,
-    onImagePreview: (String) -> Unit,
-    onResult: (String) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var pendingAction by remember { mutableStateOf<DocumentAction?>(null) }
+    val pendingDocumentCreation = remember { mutableStateOf(false) }
 
     MenuSection("Document Use Cases") {
         MenuItem("Single Page Scanning") {
@@ -47,59 +41,22 @@ fun DocumentUseCases(
         }
         MenuItem("Create Document from Images") {
             runWithValidLicense {
-                pendingAction = DocumentAction.CreateDocument
-            }
-        }
-        MenuItem("Analyze Document Quality") {
-            runWithValidLicense {
-                pendingAction = DocumentAction.AnalyzeQuality
-            }
-        }
-        MenuItem("Straighten Document") {
-            runWithValidLicense {
-                pendingAction = DocumentAction.StraightenImage
+                pendingDocumentCreation.value = true
             }
         }
     }
 
-    pendingAction?.let { action ->
+    if (pendingDocumentCreation.value) {
         GalleryPicker(
-            allowMultiple = action == DocumentAction.CreateDocument,
+            allowMultiple = true,
             onImagesSelected = { images ->
                 scope.launch {
-                    when (action) {
-                        DocumentAction.CreateDocument -> {
-                            createDocumentFromImages(images)?.let(onResultPreview)
-                                ?: onError(Throwable("Failed to create document"))
-                        }
-
-                        DocumentAction.AnalyzeQuality -> {
-                            images.firstOrNull()?.let { image ->
-                                onResult(analyzeDocumentQualityOnImage(image))
-                            } ?: onError(Throwable("No image selected"))
-                        }
-
-                        DocumentAction.StraightenImage -> {
-                            val image = images.firstOrNull()
-                            if (image == null) {
-                                onError(Throwable("No image selected"))
-                            } else {
-                                straighteningImage(image)?.straightenedImage?.uniqueId?.let {
-                                    onImagePreview(it.toString())
-                                } ?: onResult("Could not straighten the image")
-                            }
-                        }
-                    }
-                    pendingAction = null
+                    createDocumentFromImages(images)?.let(onResultPreview)
+                        ?: onError(Throwable("Failed to create document"))
+                    pendingDocumentCreation.value = false
                 }
             },
-            onDismiss = { pendingAction = null },
+            onDismiss = { pendingDocumentCreation.value = false },
         )
     }
-}
-
-private enum class DocumentAction {
-    CreateDocument,
-    AnalyzeQuality,
-    StraightenImage,
 }
