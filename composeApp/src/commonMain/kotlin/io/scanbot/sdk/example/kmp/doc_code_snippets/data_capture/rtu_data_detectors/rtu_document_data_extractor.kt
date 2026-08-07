@@ -11,9 +11,7 @@ fun startRtuDocumentDataExtractor(
     onErrorHandler: (Throwable) -> Unit,
 ) {
     // Always make sure you have a valid license on runtime via ScanbotSDK.getLicenseInfo()
-    val configuration = DocumentDataExtractorScreenConfiguration().apply {
-        viewFinder.overlayColor = ScanbotColor("#C8193C")
-    }
+    val configuration = DocumentDataExtractorScreenConfiguration()
     // Configure other parameters as needed.
 
     ScanbotSDK.documentDataExtractor.startExtractorScreen(
