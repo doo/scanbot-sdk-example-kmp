@@ -108,25 +108,25 @@ fun DataCaptureUseCases(
                     when (action) {
                         DataCaptureImageAction.Mrz -> images.firstOrNull()?.let { image ->
                             recognizeMrzDocumentOnImage(image)
-                                .onSuccess(resultNavigator::showMrzImageResult)
+                                .onSuccess(resultNavigator::showMrzResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.Check -> images.firstOrNull()?.let { image ->
                             recognizeCheckOnImage(image)
-                                .onSuccess(resultNavigator::showCheckImageResult)
+                                .onSuccess(resultNavigator::showCheckResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.DocumentData -> images.firstOrNull()?.let { image ->
                             extractDocumentData(image)
-                                .onSuccess(resultNavigator::showDocumentDataImageResult)
+                                .onSuccess(resultNavigator::showDocumentDataResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
 
                         DataCaptureImageAction.CreditCard -> images.firstOrNull()?.let { image ->
                             recognizeCreditCardOnImage(image)
-                                .onSuccess(resultNavigator::showCreditCardImageResult)
+                                .onSuccess(resultNavigator::showCreditCardResult)
                                 .onFailure(onError)
                         } ?: onError(Throwable("No image selected"))
                     }

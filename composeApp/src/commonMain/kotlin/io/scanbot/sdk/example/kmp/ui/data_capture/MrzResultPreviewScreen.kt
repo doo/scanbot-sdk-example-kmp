@@ -7,7 +7,6 @@ import io.scanbot.sdk.kmp.image.ImageRef
 
 @Composable
 internal fun MrzResultPreviewScreen(
-    status: String?,
     image: ImageRef?,
     rawJson: String,
     document: GenericDocument?,
@@ -28,9 +27,6 @@ internal fun MrzResultPreviewScreen(
         }
     }
     val sections = buildList {
-        status?.let {
-            add(ResultSection("Summary", listOf(ResultField("Status", it, true))))
-        }
         if (fields.isNotEmpty()) {
             add(ResultSection("MRZ data", fields))
         }

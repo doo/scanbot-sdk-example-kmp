@@ -67,7 +67,7 @@ internal class DataCaptureNavigationState(
         navigate(Route.CheckResult)
     }
 
-    override fun showCheckImageResult(result: CheckScanningResult) {
+    override fun showCheckResult(result: CheckScanningResult) {
         updateResultState(
             status = result.status.name,
             image = result.croppedImage,
@@ -91,7 +91,7 @@ internal class DataCaptureNavigationState(
         )
     }
 
-    override fun showMrzImageResult(result: MrzScannerResult) {
+    override fun showMrzResult(result: MrzScannerResult) {
         updateResultState(
             status = null,
             image = result.document?.crop,
@@ -119,7 +119,7 @@ internal class DataCaptureNavigationState(
         )
     }
 
-    override fun showDocumentDataImageResult(result: DocumentDataExtractionResult) {
+    override fun showDocumentDataResult(result: DocumentDataExtractionResult) {
         updateResultState(
             status = result.status.name,
             image = result.croppedImage,
@@ -158,7 +158,7 @@ internal class DataCaptureNavigationState(
         navigate(Route.CreditCardResult)
     }
 
-    override fun showCreditCardImageResult(result: CreditCardScanningResult) {
+    override fun showCreditCardResult(result: CreditCardScanningResult) {
         updateResultState(
             status = result.scanningStatus.name,
             image = result.creditCard?.crop,
@@ -212,7 +212,6 @@ internal fun NavGraphBuilder.dataCaptureResultDestinations(
     composable<Route.MrzResult> { backStackEntry ->
         val route: Route.MrzResult = backStackEntry.toRoute()
         MrzResultPreviewScreen(
-            status = state.resultStatus,
             image = state.resultImage,
             rawJson = state.resultJson,
             document = state.genericDocument,
@@ -236,8 +235,6 @@ internal fun NavGraphBuilder.dataCaptureResultDestinations(
     composable<Route.TextPatternResult> { backStackEntry ->
         val route: Route.TextPatternResult = backStackEntry.toRoute()
         TextPatternResultPreviewScreen(
-            status = state.resultStatus,
-            image = state.resultImage,
             rawJson = state.resultJson,
             rawText = route.rawText,
             words = route.words,

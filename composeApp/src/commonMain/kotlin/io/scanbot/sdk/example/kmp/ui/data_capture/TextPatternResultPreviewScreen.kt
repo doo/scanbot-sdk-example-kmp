@@ -1,12 +1,9 @@
 package io.scanbot.sdk.example.kmp.ui.data_capture
 
 import androidx.compose.runtime.Composable
-import io.scanbot.sdk.kmp.image.ImageRef
 
 @Composable
 internal fun TextPatternResultPreviewScreen(
-    status: String?,
-    image: ImageRef?,
     rawJson: String,
     rawText: String?,
     words: List<String>,
@@ -19,9 +16,6 @@ internal fun TextPatternResultPreviewScreen(
         }
     }
     val sections = buildList {
-        status?.let {
-            add(ResultSection("Summary", listOf(ResultField("Status", it, true))))
-        }
         if (textPatternFields.isNotEmpty()) {
             add(ResultSection("Text pattern data", textPatternFields))
         }
@@ -31,7 +25,7 @@ internal fun TextPatternResultPreviewScreen(
         title = "Text Pattern Result",
         sections = sections,
         rawJson = rawJson,
-        image = image,
+        image = null,
         onPopBackStack = onPopBackStack
     )
 }

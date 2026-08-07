@@ -1,6 +1,6 @@
 package io.scanbot.sdk.example.kmp.ui.common
 
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -9,6 +9,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.kmp.ScanbotSDK
 
 @Composable
@@ -20,7 +21,7 @@ fun InfoDialog(
             text = text,
             fontFamily = FontFamily.Monospace,
             modifier = Modifier
-                .fillMaxHeight(0.8f)
+                .heightIn(max = 320.dp)
                 .verticalScroll(rememberScrollState())
         )
     }, confirmButton = {
