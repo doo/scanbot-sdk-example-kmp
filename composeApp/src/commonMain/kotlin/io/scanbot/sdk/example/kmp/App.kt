@@ -1,6 +1,7 @@
 package io.scanbot.sdk.example.kmp
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.scanbot.sdk.example.kmp.navigation.NavigationRoot
@@ -13,7 +14,7 @@ const val FILE_ENCRYPTION_ENABLED = false
 
 @Composable
 fun App() {
-    MaterialTheme {
+    MaterialTheme(colorScheme = lightColorScheme()) {
         LaunchedEffect(Unit) {
             val config = SdkConfiguration(
                 licenseKey = SCANBOT_SDK_LICENSE_KEY,
@@ -36,4 +37,3 @@ fun App() {
         NavigationRoot()
     }
 }
-

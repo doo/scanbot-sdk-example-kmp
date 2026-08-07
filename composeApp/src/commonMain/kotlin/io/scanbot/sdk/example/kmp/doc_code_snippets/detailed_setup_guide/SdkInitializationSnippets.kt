@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.detailed_setup_guide
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 // @Tag("SDK initialization imports")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration

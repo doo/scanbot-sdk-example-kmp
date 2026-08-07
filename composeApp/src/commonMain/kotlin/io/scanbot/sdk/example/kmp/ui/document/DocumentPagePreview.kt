@@ -89,7 +89,7 @@ fun DocumentPagePreviewScreen(
         isLoading = false
     }
 
-    LicenseGuard { checkLicense ->
+    LicenseGuard { runWithValidLicense ->
         Scaffold(topBar = {
             TopBar(
                 title = "Page Preview", showBackButton = true, onPopBackStack = onPopBackStack
@@ -103,7 +103,7 @@ fun DocumentPagePreviewScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             startCroppingScreen(
                                 documentUuid = documentUuid,
                                 pageUuid = pageUuid,
@@ -120,7 +120,7 @@ fun DocumentPagePreviewScreen(
                         )
                     }
                     TextButton(onClick = {
-                        checkLicense { showFilterSheet = true }
+                        runWithValidLicense { showFilterSheet = true }
                     }) {
                         Text(
                             "Filter",
@@ -130,7 +130,7 @@ fun DocumentPagePreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             page?.let { p ->
                                 val imageRef = ImageRef.fromPath(
                                     p.documentImageURI ?: p.originalImageURI
@@ -149,7 +149,7 @@ fun DocumentPagePreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense { showDeleteConfirmation = true }
+                        runWithValidLicense { showDeleteConfirmation = true }
                     }) {
                         Text(
                             "Delete",

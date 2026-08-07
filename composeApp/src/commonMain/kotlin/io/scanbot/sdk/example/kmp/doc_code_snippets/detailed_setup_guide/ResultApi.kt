@@ -15,11 +15,6 @@ import io.scanbot.sdk.kmp.pdfgeneration.PdfConfiguration
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import io.scanbot.sdk.kmp.utils.Result
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 class ResultApiSnippets {
 
     // @Tag("Handle Result with when expression")

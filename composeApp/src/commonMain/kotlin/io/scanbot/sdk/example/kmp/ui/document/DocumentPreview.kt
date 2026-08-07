@@ -83,7 +83,7 @@ fun DocumentPreviewScreen(
         )
     }
 
-    LicenseGuard { checkLicense ->
+    LicenseGuard { runWithValidLicense ->
         Scaffold(topBar = {
             TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
         }, bottomBar = {
@@ -95,7 +95,7 @@ fun DocumentPreviewScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             documentData?.let {
                                 ScanbotSDK.document.startScanner(
                                     configuration = DocumentScanningFlow(documentUuid = it.uuid),
@@ -112,7 +112,11 @@ fun DocumentPreviewScreen(
                         )
                     }
 
-                    TextButton(onClick = { checkLicense { showImagePicker = true } }) {
+                    TextButton(
+                        onClick = {
+                            runWithValidLicense { showImagePicker = true }
+                        }
+                    ) {
                         Text(
                             "Add Page",
                             color = Color.White,
@@ -120,7 +124,11 @@ fun DocumentPreviewScreen(
                         )
                     }
 
-                    TextButton(onClick = { checkLicense { showExportSheet = true } }) {
+                    TextButton(
+                        onClick = {
+                            runWithValidLicense { showExportSheet = true }
+                        }
+                    ) {
                         Text(
                             "Export",
                             color = Color.White,
@@ -129,7 +137,7 @@ fun DocumentPreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense { showDeleteAllConfirmation = true }
+                        runWithValidLicense { showDeleteAllConfirmation = true }
                     }) {
                         Text(
                             "Delete All",
@@ -163,8 +171,8 @@ fun DocumentPreviewScreen(
                     documentData?.uuid?.let { uuid ->
                         addPages(
                             documentUuid = uuid, images = images
-                        ).onSuccess {
-                            updatedDoc -> documentData = updatedDoc
+                        ).onSuccess { updatedDoc ->
+                            documentData = updatedDoc
                         }.onFailure { error ->
                             resultDialogMessage = "Add pages failed: ${error.message}"
                         }
