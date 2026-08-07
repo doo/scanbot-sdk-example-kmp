@@ -8,12 +8,12 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognize
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCheckOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCreditCardOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeMrzDocumentOnImage
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_check.startCheckScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_credit_card.startCreditCardScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_dde.startDocumentDataExtractor
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_mrz.startMrzScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_text_pattern.startTextPatternScanner
-import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtuui_vin.startVinScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuVinScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuCheckScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuCreditCardScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuDocumentDataExtractor
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuMrzScanner
+import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuTextPatternScanner
 import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
@@ -32,7 +32,7 @@ fun DataCaptureUseCases(
     MenuSection("Data Capture Use Cases") {
         MenuItem("VIN Scanner") {
             runWithValidLicense {
-                startVinScanner(
+                startRtuVinScanner(
                     onResultHandler = resultNavigator::showVinResult,
                     onErrorHandler = onError
                 )
@@ -40,7 +40,7 @@ fun DataCaptureUseCases(
         }
         MenuItem("Check Scanner") {
             runWithValidLicense {
-                startCheckScanner(
+                startRtuCheckScanner(
                     onResultHandler = resultNavigator::showCheckResult,
                     onErrorHandler = onError
                 )
@@ -48,7 +48,7 @@ fun DataCaptureUseCases(
         }
         MenuItem("MRZ Scanner") {
             runWithValidLicense {
-                startMrzScanner(
+                startRtuMrzScanner(
                     onResultHandler = resultNavigator::showMrzResult,
                     onErrorHandler = onError
                 )
@@ -56,7 +56,7 @@ fun DataCaptureUseCases(
         }
         MenuItem("Document Data Extractor") {
             runWithValidLicense {
-                startDocumentDataExtractor(
+                startRtuDocumentDataExtractor(
                     onResultHandler = resultNavigator::showDocumentDataResult,
                     onErrorHandler = onError
                 )
@@ -64,7 +64,7 @@ fun DataCaptureUseCases(
         }
         MenuItem("Text Pattern Scanner") {
             runWithValidLicense {
-                startTextPatternScanner(
+                startRtuTextPatternScanner(
                     onResultHandler = resultNavigator::showTextPatternResult,
                     onErrorHandler = onError
                 )
@@ -72,7 +72,7 @@ fun DataCaptureUseCases(
         }
         MenuItem("Credit Card Scanner") {
             runWithValidLicense {
-                startCreditCardScanner(
+                startRtuCreditCardScanner(
                     onResultHandler = resultNavigator::showCreditCardResult,
                     onErrorHandler = onError
                 )
