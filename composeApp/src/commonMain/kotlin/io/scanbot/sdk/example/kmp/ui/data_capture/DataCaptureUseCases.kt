@@ -15,9 +15,9 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detect
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuMrzScanner
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors.startRtuTextPatternScanner
 import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,6 +28,44 @@ fun DataCaptureUseCases(
 ) {
     val scope = rememberCoroutineScope()
     val pendingImageAction = remember { mutableStateOf<DataCaptureImageAction?>(null) }
+
+    val pickImage = rememberImagePickerLauncher(
+        allowMultiple = false,
+        onImagesSelected = { images ->
+            val action = pendingImageAction.value ?: return@rememberImagePickerLauncher
+            pendingImageAction.value = null
+            val image = images.firstOrNull()
+            if (image == null) {
+                onError(Throwable("No image selected"))
+                return@rememberImagePickerLauncher
+            }
+            scope.launch {
+                when (action) {
+                    DataCaptureImageAction.Mrz -> recognizeMrzDocumentOnImage(image)
+                        .onSuccess(resultNavigator::showMrzResult).onFailure(onError)
+
+                    DataCaptureImageAction.Check -> recognizeCheckOnImage(image)
+                        .onSuccess(resultNavigator::showCheckResult).onFailure(onError)
+
+                    DataCaptureImageAction.DocumentData -> extractDocumentData(image)
+                        .onSuccess(resultNavigator::showDocumentDataResult).onFailure(onError)
+
+                    DataCaptureImageAction.CreditCard -> recognizeCreditCardOnImage(image)
+                        .onSuccess(resultNavigator::showCreditCardResult).onFailure(onError)
+                }
+            }
+        },
+        onError = { error ->
+            pendingImageAction.value = null
+            onError(error)
+        },
+        onDismiss = { pendingImageAction.value = null },
+    )
+
+    fun triggerImageAction(action: DataCaptureImageAction) {
+        pendingImageAction.value = action
+        pickImage()
+    }
 
     MenuSection("Data Capture Use Cases") {
         MenuItem("VIN Scanner") {
@@ -79,62 +117,17 @@ fun DataCaptureUseCases(
             }
         }
         MenuItem("Scan MRZ from Image") {
-            runWithValidLicense {
-                pendingImageAction.value = DataCaptureImageAction.Mrz
-            }
+            runWithValidLicense { triggerImageAction(DataCaptureImageAction.Mrz) }
         }
         MenuItem("Scan Check from Image") {
-            runWithValidLicense {
-                pendingImageAction.value = DataCaptureImageAction.Check
-            }
+            runWithValidLicense { triggerImageAction(DataCaptureImageAction.Check) }
         }
         MenuItem("Extract Document Data from Image") {
-            runWithValidLicense {
-                pendingImageAction.value = DataCaptureImageAction.DocumentData
-            }
+            runWithValidLicense { triggerImageAction(DataCaptureImageAction.DocumentData) }
         }
         MenuItem("Scan Credit Card from Image") {
-            runWithValidLicense {
-                pendingImageAction.value = DataCaptureImageAction.CreditCard
-            }
+            runWithValidLicense { triggerImageAction(DataCaptureImageAction.CreditCard) }
         }
-    }
-
-    pendingImageAction.value?.let { action ->
-        GalleryPicker(
-            allowMultiple = false,
-            onImagesSelected = { images ->
-                scope.launch {
-                    when (action) {
-                        DataCaptureImageAction.Mrz -> images.firstOrNull()?.let { image ->
-                            recognizeMrzDocumentOnImage(image)
-                                .onSuccess(resultNavigator::showMrzResult)
-                                .onFailure(onError)
-                        } ?: onError(Throwable("No image selected"))
-
-                        DataCaptureImageAction.Check -> images.firstOrNull()?.let { image ->
-                            recognizeCheckOnImage(image)
-                                .onSuccess(resultNavigator::showCheckResult)
-                                .onFailure(onError)
-                        } ?: onError(Throwable("No image selected"))
-
-                        DataCaptureImageAction.DocumentData -> images.firstOrNull()?.let { image ->
-                            extractDocumentData(image)
-                                .onSuccess(resultNavigator::showDocumentDataResult)
-                                .onFailure(onError)
-                        } ?: onError(Throwable("No image selected"))
-
-                        DataCaptureImageAction.CreditCard -> images.firstOrNull()?.let { image ->
-                            recognizeCreditCardOnImage(image)
-                                .onSuccess(resultNavigator::showCreditCardResult)
-                                .onFailure(onError)
-                        } ?: onError(Throwable("No image selected"))
-                    }
-                    pendingImageAction.value = null
-                }
-            },
-            onDismiss = { pendingImageAction.value = null },
-        )
     }
 }
 
@@ -143,5 +136,4 @@ private enum class DataCaptureImageAction {
     Check,
     DocumentData,
     CreditCard,
-
 }

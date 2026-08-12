@@ -1,16 +1,14 @@
 package io.scanbot.sdk.example.kmp.ui.document
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.scanbot.sdk.example.kmp.doc_code_snippets.createDocumentFromImages
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startMultiPageScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageFinderScanning
 import io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases.startSinglePageScanning
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import io.scanbot.sdk.kmp.page.DocumentData
 import kotlinx.coroutines.launch
 
@@ -21,12 +19,24 @@ fun DocumentUseCases(
     onError: (Throwable) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val pendingDocumentCreation = remember { mutableStateOf(false) }
+
+    val pickImagesForNewDocument = rememberImagePickerLauncher(
+        allowMultiple = true,
+        onImagesSelected = { images ->
+            scope.launch {
+                createDocumentFromImages(images)?.let(onResultPreview)
+                    ?: onError(Throwable("Failed to create document"))
+            }
+        },
+        onError = onError,
+    )
 
     MenuSection("Document Use Cases") {
         MenuItem("Single Page Scanning") {
             runWithValidLicense {
-                startSinglePageScanning(onResultPreview, onError)
+                scope.launch {
+                    startSinglePageScanning(onResultPreview, onError)
+                }
             }
         }
         MenuItem("Single Page Scanning with Finder") {
@@ -41,22 +51,9 @@ fun DocumentUseCases(
         }
         MenuItem("Create Document from Images") {
             runWithValidLicense {
-                pendingDocumentCreation.value = true
+                pickImagesForNewDocument()
             }
         }
     }
-
-    if (pendingDocumentCreation.value) {
-        GalleryPicker(
-            allowMultiple = true,
-            onImagesSelected = { images ->
-                scope.launch {
-                    createDocumentFromImages(images)?.let(onResultPreview)
-                        ?: onError(Throwable("Failed to create document"))
-                    pendingDocumentCreation.value = false
-                }
-            },
-            onDismiss = { pendingDocumentCreation.value = false },
-        )
-    }
 }
+

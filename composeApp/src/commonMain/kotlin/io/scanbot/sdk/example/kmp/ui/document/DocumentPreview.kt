@@ -36,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,16 +52,17 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.createSearchablePdfFromDocum
 import io.scanbot.sdk.example.kmp.doc_code_snippets.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.doc_code_snippets.removeAllPagesFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.page.PageData
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,11 +72,27 @@ fun DocumentPreviewScreen(
     navigateToPagePreview: (documentUuid: String, pageUuid: String) -> Unit,
     onPopBackStack: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     var documentData by remember { mutableStateOf<DocumentData?>(null) }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
-    var showImagePicker by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
+
+    val pickImagesForAddPages = rememberImagePickerLauncher(
+        allowMultiple = true,
+        onImagesSelected = { images ->
+            documentData?.uuid?.let { uuid ->
+                addPages(documentUuid = uuid, images = images)
+                    .onSuccess { updatedDoc -> documentData = updatedDoc }
+                    .onFailure { error ->
+                        resultDialogMessage = "Add pages failed: ${error.message}"
+                    }
+            }
+        },
+        onError = { error ->
+            resultDialogMessage = "Add pages failed: ${error.message}"
+        },
+    )
 
     LaunchedEffect(documentUuid) {
         ScanbotSDK.document.loadDocument(documentUuid).fold(
@@ -114,7 +132,7 @@ fun DocumentPreviewScreen(
 
                     TextButton(
                         onClick = {
-                            runWithValidLicense { showImagePicker = true }
+                            runWithValidLicense { pickImagesForAddPages() }
                         }
                     ) {
                         Text(
@@ -163,21 +181,6 @@ fun DocumentPreviewScreen(
                         })
                     }
                 }
-            }
-
-            if (showImagePicker) {
-                GalleryPicker(allowMultiple = true, onImagesSelected = { images ->
-                    showImagePicker = false
-                    documentData?.uuid?.let { uuid ->
-                        addPages(
-                            documentUuid = uuid, images = images
-                        ).onSuccess { updatedDoc ->
-                            documentData = updatedDoc
-                        }.onFailure { error ->
-                            resultDialogMessage = "Add pages failed: ${error.message}"
-                        }
-                    }
-                }, onDismiss = { showImagePicker = false })
             }
 
             if (showExportSheet) {
