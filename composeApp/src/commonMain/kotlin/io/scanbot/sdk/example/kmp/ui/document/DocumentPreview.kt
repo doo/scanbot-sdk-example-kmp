@@ -51,10 +51,10 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.createSearchablePdfFromDocum
 import io.scanbot.sdk.example.kmp.doc_code_snippets.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.doc_code_snippets.removeAllPagesFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.page.DocumentData
@@ -73,8 +73,23 @@ fun DocumentPreviewScreen(
     var documentData by remember { mutableStateOf<DocumentData?>(null) }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
-    var showImagePicker by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
+
+    val pickImagesForAddPages = rememberImagePickerLauncher(
+        allowMultiple = true,
+        onImagesSelected = { images ->
+            documentData?.uuid?.let { uuid ->
+                addPages(documentUuid = uuid, images = images)
+                    .onSuccess { updatedDoc -> documentData = updatedDoc }
+                    .onFailure { error ->
+                        resultDialogMessage = "Add pages failed: ${error.message}"
+                    }
+            }
+        },
+        onError = { error ->
+            resultDialogMessage = "Add pages failed: ${error.message}"
+        },
+    )
 
     LaunchedEffect(documentUuid) {
         ScanbotSDK.document.loadDocument(documentUuid).fold(
@@ -114,7 +129,7 @@ fun DocumentPreviewScreen(
 
                     TextButton(
                         onClick = {
-                            runWithValidLicense { showImagePicker = true }
+                            runWithValidLicense { pickImagesForAddPages() }
                         }
                     ) {
                         Text(
@@ -163,21 +178,6 @@ fun DocumentPreviewScreen(
                         })
                     }
                 }
-            }
-
-            if (showImagePicker) {
-                GalleryPicker(allowMultiple = true, onImagesSelected = { images ->
-                    showImagePicker = false
-                    documentData?.uuid?.let { uuid ->
-                        addPages(
-                            documentUuid = uuid, images = images
-                        ).onSuccess { updatedDoc ->
-                            documentData = updatedDoc
-                        }.onFailure { error ->
-                            resultDialogMessage = "Add pages failed: ${error.message}"
-                        }
-                    }
-                }, onDismiss = { showImagePicker = false })
             }
 
             if (showExportSheet) {
