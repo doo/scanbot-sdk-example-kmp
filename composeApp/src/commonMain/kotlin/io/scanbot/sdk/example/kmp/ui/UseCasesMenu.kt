@@ -59,28 +59,28 @@ fun UseCasesMenuScreen(
         val action = pendingMiscellaneousAction.value
         pendingMiscellaneousAction.value = null
         if (action != null) {
-            scope.launch {
-                when (action) {
-                    MiscellaneousImageAction.AnalyzeQuality -> {
-                        images.firstOrNull()?.let { image ->
-                            useCaseResult = analyzeDocumentQualityOnImage(image)
-                        } ?: run { useCaseError = "No image selected" }
-                    }
+            when (action) {
+                MiscellaneousImageAction.AnalyzeQuality -> {
+                    images.firstOrNull()?.let { image ->
+                        useCaseResult = analyzeDocumentQualityOnImage(image)
+                    } ?: run { useCaseError = "No image selected" }
+                }
 
-                    MiscellaneousImageAction.Ocr -> {
+                MiscellaneousImageAction.Ocr -> {
+                    scope.launch {
                         useCaseResult = performOcrOnImages(images)
                     }
+                }
 
-                    MiscellaneousImageAction.StraightenImage -> {
-                        val image = images.firstOrNull()
-                        if (image == null) {
-                            useCaseError = "No image selected"
-                        } else {
-                            straighteningImage(image)?.straightenedImage?.uniqueId?.let {
-                                onImagePreview(it.toString())
-                            } ?: run {
-                                useCaseResult = "Could not straighten the image"
-                            }
+                MiscellaneousImageAction.StraightenImage -> {
+                    val image = images.firstOrNull()
+                    if (image == null) {
+                        useCaseError = "No image selected"
+                    } else {
+                        straighteningImage(image)?.straightenedImage?.uniqueId?.let {
+                            onImagePreview(it.toString())
+                        } ?: run {
+                            useCaseResult = "Could not straighten the image"
                         }
                     }
                 }
@@ -108,7 +108,7 @@ fun UseCasesMenuScreen(
         onDismiss = { pendingMiscellaneousAction.value = null },
     )
 
-    fun triggerMiscellaneousAction(action: MiscellaneousImageAction) {
+    fun runImagePickerForAction(action: MiscellaneousImageAction) {
         pendingMiscellaneousAction.value = action
         when (action) {
             MiscellaneousImageAction.Ocr -> pickMultipleImagesForAction()
@@ -149,17 +149,17 @@ fun UseCasesMenuScreen(
                 MenuSection("MISCELLANEOUS") {
                     MenuItem("Analyze Document Quality") {
                         runWithValidLicense {
-                            triggerMiscellaneousAction(MiscellaneousImageAction.AnalyzeQuality)
+                            runImagePickerForAction(MiscellaneousImageAction.AnalyzeQuality)
                         }
                     }
                     MenuItem("Perform OCR") {
                         runWithValidLicense {
-                            triggerMiscellaneousAction(MiscellaneousImageAction.Ocr)
+                            runImagePickerForAction(MiscellaneousImageAction.Ocr)
                         }
                     }
                     MenuItem("Straighten Document") {
                         runWithValidLicense {
-                            triggerMiscellaneousAction(MiscellaneousImageAction.StraightenImage)
+                            runImagePickerForAction(MiscellaneousImageAction.StraightenImage)
                         }
                     }
                     MenuItem("View License Info") { showLicenseDialog = true }

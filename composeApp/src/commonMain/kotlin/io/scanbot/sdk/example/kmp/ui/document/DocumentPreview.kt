@@ -36,7 +36,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,7 +61,6 @@ import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.page.PageData
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +70,6 @@ fun DocumentPreviewScreen(
     navigateToPagePreview: (documentUuid: String, pageUuid: String) -> Unit,
     onPopBackStack: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     var documentData by remember { mutableStateOf<DocumentData?>(null) }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }

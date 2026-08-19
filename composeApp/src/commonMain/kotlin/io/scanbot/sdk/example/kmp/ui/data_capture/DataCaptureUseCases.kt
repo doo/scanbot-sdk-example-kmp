@@ -3,7 +3,6 @@ package io.scanbot.sdk.example.kmp.ui.data_capture
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.extractDocumentData
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCheckOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.image_recognizers.recognizeCreditCardOnImage
@@ -18,7 +17,6 @@ import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
 import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
-import kotlinx.coroutines.launch
 
 @Composable
 fun DataCaptureUseCases(
@@ -26,7 +24,6 @@ fun DataCaptureUseCases(
     resultNavigator: DataCaptureResultNavigator,
     onError: (Throwable) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val pendingImageAction = remember { mutableStateOf<DataCaptureImageAction?>(null) }
 
     val pickImage = rememberImagePickerLauncher(
@@ -39,20 +36,18 @@ fun DataCaptureUseCases(
                 onError(Throwable("No image selected"))
                 return@rememberImagePickerLauncher
             }
-            scope.launch {
-                when (action) {
-                    DataCaptureImageAction.Mrz -> recognizeMrzDocumentOnImage(image)
-                        .onSuccess(resultNavigator::showMrzResult).onFailure(onError)
+            when (action) {
+                DataCaptureImageAction.Mrz -> recognizeMrzDocumentOnImage(image)
+                    .onSuccess(resultNavigator::showMrzResult).onFailure(onError)
 
-                    DataCaptureImageAction.Check -> recognizeCheckOnImage(image)
-                        .onSuccess(resultNavigator::showCheckResult).onFailure(onError)
+                DataCaptureImageAction.Check -> recognizeCheckOnImage(image)
+                    .onSuccess(resultNavigator::showCheckResult).onFailure(onError)
 
-                    DataCaptureImageAction.DocumentData -> extractDocumentData(image)
-                        .onSuccess(resultNavigator::showDocumentDataResult).onFailure(onError)
+                DataCaptureImageAction.DocumentData -> extractDocumentData(image)
+                    .onSuccess(resultNavigator::showDocumentDataResult).onFailure(onError)
 
-                    DataCaptureImageAction.CreditCard -> recognizeCreditCardOnImage(image)
-                        .onSuccess(resultNavigator::showCreditCardResult).onFailure(onError)
-                }
+                DataCaptureImageAction.CreditCard -> recognizeCreditCardOnImage(image)
+                    .onSuccess(resultNavigator::showCreditCardResult).onFailure(onError)
             }
         },
         onError = { error ->
@@ -62,7 +57,7 @@ fun DataCaptureUseCases(
         onDismiss = { pendingImageAction.value = null },
     )
 
-    fun triggerImageAction(action: DataCaptureImageAction) {
+    fun runImagePickerForAction(action: DataCaptureImageAction) {
         pendingImageAction.value = action
         pickImage()
     }
@@ -117,16 +112,16 @@ fun DataCaptureUseCases(
             }
         }
         MenuItem("Scan MRZ from Image") {
-            runWithValidLicense { triggerImageAction(DataCaptureImageAction.Mrz) }
+            runWithValidLicense { runImagePickerForAction(DataCaptureImageAction.Mrz) }
         }
         MenuItem("Scan Check from Image") {
-            runWithValidLicense { triggerImageAction(DataCaptureImageAction.Check) }
+            runWithValidLicense { runImagePickerForAction(DataCaptureImageAction.Check) }
         }
         MenuItem("Extract Document Data from Image") {
-            runWithValidLicense { triggerImageAction(DataCaptureImageAction.DocumentData) }
+            runWithValidLicense { runImagePickerForAction(DataCaptureImageAction.DocumentData) }
         }
         MenuItem("Scan Credit Card from Image") {
-            runWithValidLicense { triggerImageAction(DataCaptureImageAction.CreditCard) }
+            runWithValidLicense { runImagePickerForAction(DataCaptureImageAction.CreditCard) }
         }
     }
 }
