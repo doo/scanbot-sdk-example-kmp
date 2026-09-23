@@ -27,13 +27,13 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.ocr.performOcrO
 import io.scanbot.sdk.example.kmp.doc_code_snippets.straightening.straighteningImage
 import io.scanbot.sdk.example.kmp.ui.common.ErrorDialog
 import io.scanbot.sdk.example.kmp.ui.common.Footer
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.LicenseInfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.MenuItem
 import io.scanbot.sdk.example.kmp.ui.common.MenuSection
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import io.scanbot.sdk.example.kmp.navigation.DataCaptureResultNavigator
 import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureUseCases
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCases
@@ -54,6 +54,68 @@ fun UseCasesMenuScreen(
     var cleanupStorageResult by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
     val pendingMiscellaneousAction = remember { mutableStateOf<MiscellaneousImageAction?>(null) }
+
+    val handleImagesForAction: (List<io.scanbot.sdk.kmp.image.ImageRef>) -> Unit = { images ->
+        val action = pendingMiscellaneousAction.value
+        pendingMiscellaneousAction.value = null
+        if (action != null) {
+            when (action) {
+                MiscellaneousImageAction.AnalyzeQuality -> {
+                    images.firstOrNull()?.let { image ->
+                        useCaseResult = analyzeDocumentQualityOnImage(image)
+                    } ?: run { useCaseError = "No image selected" }
+                }
+
+                MiscellaneousImageAction.Ocr -> {
+                    scope.launch {
+                        useCaseResult = performOcrOnImages(images)
+                    }
+                }
+
+                MiscellaneousImageAction.StraightenImage -> {
+                    val image = images.firstOrNull()
+                    if (image == null) {
+                        useCaseError = "No image selected"
+                    } else {
+                        straighteningImage(image)?.straightenedImage?.uniqueId?.let {
+                            onImagePreview(it.toString())
+                        } ?: run {
+                            useCaseResult = "Could not straighten the image"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    val pickSingleImageForAction = rememberImagePickerLauncher(
+        allowMultiple = false,
+        onImagesSelected = handleImagesForAction,
+        onError = { error ->
+            pendingMiscellaneousAction.value = null
+            useCaseError = error.message
+        },
+        onDismiss = { pendingMiscellaneousAction.value = null },
+    )
+
+    val pickMultipleImagesForAction = rememberImagePickerLauncher(
+        allowMultiple = true,
+        onImagesSelected = handleImagesForAction,
+        onError = { error ->
+            pendingMiscellaneousAction.value = null
+            useCaseError = error.message
+        },
+        onDismiss = { pendingMiscellaneousAction.value = null },
+    )
+
+    fun runImagePickerForAction(action: MiscellaneousImageAction) {
+        pendingMiscellaneousAction.value = action
+        when (action) {
+            MiscellaneousImageAction.Ocr -> pickMultipleImagesForAction()
+            MiscellaneousImageAction.AnalyzeQuality,
+            MiscellaneousImageAction.StraightenImage -> pickSingleImageForAction()
+        }
+    }
 
     LicenseGuard { runWithValidLicense ->
         Scaffold(
@@ -87,60 +149,22 @@ fun UseCasesMenuScreen(
                 MenuSection("MISCELLANEOUS") {
                     MenuItem("Analyze Document Quality") {
                         runWithValidLicense {
-                            pendingMiscellaneousAction.value = MiscellaneousImageAction.AnalyzeQuality
+                            runImagePickerForAction(MiscellaneousImageAction.AnalyzeQuality)
                         }
                     }
                     MenuItem("Perform OCR") {
                         runWithValidLicense {
-                            pendingMiscellaneousAction.value = MiscellaneousImageAction.Ocr
+                            runImagePickerForAction(MiscellaneousImageAction.Ocr)
                         }
                     }
                     MenuItem("Straighten Document") {
                         runWithValidLicense {
-                            pendingMiscellaneousAction.value = MiscellaneousImageAction.StraightenImage
+                            runImagePickerForAction(MiscellaneousImageAction.StraightenImage)
                         }
                     }
                     MenuItem("View License Info") { showLicenseDialog = true }
                     MenuItem("Clean up Storage") { showCleanupConfirmation = true }
                 }
-            }
-
-            pendingMiscellaneousAction.value?.let { action ->
-                GalleryPicker(
-                    allowMultiple = action == MiscellaneousImageAction.Ocr,
-                    onImagesSelected = { images ->
-                        scope.launch {
-                            when (action) {
-                                MiscellaneousImageAction.AnalyzeQuality -> {
-                                    images.firstOrNull()?.let { image ->
-                                        useCaseResult = analyzeDocumentQualityOnImage(image)
-                                    } ?: run {
-                                        useCaseError = "No image selected"
-                                    }
-                                }
-
-                                MiscellaneousImageAction.Ocr -> {
-                                    useCaseResult = performOcrOnImages(images)
-                                }
-
-                                MiscellaneousImageAction.StraightenImage -> {
-                                    val image = images.firstOrNull()
-                                    if (image == null) {
-                                        useCaseError = "No image selected"
-                                    } else {
-                                        straighteningImage(image)?.straightenedImage?.uniqueId?.let {
-                                            onImagePreview(it.toString())
-                                        } ?: run {
-                                            useCaseResult = "Could not straighten the image"
-                                        }
-                                    }
-                                }
-                            }
-                            pendingMiscellaneousAction.value = null
-                        }
-                    },
-                    onDismiss = { pendingMiscellaneousAction.value = null },
-                )
             }
 
             useCaseResult?.let { text ->
