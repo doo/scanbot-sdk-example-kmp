@@ -21,7 +21,7 @@ internal fun MrzResultPreviewScreen(
             addField("Surname", mrz.surname.value.text)
             addField("Birth Date", mrz.birthDate.value.text)
             addField("Document Number", mrz.documentNumber?.value?.text)
-            addField("Nationality", mrz.nationality.value.text)
+            addField("Nationality", mrz.nationality?.value?.text)
             addField("Gender", mrz.gender?.value?.text)
             addField("Expiry Date", mrz.expiryDate?.value?.text)
         }

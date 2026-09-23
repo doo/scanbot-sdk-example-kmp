@@ -10,7 +10,7 @@ fun cropFlowConfig(): DocumentScanningFlow {
     val configuration = DocumentScanningFlow().apply {
 
         // Disable the rotation feature.
-        screens.cropping.bottomBar.rotateButton.visible = false
+        screens.cropping.toolbar.rotateButton.visible = false
 
         // Configure various colors.
         appearance.topBarBackgroundColor = ScanbotColor("#C8193C")

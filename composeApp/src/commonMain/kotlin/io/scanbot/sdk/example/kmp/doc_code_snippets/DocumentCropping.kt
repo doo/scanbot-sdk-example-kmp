@@ -2,7 +2,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets
 
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
-import io.scanbot.sdk.kmp.ui_v2.document.configuration.CroppingConfiguration
+import io.scanbot.sdk.kmp.ui_v2.document.configuration.CroppingStandaloneConfiguration
 
 // @Tag("Start cropping screen for document page")
 fun startCroppingScreen(
@@ -11,7 +11,7 @@ fun startCroppingScreen(
     handleResult: (DocumentData) -> Unit,
     handleError: (Throwable) -> Unit,
 ) {
-    val configuration = CroppingConfiguration(
+    val configuration = CroppingStandaloneConfiguration(
         documentUuid = documentUuid,
         pageUuid = pageUuid,
         // Optional: customize cropping screen parameters as needed

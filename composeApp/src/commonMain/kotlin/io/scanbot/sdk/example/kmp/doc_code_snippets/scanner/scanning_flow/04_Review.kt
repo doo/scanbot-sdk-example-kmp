@@ -13,9 +13,9 @@ fun reviewFlowConfig(): DocumentScanningFlow {
         screens.review.apply {
             enabled = true
             zoomButton.visible = false
-            bottomBar.addButton.visible = false
-            bottomBar.retakeButton.visible = true
-            bottomBar.retakeButton.title.color = ScanbotColor("#000000")
+            toolbar.addButton.barButton.visible = false
+            toolbar.retakeButton.barButton.visible = true
+            toolbar.retakeButton.barButton.title.color = ScanbotColor("#000000")
         }
 
         // Configure the reorder pages screen.
@@ -25,7 +25,7 @@ fun reviewFlowConfig(): DocumentScanningFlow {
         }
 
         // Configure the cropping screen.
-        screens.cropping.bottomBar.resetButton.visible = false
+        screens.cropping.toolbar.resetButton.visible = false
     }
 
     return configuration

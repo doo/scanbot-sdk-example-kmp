@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.doc_code_snippets.analyzeDocumentQualityOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.applyFilterToDocumentPage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.startCroppingScreen
+import io.scanbot.sdk.example.kmp.doc_code_snippets.startDocumentCleanupScreen
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
@@ -115,6 +116,23 @@ fun DocumentPagePreviewScreen(
                     }) {
                         Text(
                             "Crop",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                    TextButton(onClick = {
+                        runWithValidLicense {
+                            startDocumentCleanupScreen(
+                                documentUuid = documentUuid,
+                                pageUuid = pageUuid,
+                                handleResult = { updatedDocument ->
+                                    documentData = updatedDocument
+                                },
+                                handleError = { resultDialogMessage = it.message })
+                        }
+                    }) {
+                        Text(
+                            "Clean Up",
                             color = Color.White,
                             style = MaterialTheme.typography.labelMedium
                         )

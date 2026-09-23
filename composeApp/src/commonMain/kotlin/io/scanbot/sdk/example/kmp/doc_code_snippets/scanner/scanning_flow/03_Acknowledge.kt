@@ -2,7 +2,6 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.scanning_flow
 
 // @Tag("Acknowledge")
 import io.scanbot.sdk.kmp.ScanbotSDK
-import io.scanbot.sdk.kmp.documentqualityanalyzer.DocumentQuality
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.AcknowledgementMode
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
@@ -23,16 +22,16 @@ fun acknowledgeFlowConfig(): DocumentScanningFlow {
         /** Set the background color for the acknowledgment screen. */
         screens.camera.acknowledgement.backgroundColor = ScanbotColor("#EFEFEF")
         /**
-         * You can also configure the buttons in the bottom bar of the acknowledgment screen.
+         * You can also configure the buttons in the toolbar of the acknowledgment screen.
          * e.g To force the user to retake, if the captured document is not OK.
          */
-        screens.camera.acknowledgement.bottomBar.retakeButton.visible = false
+        screens.camera.acknowledgement.toolbar.retakeButton.visible = false
         /** Hide the titles of the buttons. */
-        screens.camera.acknowledgement.bottomBar.acceptWhenAcceptableButton.title.visible = false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.unacceptableQuality.title.visible = false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.documentNotFound.title.visible = false
-        screens.camera.acknowledgement.bottomBar.proceedAnywayButton.uncertainQuality.title.visible = false
-        screens.camera.acknowledgement.bottomBar.retakeButton.title.visible = false
+        screens.camera.acknowledgement.toolbar.acceptWhenAcceptableButton.title.visible = false
+        screens.camera.acknowledgement.toolbar.proceedAnywayButton.unacceptableQuality.title.visible = false
+        screens.camera.acknowledgement.toolbar.proceedAnywayButton.documentNotFound.title.visible = false
+        screens.camera.acknowledgement.toolbar.proceedAnywayButton.uncertainQuality.title.visible = false
+        screens.camera.acknowledgement.toolbar.retakeButton.title.visible = false
         /** Configure the acknowledgment screen's hint message which is shown. */
         screens.camera.acknowledgement.documentNotFoundWarning.title.text = "No document found";
         screens.camera.acknowledgement.unacceptableQualityWarning.title.text =

@@ -24,8 +24,8 @@ fun rtuUiSinglePageScanningFinderUseCase(): DocumentScanningFlow {
         screens.camera.cameraConfiguration.autoSnappingEnabled = true
 
         // Hide the auto snapping enable/disable button
-        screens.camera.bottomBar.autoSnappingModeButton.visible = false
-        screens.camera.bottomBar.manualSnappingModeButton.visible = false
+        screens.camera.toolbar.autoSnappingModeButton.visible = false
+        screens.camera.toolbar.manualSnappingModeButton.visible = false
 
         // Set colors
         palette.sbColorPrimary = ScanbotColor("#C8193CFF")
