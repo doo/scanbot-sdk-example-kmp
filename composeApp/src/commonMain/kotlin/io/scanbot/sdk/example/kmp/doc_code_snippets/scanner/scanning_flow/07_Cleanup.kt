@@ -5,32 +5,36 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.scanning_flow
     This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
 */
 
-// @Tag("Crop")
+// @Tag("Cleanup")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
 
-fun cropFlowConfig(): DocumentScanningFlow {
+fun cleanupFlowConfig(): DocumentScanningFlow {
     // Create the default configuration object.
     val configuration = DocumentScanningFlow().apply {
 
-        // Disable the rotation feature.
-        screens.cropping.toolbar.rotateButton.visible = false
+        // Reveal the 'Clean up' button in the review screen's toolbar. It is hidden by default.
+        screens.review.toolbar.documentCleanupButton.barButton.visible = true
+
+        // Configure the toolbar buttons on the clean up screen. They are enabled by default.
+        screens.cleanup.toolbar.undoButton.visible = true
+        screens.cleanup.toolbar.redoButton.visible = true
 
         // Configure various colors.
         appearance.topBarBackgroundColor = ScanbotColor("#C8193C")
-        screens.cropping.topBarConfirmButton.foreground.color = ScanbotColor("#FFFFFF")
+        screens.cleanup.topBarConfirmButton.foreground.color = ScanbotColor("#FFFFFF")
 
-        // Customize a UI element's text
-        localization.croppingTopBarCancelButtonTitle = "Cancel"
+        // Customize a UI element's text.
+        localization.documentCleanupTopBarCancelButtonTitle = "Cancel"
     }
 
     return configuration
 }
 
-fun startScanningWithCropFlow() = ScanbotSDK.document.startScanner(
-    configuration = cropFlowConfig(), onResult = {
+fun startScanningWithCleanupFlow() = ScanbotSDK.document.startScanner(
+    configuration = cleanupFlowConfig(), onResult = {
         it.onSuccess { TODO("Handle scanned document result") }
         it.onFailure { TODO("Handle error") }
     })
-// @EndTag("Crop")
+// @EndTag("Cleanup")

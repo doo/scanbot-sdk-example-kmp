@@ -35,11 +35,11 @@ fun rtuUiSinglePageScanningUseCase(): DocumentScanningFlow {
         screens.camera.captureFeedback.snapFeedbackMode = PageSnapCheckMarkAnimation()
 
         // Hide the auto snapping enable/disable button
-        screens.camera.bottomBar.autoSnappingModeButton.visible = false
-        screens.camera.bottomBar.manualSnappingModeButton.visible = false
-        screens.camera.bottomBar.importButton.title.visible = true
-        screens.camera.bottomBar.torchOnButton.title.visible = true
-        screens.camera.bottomBar.torchOffButton.title.visible = true
+        screens.camera.toolbar.autoSnappingModeButton.visible = false
+        screens.camera.toolbar.manualSnappingModeButton.visible = false
+        screens.camera.toolbar.importButton.title.visible = true
+        screens.camera.toolbar.torchOnButton.title.visible = true
+        screens.camera.toolbar.torchOffButton.title.visible = true
 
         // Set colors
         palette.sbColorPrimary = ScanbotColor("#C8193CFF")
