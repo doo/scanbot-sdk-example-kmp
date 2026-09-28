@@ -21,12 +21,10 @@ fun basicInitialization() {
         // Handle initialization error
         println("SDK initialization failed: ${error.message}")
     }
-
-    ScanbotSDK.initialize(configuration)
     // @EndTag("Basic initialization")
 }
 
-fun settingLicenseKye() {
+fun settingLicenseKey() {
     // @Tag("Setting license key")
     val LICENSE_KEY = "YOUR_SCANBOT_SDK_LICENSE_KEY"
 

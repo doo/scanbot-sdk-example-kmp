@@ -15,7 +15,7 @@ fun createPdfFromDocument(
     documentId: String, outputUri: String? = null
 ): Result<String> {
 
-    // Create PDF with default config (empty attributes, CUSTOM page size, AUTO orientation).
+    // Configure the PDF: A4 pages, automatic orientation, 200 DPI.
     // Customize PdfConfiguration for DPI, page size, OCR, etc.
     val pdfConfig = PdfConfiguration(
         attributes = PdfAttributes(

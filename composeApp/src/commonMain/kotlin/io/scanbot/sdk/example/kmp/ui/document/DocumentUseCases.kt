@@ -47,7 +47,7 @@ fun DocumentUseCases(
                 startSinglePageFinderScanning(onResultPreview, onError)
             }
         }
-        MenuItem("Multi Page Scanning with Finder") {
+        MenuItem("Multi Page Scanning") {
             runWithValidLicense {
                 startMultiPageScanning(onResultPreview, onError)
             }

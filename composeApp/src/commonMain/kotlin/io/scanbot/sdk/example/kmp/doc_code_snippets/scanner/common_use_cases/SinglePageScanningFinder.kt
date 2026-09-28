@@ -2,6 +2,7 @@ package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases
 
 // @Tag("Single Page Finder")
 import io.scanbot.sdk.kmp.ScanbotSDK
+import io.scanbot.sdk.kmp.geometry.AspectRatio
 import io.scanbot.sdk.kmp.page.DocumentData
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.document.configuration.DocumentScanningFlow
@@ -15,7 +16,7 @@ fun rtuUiSinglePageScanningFinderUseCase(): DocumentScanningFlow {
 
         // Enable view finder
         screens.camera.viewFinder.visible = true
-        // configuration.screens.camera.viewFinder.aspectRatio = AspectRatio(width: 3, height: 4);
+        screens.camera.viewFinder.aspectRatio = AspectRatio(3.0, 4.0)
 
         // Enable/Disable the review screen.
         screens.review.enabled = false
@@ -37,7 +38,7 @@ fun rtuUiSinglePageScanningFinderUseCase(): DocumentScanningFlow {
         screens.camera.userGuidance.statesTitles.noDocumentFound = "Could not detect a document"
 
     }
-    return configuration;
+    return configuration
 }
 
 fun startSinglePageFinderScanning(

@@ -9,7 +9,7 @@ fun autoFilteringUseCase(): DocumentScanningFlow {
     // Create the default configuration instance
     val configuration = DocumentScanningFlow().apply {
         // Set any `ParametricFilter` type to default filter.
-        outputSettings.defaultFilter = ScanbotBinarizationFilter();
+        outputSettings.defaultFilter = ScanbotBinarizationFilter()
     }
     return configuration
 }

@@ -24,7 +24,7 @@ fun analyzeDocumentQualityOnImage(image: ImageRef): String {
 // @Tag("Analyze quality of document pages")
 fun analyzeDocumentPagesQuality(document: DocumentData) {
     document.pages.forEach { page ->
-        // Create an ImageRef from the original image URI path
+        // Create an ImageRef from the processed document image (falls back to the original image)
         val imageRef = ImageRef.fromPath(page.documentImageURI ?: page.originalImageURI)
 
         imageRef?.use { image ->

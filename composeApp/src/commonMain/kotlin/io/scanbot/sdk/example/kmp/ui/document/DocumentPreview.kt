@@ -115,7 +115,11 @@ fun DocumentPreviewScreen(
                                 ScanbotSDK.document.startScanner(
                                     configuration = DocumentScanningFlow(documentUuid = it.uuid),
                                     onResult = { result ->
-                                        documentData = result.getOrNull()
+                                        // Keep the current document if scanning failed.
+                                        result.onSuccess { updatedDocument -> documentData = updatedDocument }
+                                            .onFailure { error ->
+                                                resultDialogMessage = "Scanning failed: ${error.message}"
+                                            }
                                     })
                             }
                         }
@@ -184,38 +188,28 @@ fun DocumentPreviewScreen(
                 ModalBottomSheet(onDismissRequest = { showExportSheet = false }) {
                     ExportBottomSheetContent(onExportPdf = { withOcr ->
                         showExportSheet = false
+                        val uuid = documentData?.uuid ?: return@ExportBottomSheetContent
+                        val type = if (withOcr) "Searchable PDF File" else "PDF File"
 
-                        val onPdfCreated: (String) -> Unit = { path ->
-                            val type = if (withOcr) "Searchable PDF File" else "PDF File"
-                            resultDialogMessage = "$type created: $path"
-                        }
-
-                        if (withOcr) {
-                            createSearchablePdfFromDocument(
-                                documentId = documentData!!.uuid
-                            ).onSuccess(onPdfCreated)
+                        val result = if (withOcr) {
+                            createSearchablePdfFromDocument(documentId = uuid)
                         } else {
-                            createPdfFromDocument(
-                                documentId = documentData!!.uuid
-                            ).onSuccess(onPdfCreated)
+                            createPdfFromDocument(documentId = uuid)
                         }
+                        result.onSuccess { path -> resultDialogMessage = "$type created: $path" }
+                            .onFailure { error -> resultDialogMessage = "$type export failed: ${error.message}" }
                     }, onExportTiff = { binarized ->
                         showExportSheet = false
+                        val uuid = documentData?.uuid ?: return@ExportBottomSheetContent
+                        val type = if (binarized) "Binarized TIFF File" else "TIFF File"
 
-                        val onTiffCreated: (String) -> Unit = { path ->
-                            val type = if (binarized) "Binarized TIFF File" else "TIFF File"
-                            resultDialogMessage = "$type created: $path"
-                        }
-
-                        if (binarized) {
-                            createBinarizedTiffFromDocument(
-                                documentUuid = documentData!!.uuid
-                            ).onSuccess(onTiffCreated)
+                        val result = if (binarized) {
+                            createBinarizedTiffFromDocument(documentUuid = uuid)
                         } else {
-                            createTiffFromDocument(
-                                documentUuid = documentData!!.uuid
-                            ).onSuccess(onTiffCreated)
+                            createTiffFromDocument(documentUuid = uuid)
                         }
+                        result.onSuccess { path -> resultDialogMessage = "$type created: $path" }
+                            .onFailure { error -> resultDialogMessage = "$type export failed: ${error.message}" }
                     }, onCancel = { showExportSheet = false })
                 }
             }
@@ -228,8 +222,12 @@ fun DocumentPreviewScreen(
                     confirmButton = {
                         TextButton(onClick = {
                             showDeleteAllConfirmation = false
-                            documentData = documentData?.let {
-                                removeAllPagesFromDocument(documentUuid = it.uuid).getOrNull()
+                            documentData?.let {
+                                removeAllPagesFromDocument(documentUuid = it.uuid)
+                                    .onSuccess { updatedDocument -> documentData = updatedDocument }
+                                    .onFailure { error ->
+                                        resultDialogMessage = "Delete all pages failed: ${error.message}"
+                                    }
                             }
                         }) {
                             Text("Delete", color = MaterialTheme.colorScheme.error)

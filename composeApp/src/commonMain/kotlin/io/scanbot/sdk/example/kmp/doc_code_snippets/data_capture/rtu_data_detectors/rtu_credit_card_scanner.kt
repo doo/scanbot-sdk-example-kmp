@@ -13,7 +13,8 @@ fun startRtuCreditCardScanner(
 ) {
     // Always make sure you have a valid license on runtime via ScanbotSDK.getLicenseInfo()
     val configuration = CreditCardScannerScreenConfiguration().apply {
-        topBar.mode = TopBarMode.GRADIENT
+        // GRADIENT and HIDDEN modes are deprecated since v10.0.0. Use SOLID with a fully opaque background color instead.
+        topBar.mode = TopBarMode.SOLID
         topBar.statusBarMode = StatusBarMode.LIGHT
         topBar.cancelButton.text = "Cancel"
     }

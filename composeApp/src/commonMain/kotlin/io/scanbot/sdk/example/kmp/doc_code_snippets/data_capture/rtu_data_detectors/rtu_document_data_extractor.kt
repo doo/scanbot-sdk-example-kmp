@@ -1,7 +1,6 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.data_capture.rtu_data_detectors
 
 import io.scanbot.sdk.kmp.ScanbotSDK
-import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
 import io.scanbot.sdk.kmp.ui_v2.documentdata.configuration.DocumentDataExtractorScreenConfiguration
 import io.scanbot.sdk.kmp.ui_v2.documentdata.configuration.DocumentDataExtractorUiResult
 

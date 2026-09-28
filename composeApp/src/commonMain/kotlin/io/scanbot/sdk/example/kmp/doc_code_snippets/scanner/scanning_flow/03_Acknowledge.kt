@@ -33,11 +33,11 @@ fun acknowledgeFlowConfig(): DocumentScanningFlow {
         screens.camera.acknowledgement.toolbar.proceedAnywayButton.uncertainQuality.title.visible = false
         screens.camera.acknowledgement.toolbar.retakeButton.title.visible = false
         /** Configure the acknowledgment screen's hint message which is shown. */
-        screens.camera.acknowledgement.documentNotFoundWarning.title.text = "No document found";
+        screens.camera.acknowledgement.documentNotFoundWarning.title.text = "No document found"
         screens.camera.acknowledgement.unacceptableQualityWarning.title.text =
-            "Document quality is unacceptable";
+            "Document quality is unacceptable"
         screens.camera.acknowledgement.uncertainQualityWarning.title.text =
-            "Document quality is unacceptable";
+            "Document quality is unacceptable"
     }
 
     return configuration
