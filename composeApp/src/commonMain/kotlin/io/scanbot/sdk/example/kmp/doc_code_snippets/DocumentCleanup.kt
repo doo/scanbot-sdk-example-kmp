@@ -36,7 +36,7 @@ fun startDocumentCleanupScreen(
         cleanup.topBarConfirmButton.text = "Done"
         cleanup.topBarTitle.text = "Clean up the page"
 
-        // Background color of the clean up screen.
+        // Background color of the cleanup screen.
         cleanup.backgroundColor = ScanbotColor("#222222")
 
         // Configure the toolbar buttons (undo / redo / reset).

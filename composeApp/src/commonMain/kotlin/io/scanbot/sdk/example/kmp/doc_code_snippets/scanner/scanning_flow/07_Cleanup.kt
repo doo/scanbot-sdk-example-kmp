@@ -17,7 +17,7 @@ fun cleanupFlowConfig(): DocumentScanningFlow {
         // Reveal the 'Clean up' button in the review screen's toolbar. It is hidden by default.
         screens.review.toolbar.documentCleanupButton.barButton.visible = true
 
-        // Configure the toolbar buttons on the clean up screen. They are enabled by default.
+        // Configure the toolbar buttons on the cleanup screen. They are enabled by default.
         screens.cleanup.toolbar.undoButton.visible = true
         screens.cleanup.toolbar.redoButton.visible = true
 
