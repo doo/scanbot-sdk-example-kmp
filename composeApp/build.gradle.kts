@@ -30,7 +30,7 @@ kotlin {
         }
 
         iosTarget.swiftPackageConfig {
-            minIos = "13.0"
+            minIos = "15.0"
             dependency {
                 remotePackageVersion(
                     url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
