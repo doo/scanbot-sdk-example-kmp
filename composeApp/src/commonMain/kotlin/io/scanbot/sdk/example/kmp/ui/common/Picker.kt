@@ -14,14 +14,16 @@ import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.readBytes
 import io.github.vinceglb.filekit.write
 import io.scanbot.sdk.kmp.image.ImageRef
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 /** Native gallery picker returning decoded [ImageRef]s for the Scanbot SDK. */
 @Composable
 fun rememberImagePickerLauncher(
     allowMultiple: Boolean,
-    onImagesSelected: (List<ImageRef>) -> Unit,
+    onImagesSelected: suspend (List<ImageRef>) -> Unit,
     onError: (Throwable) -> Unit = {},
     onDismiss: () -> Unit = {},
 ): () -> Unit {
@@ -29,8 +31,8 @@ fun rememberImagePickerLauncher(
     val handle: (List<PlatformFile>) -> Unit = { files ->
         if (files.isEmpty()) onDismiss()
         else scope.launch {
-            runCatching { files.map { it.toImageRef() } }
-                .onSuccess(onImagesSelected)
+            runCatching { withContext(Dispatchers.Default) { files.map { it.toImageRef() } } }
+                .onSuccess { onImagesSelected(it) }
                 .onFailure(onError)
         }
     }

@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,7 +38,6 @@ import io.scanbot.sdk.example.kmp.ui.data_capture.DataCaptureUseCases
 import io.scanbot.sdk.example.kmp.ui.document.DocumentUseCases
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
-import kotlinx.coroutines.launch
 
 @Composable
 fun UseCasesMenuScreen(
@@ -52,10 +50,9 @@ fun UseCasesMenuScreen(
     var showLicenseDialog by rememberSaveable { mutableStateOf(false) }
     var showCleanupConfirmation by rememberSaveable { mutableStateOf(false) }
     var cleanupStorageResult by rememberSaveable { mutableStateOf<String?>(null) }
-    val scope = rememberCoroutineScope()
     val pendingMiscellaneousAction = remember { mutableStateOf<MiscellaneousImageAction?>(null) }
 
-    val handleImagesForAction: (List<io.scanbot.sdk.kmp.image.ImageRef>) -> Unit = { images ->
+    val handleImagesForAction: suspend (List<io.scanbot.sdk.kmp.image.ImageRef>) -> Unit = { images ->
         val action = pendingMiscellaneousAction.value
         pendingMiscellaneousAction.value = null
         if (action != null) {
@@ -67,9 +64,7 @@ fun UseCasesMenuScreen(
                 }
 
                 MiscellaneousImageAction.Ocr -> {
-                    scope.launch {
-                        useCaseResult = performOcrOnImages(images)
-                    }
+                    useCaseResult = performOcrOnImages(images)
                 }
 
                 MiscellaneousImageAction.StraightenImage -> {

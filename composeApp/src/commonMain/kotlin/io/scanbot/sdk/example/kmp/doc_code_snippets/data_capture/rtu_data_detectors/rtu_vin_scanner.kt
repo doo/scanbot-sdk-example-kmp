@@ -14,7 +14,7 @@ fun startRtuVinScanner(
     val configuration = VinScannerScreenConfiguration().apply {
         introScreen.explanation.text =
             "Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode\n" +
-                "The scanner will guide you to the optimal scanning position." +
+                "The scanner will guide you to the optimal scanning position. " +
                 "Once the scan is complete, your VIN details will automatically be extracted and processed."
         introScreen.doneButton.text = "Start Scanning"
         introScreen.doneButton.background.fillColor = ScanbotColor("#C8193C")

@@ -8,10 +8,11 @@ import io.scanbot.sdk.kmp.ui_v2.creditcard.configuration.CreditCardScannerScreen
 
 fun creditCardTopBarConfiguration(): CreditCardScannerScreenConfiguration {
     return CreditCardScannerScreenConfiguration().apply {
-        topBar.mode = TopBarMode.GRADIENT
+        topBar.mode = TopBarMode.SOLID
+        topBar.backgroundColor = ScanbotColor("#C8193C")
         topBar.statusBarMode = StatusBarMode.LIGHT
         topBar.cancelButton.text = "Cancel"
-        topBar.cancelButton.foreground.color = ScanbotColor("#C8193C")
+        topBar.cancelButton.foreground.color = ScanbotColor("#FFFFFF")
     }
 }
 // @EndTag("Credit Card Top Bar")

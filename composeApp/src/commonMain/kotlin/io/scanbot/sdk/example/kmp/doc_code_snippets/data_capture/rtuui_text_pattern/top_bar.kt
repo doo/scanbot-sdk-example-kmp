@@ -8,10 +8,11 @@ import io.scanbot.sdk.kmp.ui_v2.textpattern.configuration.TextPatternScannerScre
 
 fun textPatternTopBarConfiguration(): TextPatternScannerScreenConfiguration {
     return TextPatternScannerScreenConfiguration().apply {
-        topBar.mode = TopBarMode.GRADIENT
+        topBar.mode = TopBarMode.SOLID
+        topBar.backgroundColor = ScanbotColor("#C8193C")
         topBar.statusBarMode = StatusBarMode.LIGHT
         topBar.cancelButton.text = "Cancel"
-        topBar.cancelButton.foreground.color = ScanbotColor("#C8193C")
+        topBar.cancelButton.foreground.color = ScanbotColor("#FFFFFF")
     }
 }
 // @EndTag("Text Pattern Top Bar")

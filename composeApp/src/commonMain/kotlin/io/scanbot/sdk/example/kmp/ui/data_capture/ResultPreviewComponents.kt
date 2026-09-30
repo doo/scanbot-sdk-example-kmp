@@ -41,6 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
 import io.scanbot.sdk.kmp.image.ImageRef
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun DataCapturePreview(
@@ -53,11 +55,13 @@ internal fun DataCapturePreview(
     var imageBitmap by remember(image) { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(image) {
-        imageBitmap = image
-            ?.encode()
-            ?.getOrNull()
-            ?.takeIf(ByteArray::isNotEmpty)
-            ?.decodeToImageBitmap()
+        imageBitmap = withContext(Dispatchers.Default) {
+            image
+                ?.encode()
+                ?.getOrNull()
+                ?.takeIf(ByteArray::isNotEmpty)
+                ?.decodeToImageBitmap()
+        }
     }
 
     Scaffold(
