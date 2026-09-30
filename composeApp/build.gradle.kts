@@ -30,7 +30,7 @@ kotlin {
         }
 
         iosTarget.swiftPackageConfig {
-            minIos = "13.0"
+            minIos = "15.0"
             dependency {
                 remotePackageVersion(
                     url = uri("https://github.com/doo/scanbot-sdk-ios-spm.git"),
@@ -63,7 +63,8 @@ kotlin {
             implementation(libs.jetbrains.compose.navigation)
             implementation(libs.scanbot.sdk)
             implementation(libs.scanbot.compose.ui)
-            implementation(libs.image.picker)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs.compose)
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
             implementation(libs.moko.permissions.camera)

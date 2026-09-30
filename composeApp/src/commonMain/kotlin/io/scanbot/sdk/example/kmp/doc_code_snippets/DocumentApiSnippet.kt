@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.common.document.configuration.AddPageOptions
 import io.scanbot.sdk.kmp.common.document.configuration.CreateDocumentOptions
@@ -16,10 +11,10 @@ import io.scanbot.sdk.kmp.utils.Result
 fun createScannedDocumentFromImages(
     images: List<ImageRef>,
     options: CreateDocumentOptions? = null
-) {
+): Result<DocumentData> {
     // Create a new document from the specified images.
     // You can use CreateDocumentOptions to control image size, filters, etc.
-    ScanbotSDK.document.createDocumentFromImages(
+    return ScanbotSDK.document.createDocumentFromImages(
         images = images,
         options = options
     )
@@ -28,9 +23,9 @@ fun createScannedDocumentFromImages(
 fun createScannedDocumentFromSingleImage(
     image: ImageRef,
     options: CreateDocumentOptions? = null
-) {
+): Result<DocumentData> {
     // Convenience wrapper for creating a document from a single image.
-    ScanbotSDK.document.createDocumentFromImages(
+    return ScanbotSDK.document.createDocumentFromImages(
         images = listOf(image),
         options = options
     )
@@ -38,16 +33,16 @@ fun createScannedDocumentFromSingleImage(
 
 fun loadExistingDocument(
     documentUuid: String
-) {
+): Result<DocumentData> {
     // Load an existing document by its UUID.
-    ScanbotSDK.document.loadDocument(documentUuid)
+    return ScanbotSDK.document.loadDocument(documentUuid)
 }
 
 fun cloneExistingDocument(
     documentUuid: String,
-) {
+): Result<DocumentData> {
     // Clone an existing document by its UUID and return the cloned copy.
-    ScanbotSDK.document.cloneDocument(documentUuid)
+    return ScanbotSDK.document.cloneDocument(documentUuid)
 }
 
 fun accessPageImageUris(documentData: DocumentData) {
@@ -65,11 +60,10 @@ fun accessPageImageUris(documentData: DocumentData) {
 
 fun reorderPagesInDocument(
     documentUuid: String
-) {
+): Result<DocumentData> {
     // Move the last page to the first position in the document.
-
-    ScanbotSDK.document.loadDocument(documentUuid)
-        .onSuccess { documentData ->
+    return ScanbotSDK.document.loadDocument(documentUuid)
+        .mapCatching { documentData ->
             val sourceIndex = documentData.pages.size - 1
             val destinationIndex = 0
 
@@ -77,7 +71,7 @@ fun reorderPagesInDocument(
                 documentUuid = documentUuid,
                 fromIndex = sourceIndex,
                 toIndex = destinationIndex
-            )
+            ).getOrThrow()
         }
 }
 
@@ -90,14 +84,14 @@ fun removeAllPagesFromDocument(
 
 fun deleteDocumentPermanently(
     documentUuid: String
-) {
+): Result<Unit> {
     // Delete the document including its metadata and associated files.
-    ScanbotSDK.document.deleteDocument(documentUuid)
+    return ScanbotSDK.document.deleteDocument(documentUuid)
 }
 
-fun deleteAllDocuments() {
+fun deleteAllDocuments(): Result<Unit> {
     // Remove all stored documents.
-    ScanbotSDK.document.deleteAllDocuments()
+    return ScanbotSDK.document.deleteAllDocuments()
 }
 // @EndTag("Storing and retrieving a DocumentData")
 

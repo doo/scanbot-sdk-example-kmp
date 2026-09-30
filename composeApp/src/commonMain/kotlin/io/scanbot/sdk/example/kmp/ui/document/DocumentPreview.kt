@@ -51,10 +51,10 @@ import io.scanbot.sdk.example.kmp.doc_code_snippets.createSearchablePdfFromDocum
 import io.scanbot.sdk.example.kmp.doc_code_snippets.createTiffFromDocument
 import io.scanbot.sdk.example.kmp.doc_code_snippets.removeAllPagesFromDocument
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
-import io.scanbot.sdk.example.kmp.ui.common.GalleryPicker
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
 import io.scanbot.sdk.example.kmp.ui.common.TopBar
+import io.scanbot.sdk.example.kmp.ui.common.rememberImagePickerLauncher
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.page.DocumentData
@@ -73,8 +73,23 @@ fun DocumentPreviewScreen(
     var documentData by remember { mutableStateOf<DocumentData?>(null) }
     var resultDialogMessage by remember { mutableStateOf<String?>(null) }
     var showExportSheet by remember { mutableStateOf(false) }
-    var showImagePicker by remember { mutableStateOf(false) }
     var showDeleteAllConfirmation by remember { mutableStateOf(false) }
+
+    val pickImagesForAddPages = rememberImagePickerLauncher(
+        allowMultiple = true,
+        onImagesSelected = { images ->
+            documentData?.uuid?.let { uuid ->
+                addPages(documentUuid = uuid, images = images)
+                    .onSuccess { updatedDoc -> documentData = updatedDoc }
+                    .onFailure { error ->
+                        resultDialogMessage = "Add pages failed: ${error.message}"
+                    }
+            }
+        },
+        onError = { error ->
+            resultDialogMessage = "Add pages failed: ${error.message}"
+        },
+    )
 
     LaunchedEffect(documentUuid) {
         ScanbotSDK.document.loadDocument(documentUuid).fold(
@@ -83,7 +98,7 @@ fun DocumentPreviewScreen(
         )
     }
 
-    LicenseGuard { checkLicense ->
+    LicenseGuard { runWithValidLicense ->
         Scaffold(topBar = {
             TopBar(title = "Documents preview", showBackButton = true, onPopBackStack)
         }, bottomBar = {
@@ -95,12 +110,16 @@ fun DocumentPreviewScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             documentData?.let {
                                 ScanbotSDK.document.startScanner(
                                     configuration = DocumentScanningFlow(documentUuid = it.uuid),
                                     onResult = { result ->
-                                        documentData = result.getOrNull()
+                                        // Keep the current document if scanning failed.
+                                        result.onSuccess { updatedDocument -> documentData = updatedDocument }
+                                            .onFailure { error ->
+                                                resultDialogMessage = "Scanning failed: ${error.message}"
+                                            }
                                     })
                             }
                         }
@@ -112,7 +131,11 @@ fun DocumentPreviewScreen(
                         )
                     }
 
-                    TextButton(onClick = { checkLicense { showImagePicker = true } }) {
+                    TextButton(
+                        onClick = {
+                            runWithValidLicense { pickImagesForAddPages() }
+                        }
+                    ) {
                         Text(
                             "Add Page",
                             color = Color.White,
@@ -120,7 +143,11 @@ fun DocumentPreviewScreen(
                         )
                     }
 
-                    TextButton(onClick = { checkLicense { showExportSheet = true } }) {
+                    TextButton(
+                        onClick = {
+                            runWithValidLicense { showExportSheet = true }
+                        }
+                    ) {
                         Text(
                             "Export",
                             color = Color.White,
@@ -129,7 +156,7 @@ fun DocumentPreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense { showDeleteAllConfirmation = true }
+                        runWithValidLicense { showDeleteAllConfirmation = true }
                     }) {
                         Text(
                             "Delete All",
@@ -157,57 +184,32 @@ fun DocumentPreviewScreen(
                 }
             }
 
-            if (showImagePicker) {
-                GalleryPicker(allowMultiple = true, onImagesSelected = { images ->
-                    showImagePicker = false
-                    documentData?.uuid?.let { uuid ->
-                        addPages(
-                            documentUuid = uuid, images = images
-                        ).onSuccess {
-                            updatedDoc -> documentData = updatedDoc
-                        }.onFailure { error ->
-                            resultDialogMessage = "Add pages failed: ${error.message}"
-                        }
-                    }
-                }, onDismiss = { showImagePicker = false })
-            }
-
             if (showExportSheet) {
                 ModalBottomSheet(onDismissRequest = { showExportSheet = false }) {
                     ExportBottomSheetContent(onExportPdf = { withOcr ->
                         showExportSheet = false
+                        val uuid = documentData?.uuid ?: return@ExportBottomSheetContent
+                        val type = if (withOcr) "Searchable PDF File" else "PDF File"
 
-                        val onPdfCreated: (String) -> Unit = { path ->
-                            val type = if (withOcr) "Searchable PDF File" else "PDF File"
-                            resultDialogMessage = "$type created: $path"
-                        }
-
-                        if (withOcr) {
-                            createSearchablePdfFromDocument(
-                                documentId = documentData!!.uuid
-                            ).onSuccess(onPdfCreated)
+                        val result = if (withOcr) {
+                            createSearchablePdfFromDocument(documentId = uuid)
                         } else {
-                            createPdfFromDocument(
-                                documentId = documentData!!.uuid
-                            ).onSuccess(onPdfCreated)
+                            createPdfFromDocument(documentId = uuid)
                         }
+                        result.onSuccess { path -> resultDialogMessage = "$type created: $path" }
+                            .onFailure { error -> resultDialogMessage = "$type export failed: ${error.message}" }
                     }, onExportTiff = { binarized ->
                         showExportSheet = false
+                        val uuid = documentData?.uuid ?: return@ExportBottomSheetContent
+                        val type = if (binarized) "Binarized TIFF File" else "TIFF File"
 
-                        val onTiffCreated: (String) -> Unit = { path ->
-                            val type = if (binarized) "Binarized TIFF File" else "TIFF File"
-                            resultDialogMessage = "$type created: $path"
-                        }
-
-                        if (binarized) {
-                            createBinarizedTiffFromDocument(
-                                documentUuid = documentData!!.uuid
-                            ).onSuccess(onTiffCreated)
+                        val result = if (binarized) {
+                            createBinarizedTiffFromDocument(documentUuid = uuid)
                         } else {
-                            createTiffFromDocument(
-                                documentUuid = documentData!!.uuid
-                            ).onSuccess(onTiffCreated)
+                            createTiffFromDocument(documentUuid = uuid)
                         }
+                        result.onSuccess { path -> resultDialogMessage = "$type created: $path" }
+                            .onFailure { error -> resultDialogMessage = "$type export failed: ${error.message}" }
                     }, onCancel = { showExportSheet = false })
                 }
             }
@@ -220,8 +222,12 @@ fun DocumentPreviewScreen(
                     confirmButton = {
                         TextButton(onClick = {
                             showDeleteAllConfirmation = false
-                            documentData = documentData?.let {
-                                removeAllPagesFromDocument(documentUuid = it.uuid).getOrNull()
+                            documentData?.let {
+                                removeAllPagesFromDocument(documentUuid = it.uuid)
+                                    .onSuccess { updatedDocument -> documentData = updatedDocument }
+                                    .onFailure { error ->
+                                        resultDialogMessage = "Delete all pages failed: ${error.message}"
+                                    }
                             }
                         }) {
                             Text("Delete", color = MaterialTheme.colorScheme.error)

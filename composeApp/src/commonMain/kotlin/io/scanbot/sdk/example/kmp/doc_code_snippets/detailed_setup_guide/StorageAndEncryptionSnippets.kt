@@ -6,11 +6,6 @@ import io.scanbot.sdk.kmp.common.sdk.configuration.FileEncryptionMode
 import io.scanbot.sdk.kmp.common.sdk.configuration.SdkConfiguration
 // @EndTag("Storage and encryption imports")
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 fun customStorageDirectory() {
     // @Tag("Custom storage directory")
     val customStorageDir = "file:///path/to/my-custom-storage-dir"
