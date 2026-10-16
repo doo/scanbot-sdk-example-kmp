@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.scanning_flow
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 // @Tag("Crop")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
@@ -15,7 +10,7 @@ fun cropFlowConfig(): DocumentScanningFlow {
     val configuration = DocumentScanningFlow().apply {
 
         // Disable the rotation feature.
-        screens.cropping.bottomBar.rotateButton.visible = false
+        screens.cropping.toolbar.rotateButton.visible = false
 
         // Configure various colors.
         appearance.topBarBackgroundColor = ScanbotColor("#C8193C")

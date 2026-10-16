@@ -6,11 +6,6 @@ import io.scanbot.sdk.kmp.image.ImageRef
 import io.scanbot.sdk.kmp.image.PathImageLoadOptions
 import io.scanbot.sdk.kmp.image.SaveImageOptions
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 class ImageRefSnippets {
 
     fun createImageRefFromPath() {

@@ -33,7 +33,7 @@ fun straighteningImage(
     ).fold(onSuccess = { result ->
         result
     }, onFailure = { error ->
-        print("Failed to straighten image: ${error.message ?: "Unknown error"}")
+        println("Failed to straighten image: ${error.message ?: "Unknown error"}")
         null
     })
     // @EndTag("Straightening an image")
