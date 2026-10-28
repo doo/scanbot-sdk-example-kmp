@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import io.scanbot.sdk.example.kmp.doc_code_snippets.analyzeDocumentQualityOnImage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.applyFilterToDocumentPage
 import io.scanbot.sdk.example.kmp.doc_code_snippets.startCroppingScreen
+import io.scanbot.sdk.example.kmp.doc_code_snippets.startDocumentCleanupScreen
 import io.scanbot.sdk.example.kmp.ui.ScanbotRed
 import io.scanbot.sdk.example.kmp.ui.common.InfoDialog
 import io.scanbot.sdk.example.kmp.ui.common.LicenseGuard
@@ -89,7 +90,7 @@ fun DocumentPagePreviewScreen(
         isLoading = false
     }
 
-    LicenseGuard { checkLicense ->
+    LicenseGuard { runWithValidLicense ->
         Scaffold(topBar = {
             TopBar(
                 title = "Page Preview", showBackButton = true, onPopBackStack = onPopBackStack
@@ -103,7 +104,7 @@ fun DocumentPagePreviewScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             startCroppingScreen(
                                 documentUuid = documentUuid,
                                 pageUuid = pageUuid,
@@ -120,7 +121,24 @@ fun DocumentPagePreviewScreen(
                         )
                     }
                     TextButton(onClick = {
-                        checkLicense { showFilterSheet = true }
+                        runWithValidLicense {
+                            startDocumentCleanupScreen(
+                                documentUuid = documentUuid,
+                                pageUuid = pageUuid,
+                                handleResult = { updatedDocument ->
+                                    documentData = updatedDocument
+                                },
+                                handleError = { resultDialogMessage = it.message })
+                        }
+                    }) {
+                        Text(
+                            "Clean Up",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                    TextButton(onClick = {
+                        runWithValidLicense { showFilterSheet = true }
                     }) {
                         Text(
                             "Filter",
@@ -130,7 +148,7 @@ fun DocumentPagePreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense {
+                        runWithValidLicense {
                             page?.let { p ->
                                 val imageRef = ImageRef.fromPath(
                                     p.documentImageURI ?: p.originalImageURI
@@ -149,7 +167,7 @@ fun DocumentPagePreviewScreen(
                     }
 
                     TextButton(onClick = {
-                        checkLicense { showDeleteConfirmation = true }
+                        runWithValidLicense { showDeleteConfirmation = true }
                     }) {
                         Text(
                             "Delete",

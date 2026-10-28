@@ -27,8 +27,8 @@ fun straighteningPage(pageUuid: String, documentUuid: String) {
 
     /** Modify the page with the straightening parameters **/
     ScanbotSDK.document.modifyPage(
-        pageUuid,
-        documentUuid,
+        documentUuid = documentUuid,
+        pageUuid = pageUuid,
         options = ModifyPageOptions(
             straighteningParameters = straighteningParameters
         )

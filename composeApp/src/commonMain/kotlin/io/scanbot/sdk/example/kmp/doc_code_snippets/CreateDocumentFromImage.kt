@@ -10,15 +10,15 @@ fun createDocumentFromImages(images: List<ImageRef>): DocumentData? {
     val options = CreateDocumentOptions()
     // Configure other parameters (e.g., documentImageSizeLimit) as needed.
 
-    // Run the document creation and transform the Result into a displayable string
+    // Run the document creation and unwrap the Result
     return ScanbotSDK.document.createDocumentFromImages(
         images = images, options = options
     ).fold(onSuccess = { documentData ->
-        // Return the JSON string representation of the created document
+        // Return the created document
         documentData
     }, onFailure = { error ->
         // Print a descriptive error message
-        print("Failed to create document: ${error.message ?: "Unknown error"}")
+        println("Failed to create document: ${error.message ?: "Unknown error"}")
         null
     })
 // @EndTag("Create document from images")

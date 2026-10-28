@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 // @Tag("Multi Page")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
@@ -22,8 +17,8 @@ fun rtuUiMultiPageScanningUseCase(): DocumentScanningFlow {
         screens.camera.cameraConfiguration.autoSnappingEnabled = true
 
         // Hide/Reveal the auto snapping enable/disable button
-        screens.camera.bottomBar.autoSnappingModeButton.visible = true
-        screens.camera.bottomBar.manualSnappingModeButton.visible = true
+        screens.camera.toolbar.autoSnappingModeButton.visible = true
+        screens.camera.toolbar.manualSnappingModeButton.visible = true
 
         // Set colors
         palette.sbColorPrimary = ScanbotColor("#C8193CFF")
@@ -37,15 +32,15 @@ fun rtuUiMultiPageScanningUseCase(): DocumentScanningFlow {
         // Enable/Disable the review screen.
         screens.review.enabled = true
 
-        // Configure bottom bar (further properties like title, icon and  background can also be set for these buttons)
-        screens.review.bottomBar.addButton.visible = true
-        screens.review.bottomBar.retakeButton.visible = true
-        screens.review.bottomBar.cropButton.visible = true
-        screens.review.bottomBar.rotateButton.visible = true
-        screens.review.bottomBar.deleteButton.visible = true
+        // Configure toolbar (further properties like title, icon and  background can also be set for these buttons)
+        screens.review.toolbar.addButton.barButton.visible = true
+        screens.review.toolbar.retakeButton.barButton.visible = true
+        screens.review.toolbar.cropButton.barButton.visible = true
+        screens.review.toolbar.rotateButton.barButton.visible = true
+        screens.review.toolbar.deleteButton.barButton.visible = true
 
         // Configure `more` popup on review screen
-        screens.review.morePopup.reorderPages.icon.visible = true
+        screens.review.toolbar.reorderButton.popupMenuItem.icon.visible = true
         screens.review.morePopup.deleteAll.icon.visible = true
         screens.review.morePopup.deleteAll.title.text = "Delete all pages"
 
@@ -55,9 +50,9 @@ fun rtuUiMultiPageScanningUseCase(): DocumentScanningFlow {
 
         // Configure cropping screen
         screens.cropping.topBarTitle.text = "Cropping Screen"
-        screens.cropping.bottomBar.resetButton.visible = true
-        screens.cropping.bottomBar.rotateButton.visible = true
-        screens.cropping.bottomBar.detectButton.visible = true
+        screens.cropping.toolbar.resetButton.visible = true
+        screens.cropping.toolbar.rotateButton.visible = true
+        screens.cropping.toolbar.detectButton.visible = true
     }
 
     return configuration

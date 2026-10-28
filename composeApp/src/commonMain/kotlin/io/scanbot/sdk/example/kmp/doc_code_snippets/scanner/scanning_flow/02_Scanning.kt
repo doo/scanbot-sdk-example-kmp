@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.scanning_flow
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 // @Tag("ScanningFlow")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.ui_v2.common.ScanbotColor
@@ -25,8 +20,8 @@ fun scanningFlowConfig(): DocumentScanningFlow {
         // Controls whether to resume an existing draft session or start a new one when DOCUMENT_UUID is null.
         cleanScanningSession = true
 
-        // Set the background color of the bottom bar.
-        appearance.bottomBarBackgroundColor = ScanbotColor("#C8193C")
+        // Set the background color of the toolbar.
+        appearance.toolbarBackgroundColor = ScanbotColor("#C8193C")
 
         // Retrieve the camera screen configuration.
         screens.camera.apply {
@@ -63,21 +58,21 @@ fun scanningFlowConfig(): DocumentScanningFlow {
             userGuidance.statesTitles.captureManual = "The document is ready to be captured"
 
             // Import button is used to import an image from the gallery.
-            bottomBar.importButton.visible = true
-            bottomBar.importButton.title.visible = true
-            bottomBar.importButton.title.text = "Import"
+            toolbar.importButton.visible = true
+            toolbar.importButton.title.visible = true
+            toolbar.importButton.title.text = "Import"
 
             // Configure the auto/manual snap button.
-            bottomBar.autoSnappingModeButton.title.visible = true
-            bottomBar.autoSnappingModeButton.title.text = "Auto"
-            bottomBar.manualSnappingModeButton.title.visible = true
-            bottomBar.manualSnappingModeButton.title.text = "Manual"
+            toolbar.autoSnappingModeButton.title.visible = true
+            toolbar.autoSnappingModeButton.title.text = "Auto"
+            toolbar.manualSnappingModeButton.title.visible = true
+            toolbar.manualSnappingModeButton.title.text = "Manual"
 
             // Configure the torch off/on button.
-            bottomBar.torchOnButton.title.visible = true
-            bottomBar.torchOnButton.title.text = "On"
-            bottomBar.torchOffButton.title.visible = true
-            bottomBar.torchOffButton.title.text = "Off"
+            toolbar.torchOnButton.title.visible = true
+            toolbar.torchOnButton.title.text = "On"
+            toolbar.torchOffButton.title.visible = true
+            toolbar.torchOffButton.title.text = "Off"
 
             // Configure the camera blink behavior when an image is captured.
             captureFeedback.cameraBlinkEnabled = true

@@ -1,10 +1,5 @@
 package io.scanbot.sdk.example.kmp.doc_code_snippets.scanner.common_use_cases
 
-/*
-    NOTE: this snippet of code is to be used only as a part of the website documentation.
-    This code is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
-*/
-
 // @Tag("Single Page")
 import io.scanbot.sdk.kmp.ScanbotSDK
 import io.scanbot.sdk.kmp.page.DocumentData
@@ -35,11 +30,11 @@ fun rtuUiSinglePageScanningUseCase(): DocumentScanningFlow {
         screens.camera.captureFeedback.snapFeedbackMode = PageSnapCheckMarkAnimation()
 
         // Hide the auto snapping enable/disable button
-        screens.camera.bottomBar.autoSnappingModeButton.visible = false
-        screens.camera.bottomBar.manualSnappingModeButton.visible = false
-        screens.camera.bottomBar.importButton.title.visible = true
-        screens.camera.bottomBar.torchOnButton.title.visible = true
-        screens.camera.bottomBar.torchOffButton.title.visible = true
+        screens.camera.toolbar.autoSnappingModeButton.visible = false
+        screens.camera.toolbar.manualSnappingModeButton.visible = false
+        screens.camera.toolbar.importButton.title.visible = true
+        screens.camera.toolbar.torchOnButton.title.visible = true
+        screens.camera.toolbar.torchOffButton.title.visible = true
 
         // Set colors
         palette.sbColorPrimary = ScanbotColor("#C8193CFF")
